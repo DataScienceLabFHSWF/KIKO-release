@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIKO — KI-gestützte Wissensplattform für den Rückbau</title>
+<meta name="description" content="KIKO ist eine KI-gestützte Lern- und Wissensplattform für die Stilllegung kerntechnischer Anlagen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1A26; --ink-soft:#22323F; --paper:#F3F6F9;
+    --cherenkov:#0E8BD6; --cherenkov-deep:#0A6FB0; --cherenkov-glow:#3FC8F4;
+    --amber:#E2972B; --slate:#5A6B7B; --hairline-strong:#C3CEDA;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;min-height:100vh;display:flex;flex-direction:column;
+    background:var(--paper);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:18px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  .lang{position:absolute;top:24px;right:24px;display:flex;font-family:"IBM Plex Mono";font-size:13px;border:1px solid var(--hairline-strong);border-radius:7px;overflow:hidden;}
+  .lang a{padding:6px 11px;color:var(--slate);}
+  .lang a.on{background:var(--ink);color:#fff;}
+  .lang a:not(.on):hover{background:#E7EDF3;color:var(--ink);}
+
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:88px 24px 40px;}
+  .card{max-width:600px;text-align:center;position:relative;}
+  .glow{position:absolute;left:50%;top:-40px;width:280px;height:280px;transform:translateX(-50%);
+    background:radial-gradient(circle,rgba(63,200,244,.28),transparent 64%);pointer-events:none;z-index:0;}
+  .card>*{position:relative;z-index:1;}
+
+  .mark{margin:0 auto 26px;display:block;}
+  .brand{font-family:"IBM Plex Sans Condensed";font-weight:700;font-size:30px;letter-spacing:.03em;margin:0 0 4px;}
+  .brand .ki{color:var(--cherenkov);}
+  .eyebrow{font-family:"IBM Plex Mono";font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate);}
+
+  h1{font-family:"IBM Plex Sans Condensed";font-weight:700;line-height:1.12;letter-spacing:-0.01em;
+    font-size:clamp(26px,4.2vw,36px);margin:28px 0 0;}
+  h1 .accent{color:var(--cherenkov-deep);}
+  p.desc{color:var(--ink-soft);margin:20px auto 0;max-width:52ch;}
+
+  .cta{
+    display:inline-flex;align-items:center;gap:8px;font-weight:500;font-size:15.5px;margin-top:30px;
+    padding:12px 22px;border-radius:10px;background:var(--cherenkov);color:#fff;border:1px solid var(--cherenkov);
+    transition:background .15s,transform .15s,box-shadow .15s;box-shadow:0 1px 0 rgba(14,138,214,.25);
+  }
+  .cta:hover{background:var(--cherenkov-deep);transform:translateY(-1px);box-shadow:0 8px 22px -10px rgba(10,111,176,.75);}
+  .cta .arr{transition:transform .15s;}
+  .cta:hover .arr{transform:translateX(3px);}
+
+  footer{text-align:center;padding:0 24px 40px;color:var(--slate);font-size:13.5px;line-height:1.6;}
+  footer .sep{color:var(--hairline-strong);margin:0 8px;}
+  footer a.fl{border-bottom:1px solid var(--hairline-strong);}
+  footer a.fl:hover{color:var(--cherenkov-deep);border-color:var(--cherenkov);}
+
+  a:focus-visible,.cta:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px;}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+
+<div class="lang" role="group" aria-label="Sprache">
+  <a class="on" href="de.html" aria-current="true">DE</a>
+  <a href="en.html">EN</a>
+</div>
+
+<main>
+  <div class="card">
+    <div class="glow" aria-hidden="true"></div>
+
+    <svg class="mark" width="58" height="58" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+      <ellipse cx="15" cy="15" rx="13" ry="5.4" stroke="#0E8BD6" stroke-width="1.5" transform="rotate(28 15 15)"/>
+      <ellipse cx="15" cy="15" rx="13" ry="5.4" stroke="#0A6FB0" stroke-width="1.5" transform="rotate(-28 15 15)"/>
+      <circle cx="15" cy="15" r="3.4" fill="#0E8BD6"/>
+      <circle cx="27" cy="11.5" r="1.7" fill="#E2972B"/>
+    </svg>
+
+    <p class="brand"><span class="ki">KI</span>KO</p>
+    <span class="eyebrow">KI-gestützte Wissensplattform</span>
+
+    <h1>Das Wissen für den Rückbau — <span class="accent">bewahren und weitergeben.</span></h1>
+
+    <p class="desc">KIKO ist eine KI-gestützte Lern- und Wissensplattform für die Stilllegung kerntechnischer Anlagen. Sie konserviert Expertenwissen, macht es über natürliche Sprache zugänglich und vermittelt es — angepasst an den Kenntnisstand jedes Einzelnen.</p>
+
+    <a class="cta" href="https://datasciencelabfhswf.github.io/KIKO-release/" target="_blank" rel="noopener">Erste Version öffnen <span class="arr">→</span></a>
+  </div>
+</main>
+
+<footer>
+  Verbundprojekt der FH Südwestfalen, actimondo eG und TU München<span class="sep">·</span>im Rahmen des <a class="fl" href="https://www.fona.de/" target="_blank" rel="noopener">FORKA</a>-Förderkonzepts des BMBF
+</footer>
+
+</body>
+</html>
