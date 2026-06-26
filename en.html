@@ -57,8 +57,14 @@
   footer a.fl{border-bottom:1px solid var(--hairline-strong);}
   footer a.fl:hover{color:var(--cherenkov-deep);border-color:var(--cherenkov);}
 
+  .badge{display:flex;width:fit-content;align-items:center;gap:6px;margin:28px auto 0;padding:5px 12px;
+    border-radius:20px;background:rgba(226,151,43,.12);border:1px solid rgba(226,151,43,.35);
+    font-family:"IBM Plex Mono";font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);}
+  .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);
+    box-shadow:0 0 0 2px rgba(226,151,43,.3);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 2px rgba(226,151,43,.3);}50%{opacity:.7;box-shadow:0 0 0 5px rgba(226,151,43,.08);}}
   a:focus-visible,.cta:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px;}
-  @media(prefers-reduced-motion:reduce){*{transition:none!important;}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;}.badge .dot{animation:none;}}
 </style>
 </head>
 <body>
@@ -86,7 +92,8 @@
 
     <p class="desc">KIKO is an AI-powered learning and knowledge platform for the decommissioning of nuclear facilities. It preserves expert knowledge, makes it accessible through natural language, and teaches it — adapted to each person's level.</p>
 
-    <a class="cta" href="https://datasciencelabfhswf.github.io/KIKO-release/" target="_blank" rel="noopener">Open the first version <span class="arr">→</span></a>
+    <p class="badge"><span class="dot" aria-hidden="true"></span>First version available now</p>
+    <a class="cta" href="https://github.com/DataScienceLabFHSWF/KIKO-release" target="_blank" rel="noopener">Clone the Repo <span class="arr">→</span></a>
   </div>
 </main>
 
