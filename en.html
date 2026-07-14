@@ -165,10 +165,7 @@
   .shot figcaption small{display:block;font-family:"IBM Plex Sans";font-weight:400;font-size:14px;color:var(--slate);margin-top:2px;}
 
   /* ---------- LOGO PLACEHOLDERS ---------- */
-  .logo-ph{width:100%;height:54px;border:1.5px dashed var(--hairline-strong);border-radius:9px;
-    display:flex;align-items:center;justify-content:center;gap:8px;color:var(--slate);background:var(--paper);}
-  .logo-ph svg{width:18px;height:18px;color:var(--hairline-strong);}
-  .logo-ph span{font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;}
+  .logo-img{width:100%;height:54px;object-fit:contain;object-position:left center;}
 
   /* ---------- CONSORTIUM ---------- */
   .part-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:44px;}
@@ -396,17 +393,11 @@
     </div>
     <div class="shots">
       <figure class="shot">
-        <div class="ph">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.8" stroke="currentColor" stroke-width="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Screenshot</span>
-        </div>
+        <img src="screenshots/learner_en.png" alt="Learner view" style="width:100%;border-radius:14px;display:block;">
         <figcaption>Learner view<small>Course, questions on the material and AI feedback</small></figcaption>
       </figure>
       <figure class="shot">
-        <div class="ph">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="9.5" r="1.8" stroke="currentColor" stroke-width="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Screenshot</span>
-        </div>
+        <img src="screenshots/instructor_en.png" alt="Instructor view" style="width:100%;border-radius:14px;display:block;">
         <figcaption>Instructor view<small>Manage courses and learning material</small></figcaption>
       </figure>
     </div>
@@ -422,11 +413,11 @@
       <p>KIKO is a joint project of three funded partners, closely supported by two associated partners from research and industry.</p>
     </div>
     <div class="part-grid">
-      <div class="part"><div class="logo-ph"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="10" r="1.6" stroke="currentColor" stroke-width="1.5"/><path d="M4 16l4-4 3 3 3-3 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logo</span></div><h3>FH Südwestfalen</h3><span class="role fund">Lead · funded</span></div>
-      <div class="part"><div class="logo-ph"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="10" r="1.6" stroke="currentColor" stroke-width="1.5"/><path d="M4 16l4-4 3 3 3-3 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logo</span></div><h3>actimondo eG</h3><span class="role fund">funded</span></div>
-      <div class="part"><div class="logo-ph"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="10" r="1.6" stroke="currentColor" stroke-width="1.5"/><path d="M4 16l4-4 3 3 3-3 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logo</span></div><h3>TU München · RCM</h3><span class="role fund">funded</span></div>
-      <div class="part"><div class="logo-ph"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="10" r="1.6" stroke="currentColor" stroke-width="1.5"/><path d="M4 16l4-4 3 3 3-3 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logo</span></div><h3>GRS gGmbH</h3><span class="role assoc">associated</span></div>
-      <div class="part"><div class="logo-ph"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="10" r="1.6" stroke="currentColor" stroke-width="1.5"/><path d="M4 16l4-4 3 3 3-3 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logo</span></div><h3>Framatome GmbH</h3><span class="role assoc">associated</span></div>
+      <div class="part"><img src="logos/FH-SWF_Logo-RGB_jpeg.jpg" alt="FH Südwestfalen" class="logo-img"><h3>FH Südwestfalen</h3><span class="role fund">Lead · funded</span></div>
+      <div class="part"><img src="logos/actimondo.png" alt="actimondo eG" class="logo-img"><h3>actimondo eG</h3><span class="role fund">funded</span></div>
+      <div class="part"><img src="logos/tum.png" alt="TU München" class="logo-img"><h3>TU München · RCM</h3><span class="role fund">funded</span></div>
+      <div class="part"><img src="logos/csm__c__GRS__csm_grs_logo_kp_1200.jpg" alt="GRS gGmbH" class="logo-img"><h3>GRS gGmbH</h3><span class="role assoc">associated</span></div>
+      <div class="part"><img src="logos/framatome_logo.png" alt="Framatome GmbH" class="logo-img"><h3>Framatome GmbH</h3><span class="role assoc">associated</span></div>
     </div>
   </div>
 </section>
