@@ -93,10 +93,10 @@ The platform for AI-supported competence and young talent development for the de
 
 1. Clone the repository:
    ```bash
-   git clone git@github.com:DataScienceLabFHSWF/kiko-platform.git
+   git clone git@github.com:DataScienceLabFHSWF/KIKO-release.git
    ```
    ```bash
-   cd kiko-platform
+   cd KIKO-release
    ```
 2. Launch the app:
    ```bash
@@ -334,7 +334,7 @@ pytest tests/backend/
 
 1. Fork or clone the repository.
    ```bash
-   git clone git@github.com:DataScienceLabFHSWF/kiko-platform.git
+   git clone git@github.com:DataScienceLabFHSWF/KIKO-release.git
    ```
 2. Create a new branch
    ```bash
@@ -349,7 +349,7 @@ pytest tests/backend/
    ```bash
    git push origin develop-new-feature-name
    ```
-6. Submit a [Pull Request](https://github.com/DataScienceLabFHSWF/kiko-platform/pulls) with a clear description.
+6. Submit a [Pull Request](https://github.com/DataScienceLabFHSWF/KIKO-release/pulls) with a clear description.
 
 ## 👨‍🔧 Maintainers
 
@@ -359,4 +359,4 @@ pytest tests/backend/
 
 ## 💬 Questions or Feedback?
 
-Open an [issue](https://github.com/DataScienceLabFHSWF/kiko-platform/issues) or start a discussion.
+Open an [issue](https://github.com/DataScienceLabFHSWF/KIKO-release/issues) or start a discussion.
