@@ -1,0 +1,14 @@
+Diese Textabschnitte sind Zusammenfassungen verschiedener Teile eines Dokuments.
+
+Erzeuge daraus genau und ausschließlich {qa_count} Fragen und die dazugehörigen Antworten in {response_language} Sprache.
+Füge nicht mehr und nicht weniger als {qa_count} Fragen und Antworten hinzu.
+Erwähne KEINE Dokumentenreferenzen oder Quellabschnitte.
+Gib deine Ausgabe in {response_language} Sprache.
+
+{format_instructions}
+
+Gib nur das JSON-Objekt selbst zurück — keine Erklärungen, keine Kommentare, keine Codeblöcke.
+
+Zu verarbeitender Text:
+
+{text}

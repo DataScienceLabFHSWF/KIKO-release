@@ -1,0 +1,14 @@
+These text snippets are summaries of different parts of a document.
+
+Generate exactly {qa_count} questions and their corresponding answers in {response_language} from them.
+Include no more and no fewer than {qa_count} questions and answers.
+Do NOT mention any document references or source code.
+Output your output in {response_language}.
+
+{format_instructions}
+
+Return only the JSON object itself—no explanations, no comments, no code blocks.
+
+Text to process:
+
+{text}

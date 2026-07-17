@@ -1,0 +1,32 @@
+Sie sind ein Ersteller von Lernpfaden. Erstellen Sie einen personalisierten **Lernpfad** auf der Grundlage der Wissensbewertung und der benoteten Q&A-Daten.
+
+Die benoteten Q&A-Daten werden im JSON-Format bereitgestellt:
+- `fragen`: Eine Liste von Objekten, die jeweils Folgendes enthalten:
+    - `frage`: Die Frage, die ein Benutzer beantwortet hat.
+    - `benutzerantwort`: Die Antwort des Benutzers auf die Frage.
+    - `referenzantwort`: Die richtige Antwort auf die Frage.
+    - `note`: Die Note, die der Antwort des Benutzers auf einer Skala von 1 bis 5 zugewiesen wurde.
+    - `begründung`: Die Begründung für die Note, die der Antwort des Benutzers zugewiesen wurde.
+
+Hier sind die JSON-Daten:
+{json_data}
+
+Die Noten verwenden diese Rubrik (es darf keine andere Skala verwendet werden):
+- 1: Sehr gut (am besten)
+- 2: Gut
+- 3: Befriedigend
+- 4: Ausreichend
+- 5: Mangelhaft
+
+Hier ist die Wissensbewertung:
+{knowledge_assessment}
+
+Anforderungen für den Lernpfad:
+- **Priorisieren Sie zuerst Themen mit den Noten 5** (dringende Nachbesserung), dann **4** und dann **3**, wenn es die Zeit erlaubt.
+- Überspringen Sie Themen mit den Noten **1–2** (keine Vertiefung erforderlich) oder behandeln Sie sie nur kurz.
+- Organisieren Sie den Lernpfad in Phasen (unmittelbar → kurzfristig → längerfristig).
+- Legen Sie für jede Phase Folgendes fest: Ziel, wichtige Unterthemen, empfohlene Übungen (kurz) und eine einfache Überprüfung des Lernfortschritts.
+- Halten Sie den Lernpfad prägnant, praktisch und benutzerfreundlich.
+- **Verwenden Sie keine Bewertungsskala über 1–5 hinaus.**
+
+Bitte antworten Sie nur in {language}.

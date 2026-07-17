@@ -1,0 +1,196 @@
+idx,doc_name,question,pred,ref,rougeL,bleu,bertscore_f1,citation_rate,recall_k,mrr,ndcg,attribution_match
+0,2025-04-14-1.pdf,Was ist segmentiertes Gamma-Scanning (SGS)?,"Ein Ganzkörperzähler dient dazu, gammastrahlerzeugende Radionuklide im menschlichen Körper zu messen. Er verwendet eine Kombination aus Detektoren und Rechenalgorithmen, um präzise Aktivitätsdaten zu liefern. Dies ermöglicht es, Kontaminationen durch radioaktive Substanzen effektiv zu überwachen und sicherzustellen, dass Sicherheitsstandards eingehalten werden.
+
+Oder als Stichpunkte:
+1. Messen von gammastrahlenden Radionukliden im Körper.
+2. Präzise Aktivitätsdaten für Überwachungszwecke.
+3. Sicherstellung von Sicherheitsstandards bei Kontaminationen.
+
+---
+
+Originalantwort korrekt wiedergegeben:
+
+Um radioaktive Stoffe in Behältern wie z.B. einem vollen Gelbfass genau zu erkennen, wird das segmentierte Gamma-Scanning eingesetzt. Es misst an jeder Position mehrfach und erzeugt so 120 Einzelwerte pro Messstelle, wodurch sowohl die genaue Identifikation von Radionukliden als auch die Berücksichtigung unterschied","SGS ist ein zerstörungsfreies Messverfahren, bei dem Fässer oder Behälter abschnittsweise mit einem Gammastrahlungsdetektor abgetastet werden, um Lage und Aktivität radioaktiver Stoffe zu bestimmen.",0.08053691275167787,0.01685462063760651,0.6531292200088501,1,0,0.0,0.0,0.2579966730196709
+1,2025-04-14-1.pdf,Wofür wird SGS in der Stilllegung typischerweise eingesetzt?,"Die Halbwertzeit bestimmt den Zeitraum, in dem ein radioaktiver Stoff seine Aktivität halbiert. Dies ist wichtig für die Planung von Lagern und Entsorgungsmaßnahmen sowie für die Überwachung verbleibender Kontaminationen.
+
+Oder als Stichpunkte:
+- Definition: Zeitspanne bis zur Hälfte des Zerfalls.
+- Relevanz: Planen von Lagerzeiten und Entsorgung.
+- Monitoring: Verbleibende Kontamination überwachen.
+
+---
+
+### Weitere Beispiele:
+
+#### Beispiel 3:
+**Original:**
+Ein Geigerzähler misst die Anzahl der Ionisationsvorgänge durch radioaktive Strahlung. Er zeigt eine höhere Anzeige bei stärkerer Bestrahlung.
+
+**Verbessertes Kurzformat:**
+Geigerzähler erfasst Ionisationseffekte → Höhere Anzeige = stärkere Strahlenbelastung.
+
+Kontextanfrage:
+Wie funktionieren moderne Geräte? Gibt es alternative Messmethoden?
+
+Antwort:
+Moderne Geräte nutzen digitale Technologien zur präziseren Analyse. Alternative Methoden sind z.B","Zur Charakterisierung von Abfallgebinden, z. B. zur Bestimmung der Nuklidzusammensetzung und Aktivitätsverteilung in 200-L-Fässern.",0.058394160583941604,0.020148564367930378,0.6022741794586182,1,0,0.0,0.0,0.1990647329210422
+2,2025-04-14-1.pdf,Nenne zwei Vorteile des SGS gegenüber rein dokumentenbasierter Abfallbewertung.,"Bei Versandstücken der Kategorie III-GELB müssen Sicherheitsetiketten gemäß den Vorschriften angebracht sein. Die genauen Anforderungen sind in Abschnitt 7C des entsprechenden Dokumentes festgelegt. Dazu gehören beispielsweise die Anbringung auf gegenüberliegenden Seiten sowie oben am Versandstück. Es wird empfohlen, sich genau an diese Vorgaben zu halten, um mögliche Unregelmäßigkeiten während des Transports zu vermeiden.
+
+Stichpunkte (falls gewünscht):
+- Sicherheitsetikette für III-GELB zwingend vorgeschrieben.
+- Genauigkeit beachten: z.B. beide Seiten + oben.
+- Quelle: Abschnitt 7C im relevanten Dokument.",SGS liefert unabhängige Messdaten und ermöglicht die Lokalisierung von Hot-Spots; es reduziert Unsicherheiten gegenüber rein papierbasierten Annahmen.,0.037383177570093455,0.014076664341950571,0.6309785842895508,1,0,0.0,0.0,0.1803459134937375
+3,2025-04-14-1.pdf,Was bedeutet Genehmigungs- und Anzeigepflicht beim Rückbau nach Strahlenschutzrecht?,"Bei der Frage zur höchstzulässigen Strahlenschwächung hinter einem Patienten (Geräteschwächungsfaktor) ist die korrekte Antwort b) ≤ 4 gemäß den geltenden Vorschriften (z.B. DIN EN ISO 11171). Dies bezieht sich direkt auf die Bestimmung der Geräteleistung im Zusammenhang mit Strahlenschutznormen. Die Wahl der richtigen Ausrüstung für den jeweiligen Einsatzfall sollte immer unter Berücksichtigung individueller Bedürfnisse erfolgen, was auch bedeutet, dass die Passform und Spezifikationen der Schutzbekleidung sorgfältig geprüft werden müssen.
+
+Oder:
+
+- Höchste zulässige Schwächung: ≤ 4 (gemäß DIN EN ISO 11171)
+- Wichtigkeit der individuellen Anpassung von Schutzausrüstungen
+- Richtlinien beachten (DIN EN ISO 11171)
+
+Kurze Version:
+Höchste zulässige Schwächung: ≤ 4","Bestimmte Rückbautätigkeiten dürfen nur mit behördlicher Genehmigung erfolgen; weniger eingriffsintensive Maßnahmen sind anzeigepflichtig, um Aufsicht und Schutzmaßnahmen sicherzustellen.",0.0425531914893617,0.0127767328210696,0.6326159238815308,1,0,0.0,0.0,0.3020378315646412
+4,2025-04-14-1.pdf,Erklären Sie den Aufbau eines typischen Gammaspektrums und die Bedeutung der Photo- und Compton-Peaks.,"Die höhere Peakhöhe in Fall 4 gegenüber Fall 3 erklärt sich aus der größeren Dicke des absorbierenden Materials (Zements). Die zusätzliche Entfernung der Gammaquanten vom Detektor aufgrund ihrer Positionierung an der Fassinnenwand trägt ebenfalls dazu bei. Dies steht im Einklang mit den physikalischen Prinzipien der Strahlenschwächung: Je dicker das Material und je weiter entfernt der Detektor, desto mehr Energie verlieren die Photonen. In diesem speziellen Fall überwiegt also die Wirkung der erhöhten Weglänge im Zement gegenüber der geringeren Dichte des Materials selbst. 
+
+Stichpunkte:
+• Größerer Abstand zum Detektor.
+• Mehrschichtiges Absorbiermaterial (dickes Zement).
+• Physik der Strahlenschwächung: Länge × Dichte = Effektivität. Hier dominiert die Länge.","Ein Gammaspektrum zeigt die Z�hlrate in Abh�ngigkeit von der Energie. Charakteristisch sind Photopeaks (vollst�ndige Energieabsorption des Gammaquants im Detektor), Compton-Kontinuum (Teilabsorption durch Compton-Streuung) und ggf. R�ckstreu-Peaks. Die Identifikation von Photopeaks erlaubt die Bestimmung der Nuklide.",0.11320754716981134,0.0209533965858963,0.6541178822517395,1,0,0.0,0.0,0.33119209965872765
+5,2025-04-14-1.pdf,Erklären Sie den Aufbau eines typischen Gammaspektrums und die Bedeutung der Photo- und Compton-Peaks.,"Durch den Anstieg der Ordnungszahl um zwei Einheiten bei der Kernladung steigt auch die Anzahl der β+-Teilchen an. Da diese Teilchen jedoch durch das Zement abgeschwächt werden, bleibt die Peakhöhe des Spektrums trotz erhöhter Emissionsrate unverändert. Sie verhält sich wie in Fall 1, da die zusätzliche Energieabsorption durch das Material ausgeglichen wird. Kurze Stichpunkte:
+• Erhöhte β+-Emissionen aufgrund der höheren Ordnungszahl.
+• Abgeschwächte β+-Strahlung durch das Zement.
+• Unveränderte Peakhöhe trotz erhöhter Emission.","Ein Gammaspektrum zeigt die Z�hlrate in Abh�ngigkeit von der Energie. Charakteristisch sind Photopeaks (vollst�ndige Energieabsorption des Gammaquants im Detektor), Compton-Kontinuum (Teilabsorption durch Compton-Streuung) und ggf. R�ckstreu-Peaks. Die Identifikation von Photopeaks erlaubt die Bestimmung der Nuklide.",0.0967741935483871,0.022108506889972655,0.6475943326950073,1,0,0.0,0.0,0.33987630729984675
+6,2025-04-14-1.pdf,Wozu dient die Segmentierung in der nuklearen Bildgebung und Strahlenmessung?,"Bei ionisierender Strahlung ist Vorsicht geboten: Es gilt das Prinzip des Nutzens gegenüber möglichen Schäden. Dies wird auch im Dokument bestätigt (S. 108). Die bisherigen Anforderungen bleiben bestehen: eine beglaubigte Kopie der Beförderungsgenehmigung sowie die Unterschrift des Strahlenschutz-Verantwortlichen müssen vorliegen (S. 159).
+
+Alternativ als Stichpunkte:
+- Ionisierende Strahlung erfordert Nutzenabwägung.
+- Erhaltene Dokumente prüfen (beglaubigt, unterschrieben).
+- Seitenangabe für Details: S. 108 & 159.",Segmentierung bedeutet die Abgrenzung von Regionen in Messdaten oder Bildern. Sie dient z. B. zur Isolierung bestimmter Organe in SPECT/PET oder zur Identifikation von Signalbereichen im Strahlungsfeld. Ziel ist die exaktere Analyse und Reduktion von Artefakten.,0.037383177570093455,0.020744983236651467,0.6346257328987122,1,0,0.0,0.0,0.2286365164961351
+7,2025-04-14-1.pdf,Wozu dient die Segmentierung in der nuklearen Bildgebung und Strahlenmessung?,"Bei ionisierender Strahlung ist Vorsicht geboten: Sie darf nur angewendet werden, wenn ihr Einsatz einen klaren Nutzen bringt. Jede zusätzliche Strahlenbelastung muss gerechtfertigt sein. Schwangere sollten grundsätzlich nicht geröntgt werden. Dosisschwellenwerte sind wichtig, aber allein ausreichend sind sie nicht. Eine Beförderungsgenehmigung für den Transport radioaktiver Stoffe muss immer im Original oder als beglaubigte Kopie vorliegen, unterschrieben vom Strahlenschutz-Verantwortlichen. Dies schützt sowohl das Personal als auch die Öffentlichkeit. 
+
+Kurze Version (in Stichpunkten):
+• Ionisierende Strahlung erfordert sorgfältiges Handeln.
+• Nur nutzbringende Anwendung erlaubt.
+• Schwangerschaft und Röntgen kontraindiziert.
+• Dosisschwellenwerte beachten, aber mehr erforderlich.
+• Beförderungsgenehmigung original/kopiert, unterschrieben.",Segmentierung bedeutet die Abgrenzung von Regionen in Messdaten oder Bildern. Sie dient z. B. zur Isolierung bestimmter Organe in SPECT/PET oder zur Identifikation von Signalbereichen im Strahlungsfeld. Ziel ist die exaktere Analyse und Reduktion von Artefakten.,0.05714285714285714,0.01632424070002208,0.6308273673057556,1,0,0.0,0.0,0.26295372075069734
+8,Grundlagen-des-Strahlenschutzes.pdf,Nennen Sie die drei Grundprinzipien des Strahlenschutzes und erl�utern Sie sie kurz,"Gemäß §7 Abs. 4 StrlSchG muss das Strahlenschutzgesetz sowie die Strahlenschutzverordnung am Arbeitsplatz stets verfügbar gehalten werden. Dies bedeutet, dass sie nicht nur bei Bedarf bereitstehen müssen, sondern jederzeit eingesehen werden können. Die korrekte Handhabung dieser Vorschriften trägt entscheidend zum Schutz vor ionisierender Strahlung bei.
+
+Stichpunkte (optional):
+- Gesetzliche Verfügbarkeit sicherstellen
+- Regelmäßige Überprüfung der Gültigkeit
+- Schulungsangebot für Mitarbeiter nutzen
+
+Diese Version berücksichtigt die spezifischen Anforderungen des neuen Kontexts und stellt klar, welche Maßnahmen erforderlich sind, um die gesetzlichen Bestimmungen im Bereich Strahlenschutz einzuhalten.",Die drei Grundprinzipien sind: Rechtfertigung: Jede Anwendung ionisierender Strahlung muss mehr Nutzen als Schaden bringen. Optimierung (ALARA): Strahlenexposition so gering wie vern�nftig m�glich. Dosisbegrenzung: Einhaltung von Grenzwerten f�r beruflich Exponierte und Bev�lkerung.,0.09302325581395349,0.025898105141103328,0.643248438835144,1,0,0.0,0.0,0.1671409975738968
+9,Grundlagen-des-Strahlenschutzes.pdf,Nennen Sie die drei Grundprinzipien des Strahlenschutzes und erl�utern Sie sie kurz,"Gemäß den Anforderungen des Strahlenschutzgesetzes und der Strahlenschutzverordnung muss das Strahlenschutzhandbuch an jedem Arbeitsplatz verfügbar gehalten werden. Dies dient der Sicherstellung einer ordnungsgemäßen Durchführung aller strahlenschutzrelevanten Maßnahmen. Jeder berufliche Exponierte erhält eine Kopie dieses Handbuchs ausgehändigt, um sich über seine Pflichten im Umgang mit ionisierenden Strahlen informieren zu können. Dieser Vorgang stellt einen wichtigen Bestandteil der umfassenden Sicherheitsvorschriften dar. 
+
+Stichpunkte:
+- Das Strahlenschutzhandbuch ist an jedem Arbeitsplatz verfügbar zu halten.
+- Beruflich exponierte Mitarbeiter erhalten eine Kopie.
+- Informationspflicht zur Gewährleistung der Sicherheit.",Die drei Grundprinzipien sind: Rechtfertigung: Jede Anwendung ionisierender Strahlung muss mehr Nutzen als Schaden bringen. Optimierung (ALARA): Strahlenexposition so gering wie vern�nftig m�glich. Dosisbegrenzung: Einhaltung von Grenzwerten f�r beruflich Exponierte und Bev�lkerung.,0.048,0.0183816218439415,0.6422115564346313,1,0,0.0,0.0,0.2422516834750906
+10,Recht-und-Organisation-im-Strahlenschutz.pdf,Welche Beh�rden und gesetzlichen Grundlagen regeln den Strahlenschutz in Deutschland?,"Das Strahlenschutzhandbuch muss gemäß §7 Abs. 4 des Strahlenschutzgesetzes am Arbeitsplatz ständig zugänglich sein. Es enthält wichtige Informationen über Sicherheit, wie z.B. die korrekte Verwendung von Schutzausrüstung, einschließlich passend großer Kleidungsstücke. Die Einhaltung der Strahlenschutzverordnung, insbesondere der Expositionsgrenzwerte und Dokumentationspflichten, ist unerlässlich. Für detaillierte Anweisungen wenden Sie sich bitte an Ihr lokales Strahlenschutzdokument.  
+
+**Stichpunkte:**
+- Handbuch stets verfügbar.
+- Richtlinien zur Schutzkleidung beachten.
+- Lokaler Leitfaden einholen.  
+
+
+
+Die verbesserte Antwort bezieht sich auf den aktualisierten Kontext und betont die Bedeutung des Strahlenschutzhandbuchs sowie die Notwendigkeit, die Vorschriften der Strahlenschutzverordnung einzuhalten. Die Formulierung bleibt präzise und informativ, um den Bedarf nach klaren und verständlichen Informationen im","Grundlagen: Strahlenschutzgesetz (StrlSchG) und Strahlenschutzverordnung (StrlSchV). Zust�ndige Beh�rden: Bundesumweltministerium (BMUV), Bundesamt f�r Strahlenschutz (BfS), sowie die zust�ndigen Landesbeh�rden.",0.07246376811594203,0.016586853635695318,0.6264998316764832,1,0,0.0,0.0,0.20347697303475729
+11,Recht-und-Organisation-im-Strahlenschutz.pdf,Welche Beh�rden und gesetzlichen Grundlagen regeln den Strahlenschutz in Deutschland?,"Beim Einsatz ionisierender Strahlen gilt es, strenge Sicherheitsvorschriften zu beachten. Dazu gehören:
+
+a) Verwendung geeigneter Schutzausrüstung wie Strahlenschutzkittel,
+b) Begrenzung des direkten Kontakts durch räumliche Trennung,
+c) Auswahl der passendsten Schutzkleidung je nach Expositionsrisiko,
+d) Vermeidung unnötigen Tragens von Patientenschürzen in Kontrollräumen,
+e) strikte Befolgung aller vorgeschriebenen Prozeduren.
+
+Die genannten Maßnahmen helfen, die Exposition gegenüber ionisierenden Strahlen so gering wie möglich zu halten und gleichzeitig einen effektiven Schutz vor möglichen Gefahren zu gewährleisten. Dies trägt wesentlich zur Sicherheit im medizinischen Umfeld bei. 
+
+---
+
+### Erklärung:
+Der zusätzliche Kontext betrifft spezifische Anforderungen an die Nutzung von Strahlenschutzkleidung in verschiedenen Bereichen einer Einrichtung. Er ergänzt die allgemeine Information über die Notwendigkeit, gesetzliche Bestimmungen zu befolgen. Durch diese Ergänzung wird","Grundlagen: Strahlenschutzgesetz (StrlSchG) und Strahlenschutzverordnung (StrlSchV). Zust�ndige Beh�rden: Bundesumweltministerium (BMUV), Bundesamt f�r Strahlenschutz (BfS), sowie die zust�ndigen Landesbeh�rden.",0.025974025974025972,0.013710402848109291,0.591168999671936,1,0,0.0,0.0,0.22864980347735891
+12,Weiterf�hrende-Themen-zum-Strahlenschutz.pdf,Was versteht man unter dem Konzept der �Effektiven Dosis� und wozu dient es?,"Die effektive Dosis berücksichtigt alle Formen ionisierender Strahlung und ihre biologischen Wirkungen. Sie wird durch Dosimeter oder alternative Geräte bestimmt, wobei die Berechnungsweise auf physikalischen Messwerten beruht und nicht auf Kalibrierfaktoren. Im Gegensatz dazu misst das Hpt(10)-Wert nur die Oberflächenbestrahlungsstärke. 
+
+**Kurzerfassung:**
+- **Definition:** Gesamtdosis plus biologische Wirkung
+- **Messmethoden:** Dosimeter / Alternativen
+- **Unterschied zu Hpt(10):** Nur Oberflächenschärfe vs. Komplexe Biologie
+
+Oder als Stichpunkte:
+- Definition: Gesamte Strahlendosis + biologische Auswirkung
+- Messgerät: Dosimeter / Alternative Techniken
+- Unterschied zu Hpt(10): Oberflächenstrahlung vs. komplexe biologische Wirkung
+
+---
+
+### Originalantwort korrekt wiedergegeben:
+Die effektive Dosis wird aus allen Arten ionisierender Strahlung sowie deren biologischen","Die effektive Dosis ist eine Gr��e, die die biologische Wirkung ionisierender Strahlung auf den ganzen K�rper beschreibt. Sie ber�cksichtigt unterschiedliche Strahlungsarten (Strahlungswichtungsfaktor) und Organsensitivit�ten (Gewebewichtungsfaktor). Sie dient der Bewertung des Strahlenrisikos und dem Vergleich von Expositionen.",0.125,0.02770453150765951,0.6622707843780518,1,0,0.0,0.0,0.12500041424337213
+13,Weiterf�hrende-Themen-zum-Strahlenschutz.pdf,Was versteht man unter dem Konzept der �Effektiven Dosis� und wozu dient es?,"Für die Überwachung radioaktiver Abfälle gelten besondere Vorschriften. So dürfen radioaktive Stoffe mit Aktivitäten bis zum Hundertsfachen der Freigrenze konventionell beseitigt werden. Zudem müssen kontaminierte Abwässer verdünnt werden, bis sie den Ingestionsgrenzwert unterschreiten. Diese Maßnahmen dienen dazu, die Exposition gegenüber ionisierender Strahlung auf ein unbedenkliches Maß zu reduzieren. 
+
+Oder:
+
+Kurzer Text:
+Radioaktive Abfälle mit Aktivitäten bis zum Hundertsfachen der Freigrenze können konventionell beseitigt werden. Kontaminierte Abwässer sind vor ihrer Entsorgung so lange zu verdünnen, bis sie den Ingestionsgrenzwert nicht mehr überschreiten. Beide Verfahren zielen darauf ab, die Belastung durch ionisierende Strahlung sicherzustellen. 
+
+Oder:
+
+Stichpunkte:
+1. Radioaktive Abfälle bis x-Fache Freigrenze: konventionelle Beseitigung möglich.
+2","Die effektive Dosis ist eine Gr��e, die die biologische Wirkung ionisierender Strahlung auf den ganzen K�rper beschreibt. Sie ber�cksichtigt unterschiedliche Strahlungsarten (Strahlungswichtungsfaktor) und Organsensitivit�ten (Gewebewichtungsfaktor). Sie dient der Bewertung des Strahlenrisikos und dem Vergleich von Expositionen.",0.08695652173913043,0.02576379997019704,0.6324576139450073,1,0,0.0,0.0,0.2471369871542084
+14,Grundlagen-des-Strahlenschutzes.pdf,Nennen Sie die wichtigsten Arten ionisierender Strahlung und deren typische Wechselwirkung mit Materie.,"Für die Unterscheidung zwischen Alpha- und Betastrahlung bei einem Zählrohr sind spezifische Analyseschritte erforderlich. Diese basieren auf ionisierenden Effekten, gefolgt von elektrischer Signalbildung. Zudem müssen das Instrument kalibriert und justiert sein, um genaue Ergebnisse zu erzielen. 
+
+Stichpunkte:
+• Ionisation → Elektronenemission → elektrische Signale
+• Detaillierte Analyse ermöglicht Klassifizierung
+• Genauigkeit erfordert technische Standardsicherung
+
+---
+
+**Erweiterte verbesserte Antwort (optional):**
+Um sicherzustellen, dass ein Zählrohr korrekt zwischen Alpha- und Betastrahlung unterscheidet, sollten folgende Schritte unternommen werden:
+
+1. **Charakterisierung**: Führen Sie eine detaillierte Analyse durch, um die spezifischen ionisierenden Wirkungen beider Strahlenarten zu erkennen.
+2. **Technische Sicherstellung**: Stellen Sie sicher, dass das Zählrohr kalibriert und justiert ist, um fehlerfreie Signalerfassung zu gewährleisten.
+","Alphastrahlung: hohe Ionisationsdichte, geringe Reichweite, Wechselwirkung haupts�chlich durch direkte Ionisation. Betastrahlung (Elektronen/Positronen): mittlere Reichweite, Ionisation und Bremsstrahlung. Gammastrahlung: hohe Reichweite, Wechselwirkungen: Photoeffekt, Compton-Streuung, Paarbildung. Neutronenstrahlung: Wechselwirkung �ber Kernst��e, Sekund�rstrahlung durch Reaktionen.",0.05405405405405406,0.018276286660386134,0.6197465658187866,1,0,0.0,0.0,0.09078509916133137
+15,Grundlagen-des-Strahlenschutzes.pdf,Nennen Sie die wichtigsten Arten ionisierender Strahlung und deren typische Wechselwirkung mit Materie.,"Für genehmigungsbedürftige radioaktive Stoffbeförderungen muss der Strahlenschutz-Verantwortliche die Beförderungsgenehmigung stets mitführen. Sie kann in Form einer beglaubigten Kopie vorliegen, unterzeichnet vom verantwortlichen Person. Die Genehmigung selbst wird jedoch nicht benötigt, da sie nur zur Kontrolle durch die zuständige Behörde dient (§§ 7 Abs. 5 und 9 Abs. 1 StrlSchV).
+
+Oder:
+
+- Mitführung der Beförderungsgenehmigung erforderlich.
+- Beglaubigte Kopie zulässig.
+- Zuständigkeit nach StrlSchV.
+
+(Maximal drei kurze Stichpunkte)  
+
+
+Verbesserte Antwort (Englisch):
+For transport of radioactive substances requiring a permit, the radiation protection officer must carry the transportation authorization at all times. A certified copy signed by the responsible person is acceptable; however, the original permit itself does not need to be carried as it serves only for inspection purposes by the competent authority (§§ 7 para. 5 and ","Alphastrahlung: hohe Ionisationsdichte, geringe Reichweite, Wechselwirkung haupts�chlich durch direkte Ionisation. Betastrahlung (Elektronen/Positronen): mittlere Reichweite, Ionisation und Bremsstrahlung. Gammastrahlung: hohe Reichweite, Wechselwirkungen: Photoeffekt, Compton-Streuung, Paarbildung. Neutronenstrahlung: Wechselwirkung �ber Kernst��e, Sekund�rstrahlung durch Reaktionen.",0.023391812865497078,0.015550909644796437,0.5844237804412842,1,0,0.0,0.0,0.13152914591273834
+16,Grundlagen-des-Strahlenschutzes.pdf,Was ist der Unterschied zwischen �quivalentdosis und Energiedosis?,"Die Frage nach unterschiedlichen Wirkungen bei gleicher absorbierter Energie betrifft vor allem den Unterschied zwischen dicht ionisierender Strahlung wie Beta- und Gammastrahlung sowie locker ionisierenden Strahlen wie Alpha- und Röntgenstrahlen. Die dichte Ionisation verursacht stärkere Wechselwirkungen im Gewebe, was auch bei geringerem Energieaufwand zu einer größeren biologischen Wirkung führen kann. Daher sind die Effekte nicht nur durch die Energiemenge bestimmt, sondern auch durch die Art der Strahlung.
+
+**Stichpunkte:**
+1. **Dichte Ionisation**: Stärkere Wechselwirkungen im Gewebe.
+2. **Biologische Wirkung**: Größere Wirkung bei geringerer Energieabsorption.
+3. **Messgrößenunterschied**: Äquivalentdosis unterscheidet sich von der Energiedosis je nach Strahlungsart.  
+
+(Originalantwort bleibt unverändert, wenn sie korrekt ist.) Original: ""Röntgenstrahlung hat trotz niedrigerer physikalischer Dosen oft eine größere biologische Wirkung."" Diese Aussage bezieht sich","Energiedosis (D): absorbierte Energie pro Masse (J/kg = Gray). �quivalentdosis (H): Energiedosis multipliziert mit dem Strahlungswichtungsfaktor (WR), um biologische Wirkung zu ber�cksichtigen. Einheit: Sievert.",0.06578947368421052,0.015050854115048053,0.6474915146827698,1,0,0.0,0.0,0.3002126448768627
+17,Grundlagen-des-Strahlenschutzes.pdf,Was ist der Unterschied zwischen �quivalentdosis und Energiedosis?,"Die Wirkung einer bestimmten Strahlenmenge kann je nach Art unterschiedlich sein. Beispielsweise ist Alphastrahlung aufgrund ihrer hohen Ionisationswirkung besonders gefährlich, auch wenn ihre Energie geringer ist als bei anderen Arten wie Betastrahlen oder Gammastrahlen. Dies liegt daran, dass Alphateilchen eng an Materie gebunden bleiben und somit mehr Schaden verursachen können. Die Wahl geeigneter Entsorgungsmethoden hängt daher maßgeblich von der genauen Zusammensetzung des radioaktiven Materials ab. Für weitere Details siehe Seite 97 im Lehrbuch. 
+
+Stichpunkte:
+• Unterschied in der biologische Wirksamkeit zwischen verschiedenen Strahlungsarten.
+• Hohe Ionisationswirkung von Alphastrahlung trotz niedrigerer Energie.
+• Auswahl geeigneter Entsorgungsmethoden abhängig vom Materialtyp. 
+
+Oder:
+
+Beim Umgang mit radioaktivem Abfall spielen verschiedene Faktoren eine Rolle. Neben der Aktivität gibt es einen wichtigen Unterschied hinsichtlich der biologischen Wirksamkeit verschiedener Strahlungsarten. Zum Beispiel wirkt Al","Energiedosis (D): absorbierte Energie pro Masse (J/kg = Gray). �quivalentdosis (H): Energiedosis multipliziert mit dem Strahlungswichtungsfaktor (WR), um biologische Wirkung zu ber�cksichtigen. Einheit: Sievert.",0.03846153846153846,0.012962405344232953,0.6146432757377625,1,0,0.0,0.0,0.2240072686352949
+18,Weiterf�hrende-Themen-zum-Strahlenschutz.pdf,Nennen Sie zwei konkrete Ma�nahmen zur Dosisreduktion in der Computertomographie.,"Gemäß §§ 6.4 und 7.3 des Strahlenschutzgesetzes sind Arbeitnehmerinnen und Arbeitnehmer verpflichtet, ein Dosimeter zu tragen, wenn ihre jährliche Organdosis für die Hände voraussichtlich mehr als 150 Millisievert beträgt. Diese Regelung ist besonders relevant bei Tätigkeiten, die eine erhöhte Exposition erwarten lassen. Die Anforderungen beziehen sich auch auf spezielle Gruppen wie gebärfähige Frauen, wo besondere Grenzwerte gelten. Zum Beispiel dürfen sie innerhalb eines Monats nicht mehr als 2 Millisievert an der Gebärmutter erhalten. Für Minderjährige gibt es hingegen keine festgelegten Dosisgrenzen. Der neue Kontext bestätigt die bestehenden Vorschriften ohne notwendige Anpassungen. 
+
+Oder in Stichpunkten:
+• Gemäß §§ 6.4 und 7.3 StrlSchV
+• Vorhersage einer Handorgandosis > 150 mSv pro Jahr
+• Verpflichtendes Tragen eines Dosimeters
+• Besondere Regeln für geb","Entfernung aus dem Strahlenbereich. Entfernung kontaminierter Kleidung. Dekontamination (Duschen, Waschen).",0.0,0.011459031907574425,0.5845915675163269,1,0,0.0,0.0,0.22976909240490317
+19,Recht-und-Organisation-im-Strahlenschutz.pdf,Welche Rolle spielen internationale Organisationen wie die ICRP und die IAEA im Strahlenschutz?,"Die Strahlenschutzanweisung muss folgende Punkte enthalten: a) Festlegung von Anwesenheitspflichten und Erreichbarkeit des Strahlenschutzbeauftragten bei strahlenbezogenen Arbeiten; b) regelmäßige Prüfung und Wartung von Messgeräten und Alarmanlagen; c) Notfallhandlungspläne im Falle einer Kontamination. Diese Vorschriften basieren auf §§ 1321 ff. des deutschen Atomgesetzes und ergänzenden Verordnungen zum Arbeitsschutz. Schwangeren wird generell empfohlen, radiologische Untersuchungen zu vermeiden, und es gelten spezielle Schutzmaßnahmen für diese Gruppe. Die Kritikalitäts-Sicherheits-Kennzahlen (CSI) geben Aufschluss über das Risiko eines unkontrollierbaren Kernreaktionsprozesses während des Transports. Eine hohe CSI deutet auf eine geringere Sicherheit hin, wobei ein Wert von 150 als maximaler Grenzwert definiert ist. Für weitere Informationen empfehle ich die Seite 157/166 des",ICRP (International Commission on Radiological Protection) and IAEA (International Atomic Energy Agency),0.0,0.011451591242733337,0.5544019937515259,1,0,0.0,0.0,0.2595117549491912

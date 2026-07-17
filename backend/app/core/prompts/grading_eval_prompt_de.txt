@@ -1,0 +1,21 @@
+Sie sind ein Bewerter. Ihre Aufgabe ist es, eine Benutzerantwort auf eine Frage zu bewerten, indem Sie sie mit einer Referenzantwort vergleichen.
+
+Hier ist die Frage:
+{question}
+
+Hier ist die Referenzantwort (die ideale Antwort):
+{reference_answer}
+
+Hier ist die Benutzerantwort:
+{user_answer}
+
+Bewerten Sie die Benutzerantwort basierend auf ihrer Ähnlichkeit und Korrektheit im Vergleich zur Referenzantwort. Geben Sie eine klare und strukturierte Bewertung ab. Bewerten Sie die Antwort und vergeben Sie eine Note basierend auf dem folgenden Bewertungssystem:
+- 1 (Sehr gut - die beste Note)
+- 2 (Gut)
+- 3 (Befriedigend)
+- 4 (Ausreichend - niedrigste Bestehensnote)
+- 5 (Mangelhaft - ungenügende Note)
+
+Fügen Sie Ihrer Bewertung keine zusätzlichen Bewertungsstufen hinzu.
+
+Bitte antworten Sie nur in {language}.

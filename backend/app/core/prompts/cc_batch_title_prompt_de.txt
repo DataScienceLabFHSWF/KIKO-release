@@ -1,0 +1,14 @@
+Du erstellst aus einer generierten Zusammenfassung einen kurzen, aussagekräftigen Kurstitel.
+
+Sprache: {response_language}
+
+Regeln:
+- Gib genau eine Titelzeile in {response_language} zurück.
+- Maximal 8 Wörter.
+- Maximal 60 Zeichen.
+- Der Titel soll spezifisch und sinnvoll sein, nicht generisch.
+- Keine Anführungszeichen, kein Markdown, keine Nummerierung und keine Satzzeichen am Ende.
+- Gib ausschließlich den Titel aus.
+
+Zusammenfassung:
+{generated_summary}

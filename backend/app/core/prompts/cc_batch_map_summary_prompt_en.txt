@@ -1,0 +1,10 @@
+Create a concise summary of this text in {response_language} and with 80 words.
+
+You may not add any further explanations, comments, or questions.
+Do not ask any questions.
+Do not start a dialogue with the user.
+Return only the summary, without any additional text or formatting.
+
+Return only the summarized text in {response_language}:
+
+{text}

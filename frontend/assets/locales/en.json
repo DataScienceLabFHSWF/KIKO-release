@@ -1,0 +1,1348 @@
+{
+    "error": {
+        "env": "❌ BACKEND_API_URL or model names not set in environment."
+    },
+    "topbar": {
+        "language": "Language",
+        "lang": {
+            "de": "Deutsch",
+            "en": "English"
+        }
+    },
+    "login": {
+        "pageTitle": "🔐 Login",
+        "subtitle": "Please enter your credentials to access the platform.",
+        "form": {
+            "email": {
+                "label": "Email *",
+                "help": "Enter your registered email address"
+            },
+            "password": {
+                "label": "Password *",
+                "help": "Enter your password"
+            },
+            "submit": {
+                "label": "🔐 Login",
+                "help": "Check credentials."
+            }
+        },
+        "linkToRegister": "Don't have an account? Go to 📝 Register →",
+        "validations": {
+            "required": "⚠️ Please fill all required fields.",
+            "emailInvalid": "⚠️ Please enter a valid email address.",
+            "passwordLen": "⚠️ Password must be at least 8 characters."
+        },
+        "status": {
+            "loading": "🔄 Logging in...",
+            "success": "✅ Logged in successfully!",
+            "profileFailed": "❌ Failed to fetch user profile. Please try again.",
+            "invalid": "❌ Invalid credentials. Please try again."
+        },
+        "dashboard": {
+            "goto": "📘 Go to Dashboard",
+            "help": "View dashboard."
+        }
+    },
+    "main": {
+        "pageTitle": "🧠 KIKO Platform",
+        "role": {
+            "invalid": "❌ Invalid role. Please contact support team."
+        }
+    },
+    "register": {
+        "pageTitle": "📝 User Registration",
+        "subtitle": "Please enter your details to create the account in KIKO platform.",
+        "form": {
+            "username": {
+                "label": "Username *",
+                "help": "Your unique username to the system."
+            },
+            "fullName": {
+                "label": "Full name *",
+                "help": "Your full name."
+            },
+            "role": {
+                "label": "Role *",
+                "help": "Select your role.",
+                "options": {
+                    "instructor": "Instructor",
+                    "learner": "Learner"
+                }
+            },
+            "email": {
+                "label": "Email *",
+                "help": "Your email address. Used for login and notifications."
+            },
+            "dob": {
+                "label": "Date of birth *",
+                "help": "Your date of birth."
+            },
+            "password": {
+                "label": "Password * (min 8 chars)",
+                "help": "Your password must be at least 8 characters long."
+            },
+            "bio": {
+                "label": "Bio *",
+                "help": "A short bio about yourself.",
+                "default": "Passionate about clean energy."
+            },
+            "submit": {
+                "label": "📝 Create account",
+                "help": "Register yourself."
+            }
+        },
+        "linkToLogin": "Already have an account? Go to 🔐 Login →",
+        "validations": {
+            "required": "⚠️ Please fill all required fields.",
+            "emailInvalid": "⚠️ Please enter a valid email address.",
+            "passwordLen": "⚠️ Password must be at least 8 characters."
+        },
+        "status": {
+            "creating": "👤➕ Creating your account...",
+            "success": "🎉 Account created successfully! You can now log in.",
+            "failed": "❌ Registration failed.",
+            "networkError": "❌ Network error: {error}"
+        },
+        "alreadyLoggedIn": {
+            "info": "ℹ️ You are already logged in. Please log out to register a new account.",
+            "goToLogin": "🔐 Go to Login",
+            "help": "Go to Login."
+        }
+    },
+    "profile": {
+        "pageTitle": "👤 User Profile",
+        "subtitle": "View and manage your profile information.",
+        "errors": {
+            "loadFailed": "❌ Failed to load profile. Please try again later."
+        },
+        "leftCard": {
+            "fullName": "Full name",
+            "username": "Username",
+            "email": "Email",
+            "dob": "Date of birth",
+            "role": "Role",
+            "joined": "Joined",
+            "lastLogin": "Last login"
+        },
+        "bio": {
+            "title": "📝 Bio",
+            "empty": "ℹ️ No bio available."
+        }
+    },
+    "chat": {
+        "pageTitle": "🤖 Chat Assistant",
+        "subtitle": "Your chat assistant!",
+        "history": {
+            "loadWarn": "⚠️ Could not load chat history: {error}",
+            "loadFailLog": "Failed to load chat history: {status} - {text}",
+            "loadedLog": "✅ Loaded chat history.",
+            "countLog": "ℹ️ Loaded messages from chat history."
+        },
+        "input": {
+            "label": "Message",
+            "placeholder": "Ask me… (powered by state-of-the-art AI) 🚀",
+            "send": {
+                "label": "🚀 Send with AI",
+                "help": "Ask assistant.",
+                "loader": "🚀 Generating response with state-of-the-art AI..."
+            }
+        },
+        "config": {
+            "upload": {
+                "title": "📄 Upload Documents",
+                "uploaderLabel": "Drop one or more PDFs here for state-of-the-art analysis",
+                "uploaderHelp": "Drag & drop multiple PDFs; they’ll be processed with advanced AI models",
+                "process": {
+                    "label": "🚀 Process with Advanced AI",
+                    "help": "Start processing.",
+                    "spinner": "🔄 Uploading and processing PDFs with state-of-the-art models…",
+                    "fileEmptyWarn": "⚠️ {file} was empty — skipped.",
+                    "noFilesWarn": "⚠️ No valid files to upload.",
+                    "error": "❌ Error processing document: {status} - {detail}",
+                    "networkError": "❌ Error during uploading and processing document: {error}"
+                }
+            },
+            "models": {
+                "llmLabel": "Large Language Model (LLM)",
+                "llmHelp": "Choose the language model for question answering",
+                "switchedWarn": "🔄 Switched to {model}. Chain will reinitialize on next query."
+            },
+            "system": {
+                "expander": "ℹ️ System Information",
+                "modelsTitle": "🚀 AI Models Available:",
+                "vlmAdvanced": "👁️\u200d🗨️ Advanced VLM Models",
+                "vlmBasic": "⚠️ Basic Models Only",
+                "ocrSurya": "📝 Surya OCR (State-of-the-art)",
+                "ocrTrocr": "📝 TrOCR Available",
+                "cvOn": "📷 OpenCV Computer Vision",
+                "cvOff": "⚠️ Limited CV Capabilities",
+                "embAndLlmTitle": "🤖 Embedding and LLM Model:",
+                "embedding": "🧬 Embedding Model: {model}",
+                "llm": "🧠 Large Language Model: {model}",
+                "systemTitle": "💻 System:",
+                "python": "🐍 Python: {version}",
+                "pytorch": "🔥 PyTorch: {version}",
+                "cuda": "⚡ CUDA: {version}, {device} ({memory} GB)",
+                "cpu": "💻 CPU Available"
+            },
+            "clear": {
+                "button": {
+                    "label": "🗑️ Clear chat…",
+                    "help": "Clear chats."
+                },
+                "dialog": {
+                    "title": "Clear all chat?",
+                    "body": "This will permanently remove your entire chat history.",
+                    "yes": "✅ Yes, clear",
+                    "yes_help": "Delete chats.",
+                    "no": "❌ No, cancel",
+                    "no_help": "Close the window.",
+                    "toast": "✅ Chat history cleared.",
+                    "error": "❌ Failed to clear chat: {status} – {text}",
+                    "exception": "❌ Error clearing chat: {error}"
+                }
+            },
+            "usage": {
+                "expander": "📊 Usage Statistics",
+                "total": "Total Queries",
+                "avgTime": "Avg Response Time",
+                "avgConfidence": "Avg Confidence"
+            }
+        },
+        "errors": {
+            "env": "❌ BACKEND_API_URL not set in environment.",
+            "configFetch": "❌ Failed to fetch Application configurations from backend. Please try again.",
+            "configEmpty": "❌ Empty response from backend. Please check the server logs.",
+            "configMissing": "❌ Missing Application configurations in backend response."
+        }
+    },
+    "helper": {
+        "status": {
+            "processed": "🟢 Processed and Indexed.",
+            "exists": "🔵 Already Processed and Indexed.",
+            "error": "🔴 Error.",
+            "unknown": "⚪ Unknown"
+        },
+        "grade": {
+            "very_good": "1 · Very good",
+            "good": "2 · Good",
+            "satisfactory": "3 · Satisfactory",
+            "sufficient": "4 · Sufficient",
+            "insufficient": "5 · Insufficient"
+        },
+        "date": {
+            "invalid": "Invalid date"
+        },
+        "fileStatus": {
+            "noResults": "❌ No file results returned.",
+            "uploadResults": "📑 Upload Results"
+        },
+        "download": {
+            "failed": "Download failed: {error}"
+        },
+        "image": {
+            "notFound": "⚠️ Image not found (status {status}): {url}",
+            "noAuth": "⚠️ Cannot load image (no auth): {url}",
+            "loadError": "❌ Error loading image {url}: {error}",
+            "unsupportedPath": "⚠️ Unsupported image path: {url}. Use full path like /api/course/ID/images/filename.png"
+        }
+    },
+    "instructorCourses": {
+        "pageTitle": "📚 My Courses",
+        "subtitle": "Create, view, edit, and delete your courses.",
+        "no_available_courses": "ℹ️ You haven't created any courses yet. Click 'Create New Course' to start.",
+        "course_json_error": "❌ This course does not contain a saved course_json file. Please save it first in the new template flow.",
+        "errors": {
+            "fetch": "❌ Failed to fetch courses {code}",
+            "details": "❌ Failed to fetch course details",
+            "delete": "❌ Delete failed {code} — {detail}",
+            "update": "❌ Update failed {code}",
+            "qaDelete": "❌ Delete failed: {error}"
+        },
+        "warning": {
+            "atleast": "Select at least one Q&A pair to delete."
+        },
+        "empty": "You haven't created any courses yet. Click 'Create New Course' to start.",
+        "toolbar": {
+            "create": "➕ Create New Course",
+            "help": "Create"
+        },
+        "table": {
+            "headers": {
+                "courseId": "**Course ID**",
+                "title": "**Title**",
+                "dateCreated": "**Date Created**",
+                "view": "**View**",
+                "delete": "**Delete**"
+            },
+            "row": {
+                "view": {
+                    "label": "🔽 View",
+                    "help": "View details."
+                },
+                "delete": {
+                    "label": "🗑️ Delete",
+                    "help": "Delete course."
+                }
+            }
+        },
+        "confirmDelete": {
+            "title": "Confirm deletion",
+            "message": "ℹ️ Are you sure you want to delete course **{courseId}**? This action cannot be undone.",
+            "yes": {
+                "label": "✅ Yes, delete",
+                "help": "Delete course."
+            },
+            "no": {
+                "label": "❌ No, keep it",
+                "help": "Close the window."
+            },
+            "toast": "🗑️ Course deleted."
+        },
+        "expander": {
+            "id": "Course #{id}: {title}",
+            "prefix": "**Summary:** {summary}",
+            "courseContent": "📄 Course Content",
+            "editCourse": "✏️ Edit Course",
+            "title": "Title",
+            "summary": "Summary",
+            "summaryHelp": "You can use markdown syntax and add images",
+            "quiz": "Quiz (YAML)",
+            "qa_header": "**Questions & Answers**",
+            "viewMode": {
+                "preview": "👁 Preview",
+                "previewHelp": "View the course content in read-only mode",
+                "edit": "✏️ Edit",
+                "editHelp": "Edit course title, summary, questions, and quiz"
+            }
+        },
+        "qa": {
+            "toolbar": {
+                "remove": {
+                    "label": "🗑️ Remove",
+                    "help": "Select and delete Q&A entries."
+                },
+                "exit": {
+                    "label": "🗑️ Delete",
+                    "help": "Delete the selected Q&A entries."
+                },
+                "cancel": {
+                    "label": "❌ Cancel",
+                    "help": "Exit delete mode."
+                }
+            },
+            "checkbox": {
+                "help": "Select to delete this Q&A pair."
+            },
+            "addNew": {
+                "toggle": "Add a new question",
+                "q": "New Question",
+                "a": "New Answer"
+            },
+            "confirmDelete": {
+                "title": "Delete selected Q&A?",
+                "none": "ℹ️ No questions selected.",
+                "message": "ℹ️ Are you sure you want to delete {count} selected question{plural}? This action cannot be undone.",
+                "yes": {
+                    "label": "✅ Yes, delete",
+                    "help": "Delete selected questions."
+                },
+                "no": {
+                    "label": "❌ No, keep them",
+                    "help": "Close the window."
+                },
+                "toast": "🧹 Selected Q&A deleted."
+            },
+            "validation": {
+                "empty": "QA number {n} cannot have empty question or answer."
+            },
+            "models": {
+                "llmLabel": "Inference LLM",
+                "llmHelp": "Choose the Inference model for grading your answer."
+            },
+            "exitBeforeSave": "Exit delete mode before saving changes or adding new questions."
+        },
+        "save": {
+            "label": "💾 Save Changes",
+            "help": "Save changes to database.",
+            "success": "✅ Course updated"
+        },
+        "raw_markdown": {
+            "expander": "📄 Raw Markdown",
+            "no_stored": "No stored markdown found."
+        },
+        "reset_changes": {
+            "label": "⚠️ Reset Changes",
+            "help": "Reset all unsaved changes."
+        }
+    },
+    "faq": {
+        "pageTitle": "❓ FAQ — Frequently Asked Questions",
+        "welcome": "Welcome {fullName}! This page shows tips and links tailored for your role.",
+        "quickLinks": {
+            "title": "### 🔗 Quick Links",
+            "learner": {
+                "dashboard": "📊 Learning Dashboard",
+                "chat": "🤖 Chat Assistant",
+                "myCourses": "📚 My Courses",
+                "assessment": "🧠 Knowledge Assessment",
+                "documents": "📄 My Documents",
+                "profile": "👤 Profile",
+                "results": "🔍 Evaluation Results"
+            },
+            "instructor": {
+                "chat": "🤖 Chat Assistant",
+                "courseSetup": "✍️ Course Setup",
+                "myCourses": "📚 My Courses",
+                "documents": "📄 My Documents",
+                "profile": "👤 Profile",
+                "results": "🔍 Evaluation Results"
+            },
+            "unknownRole": {
+                "learnerHeader": "👩‍🎓 Learner",
+                "instructorHeader": "👨‍🏫 Instructor"
+            }
+        },
+        "sections": {
+            "learner": {
+                "header": "👩‍🎓 For Learners",
+                "learningDashboard": {
+                    "title": "📊 Learning Dashboard — what is it and how do I use it?",
+                    "body": "- The dashboard gives a **snapshot** of your activity (recent chats, enrolled courses, and progression).\n- Use it as a **home base**: jump into courses or continue learning from recommendations.\n- If tiles look empty, enroll in a course first from **My Courses**."
+                },
+                "chatAssistant": {
+                    "title": "🤖 Chat Assistant — tips for getting great answers",
+                    "body": "- Ask questions about your uploaded documents or course topics.\n- Use **citations/sources** shown under answers to preview or download supporting docs.\n- To download a referenced document, use the **Download** button the assistant renders for that source.\n- Clear chat: use the **Clear Chat** button in the configuration panel (you’ll be asked to confirm)."
+                },
+                "myCourses": {
+                    "title": "📚 My Courses — enroll, view, and manage",
+                    "body": "- **Enrolled** shows courses you’re currently taking.\n- If a course reaches **100%**, you’ll see a **Completed** indicator (no Unenroll button).\n- Otherwise, you can **View** details or **Unenroll** (confirmation dialog will appear).\n- **Recommended** lists courses suggested from your **Knowledge Assessment** and learning signals.\n- Click **Enroll** to join (confirmation dialog).\n- Use **Refresh** to reload the latest data (progress or recommendations)."
+                },
+                "assessment": {
+                    "title": "🧠 Knowledge Assessment — how it works",
+                    "body": "- Answer a short set of questions; we grade them with an **AI rater** on a 1–6 scale (1=very good, 6=unsatisfactory).\n- You’ll see a **knowledge assessment**, **learning path**, and a **first learning step**.\n- Recommendations are generated and shown on **My Courses → Recommended**.\n- Make sure you submit **all answers**; the form checks for missing fields."
+                },
+                "documents": {
+                    "title": "📄 My Documents — preview, download, and delete",
+                    "body": "- Shows files you’ve uploaded. Thumbnails (for PDFs) allow quick **Preview**; use **Download** to grab the file.\n- **Delete…** prompts a confirmation dialog.\n- **Delete All…** removes every file for your account (also with confirmation).\n- Thumbnails for Markdown show a file-type icon instead of a PDF page image."
+                },
+                "profileResults": {
+                    "title": "👤 Profile & 🔍 Evaluation Results",
+                    "body": "- **Profile** lets you review your account info.\n- **Evaluation Results** aggregate outcomes from recent assessments (scores, summaries, and learning artifacts)."
+                }
+            },
+            "instructor": {
+                "header": "👨‍🏫 For Instructors",
+                "chatAssistant": {
+                    "title": "🤖 Chat Assistant — tips for getting great answers",
+                    "body": "- Ask questions about your uploaded documents or course topics.\n- Use **citations/sources** shown under answers to preview or download supporting docs.\n- To download a referenced document, use the **Download** button the assistant renders for that source.\n- Clear chat: use the **Clear Chat** button in the configuration panel (you’ll be asked to confirm)."
+                },
+                "courseSetup": {
+                    "title": "✍️ Course Setup — create courses from documents",
+                    "body": "- Upload **PDF** or **Markdown**, then **Process** to extract content.\n- System can generate **summary** + **Q&A** to edit and save.\n- Saved courses appear in **My Courses (Instructor)**\n- On first login, a sample Markdown (**gamma_scanning_EducTUM.md**) is auto-uploaded to **My Documents** if missing."
+                },
+                "myCourses": {
+                    "title": "📚 My Courses — view, edit, delete",
+                    "body": "- List shows ID, Title, Created, and Question count.\n- **View** to edit Title/Summary/Q&A.\n- **Delete** removes the course (confirmation) and cleans dependents."
+                },
+                "documents": {
+                    "title": "📄 My Documents — managing course files",
+                    "body": "- Manage all uploaded files, including the default Markdown template.\n- Preview, download, delete; **Delete All…** with confirmation."
+                },
+                "profileResults": {
+                    "title": "👤 Profile & 🔍 Evaluation Results",
+                    "body": "- **Profile** lets you review your account info.\n- **Evaluation Results** aggregate outcomes from recent assessments (scores, summaries, and learning artifacts)."
+                }
+            }
+        },
+        "common": {
+            "header": "🌐 Common Questions",
+            "dialogs": {
+                "title": "How do confirmations and dialogs work?",
+                "body": "- Any destructive action (Delete, Unenroll, Clear Chat) triggers a **confirmation dialog** with **Confirm** and **Cancel**.\n- This prevents accidental data loss.\n- Simply choose **Cancel** to abort the action safely."
+            },
+            "recommendations": {
+                "title": "Why don’t I see recommendations yet?",
+                "body": "- Complete **Knowledge Assessment** first (for Learners).\n- Click **Refresh** in **My Courses**.\n- It’s possible current catalog items don’t strongly match your topics yet."
+            },
+            "uploads": {
+                "title": "Troubleshooting uploads & previews",
+                "body": "- Encrypted/damaged PDFs may fail to preview.\n- Markdown shows an icon (no page thumbnails) but still works in Chat.\n- Duplicate content returns an “already processed” message."
+            },
+            "contact": "Need more help? Contact support team at **{email}**"
+        }
+    },
+    "sidebar": {
+        "welcome": "👋 Welcome, {fullName} ({role})",
+        "roles": {
+            "learner": "Learner",
+            "instructor": "Instructor",
+            "admin": "Admin"
+        },
+        "menus": {
+            "learner": {
+                "dashboard": "Learning Dashboard",
+                "chat": "Chat Assistant",
+                "myCourses": "My Courses",
+                "assessment": "Knowledge Assessment"
+            },
+            "instructor": {
+                "chat": "Chat Assistant",
+                "courseSetup": "Course Setup",
+                "myCourses": "My Courses",
+                "mediaManager": "Media Manager"
+            },
+            "admin": {
+                "knowledgeConfig": "Knowledge Check Config",
+                "dashboard": "Admin Dashboard",
+                "console": "Admin Console"
+            },
+            "common": {
+                "documents": "My Documents",
+                "profile": "Profile",
+                "faq": "FAQ",
+                "results": "Evaluation Results",
+                "logout": {
+                    "label": "🚪Logout",
+                    "help": "Logout yourself."
+                }
+            }
+        }
+    },
+    "eval": {
+        "pageTitle": "🔍 Evaluation Results — Why do models vary in speed & quality?",
+        "subtitle": "You can view the LLM results!",
+        "tabs": {
+            "dataset": "Dataset (what we tested)",
+            "chatApertus": "Chat: Apertus-8B",
+            "chatLlama3": "Chat: Llama3.3:70B",
+            "chatKimik2": "Chat: Kimi-K2-Instruct-0905",
+            "grading": "Grading: DeepSeek-R1-32B"
+        },
+        "dataset": {
+            "subheader": "📚 Evaluation dataset (what we tested)",
+            "caption": "Below is the corpus used for the evaluations, with a short, non-technical overview.",
+            "explainerTitle": "**What is this dataset and how was it used?**",
+            "explainer": "- **What you’re looking at:** a sample of real-world questions, short passages, and (where relevant) target grades.\n- **Why this matters:** it shows the exact kind of material we used to check answer quality and grading reliability.\n- **How we used it:**\n  - For **chat**, we compare model answers to a reference answer.\n  - For **grading**, we compare the model’s grade to a human grade.\n- **How to read the table:** each row is one test case.\n- **Limits:** it’s a sample, not everything; very unusual questions may behave differently.\n- **Tip:** If you spot gaps, tell us — we can expand the dataset.",
+            "statsTitle": "**Statistics**",
+            "stats": {
+                "rows": "Rows",
+                "columns": "Columns",
+                "missing": "Missing values",
+                "avgChars": "Avg. chars/row"
+            },
+            "previewTitle": "**Preview**",
+            "missingDataset": "Dataset not found at `{path}`. Once your eval notebook exports it, it will appear here."
+        },
+        "chatApertus": {
+            "subheader": "🤖 Chat quality — Apertus-8B-Instruct-2509",
+            "explainerTitle": "**How to read these results (Apertus-8B)?**",
+            "explainer": "- **Table:** One row per test showing per-metric scores and runtime.\n- **Chart:** shows how answer quality is distributed (higher is better).\n- **What affects speed/quality:** longer questions, larger context slow things down and initial loading of model from Hugging Face.\n- **Takeaway:** Apertus-8B is the fast responder; for very complex tasks, try the larger model.",
+            "resultsTable": "**Results table**",
+            "quickAggregates": "**Quick aggregates**",
+            "visualization": "**Visualization**",
+            "vizCaption": "Distribution of chat quality (BERTScore F1) — Apertus",
+            "artifactsMissing": "Artifacts not found yet. They’ll show up here after Admin run the evaluations and generate the reports."
+        },
+        "chatLlama3": {
+            "subheader": "🤖 Chat quality — Llama3.3:70B",
+            "explainerTitle": "**How to read these results (Llama3.3:70B)?**",
+            "explainer": "- **Why this model:** larger = more detailed answers, but slower.\n- **Table:** One row per test showing per-metric scores and runtime.\n- **Chart:** overall quality tends to be higher than smaller models.\n- **When to use:** complex, multi-step questions; you want depth over speed.\n- **Takeaway:** Llama3.3:70B is the deep diver; expect slightly longer times.",
+            "resultsTable": "**Results table**",
+            "quickAggregates": "**Quick aggregates**",
+            "visualization": "**Visualization**",
+            "vizCaption": "Distribution of chat quality (BERTScore F1) — Llama3.3",
+            "artifactsMissing": "Artifacts not found yet. They’ll show up here after Admin run the evaluations and generate the reports."
+        },
+        "chatKimik2": {
+            "subheader": "🤖 Chat quality — Kimi-K2-Instruct-0905",
+            "explainerTitle": "**How to read these results (Kimi-K2-Instruct-0905)?**",
+            "explainer": "- **Why this model:** Chosen as a long-context instruct model to benchmark chat-style semantic quality and grounding.\n- **Table:** One row per test showing per-metric scores and runtime.\n- **Chart:** Histogram of per-test BERTScore F1 showing most answers cluster around ~0.60–0.62.\n- **When to use:** When semantic similarity is acceptable, but not for strict grounding/RAG without improving retrieval + attribution.\n- **Takeaway:** Moderate semantic quality (avg BERTScore F1 ≈ 0.61) with weak grounding (Recall@k/MRR modest; AttributionMatch very low).",
+            "resultsTable": "**Results table**",
+            "quickAggregates": "**Quick aggregates**",
+            "visualization": "**Visualization**",
+            "vizCaption": "Distribution of chat quality (BERTScore F1) — Kimi-K2-Instruct-0905",
+            "artifactsMissing": "Artifacts not found yet. They’ll show up here after Admin run the evaluations and generate the reports."
+        },
+        "grading": {
+            "subheader": "📝 Grading — DeepSeek-R1-32B",
+            "explainerTitle": "**How to read the grading results?**",
+            "explainer": "- **Goal:** see how close the model's grades are to human grades.\n- **Confusion matrix:** rows = human grade, columns = model grade; darker on the diagonal is good.\n- **Metrics:** Accuracy (higher better), MAE (lower better), Agreement κ (closer to 1 better).\n- **Reality check:** great on clear cases; borderline cases can vary like different teachers.\n- **Tip:** treat the model grade as a starting point; keep quick human checks for key decisions.",
+            "resultsTable": "**Results table**",
+            "quickAggregates": "**Quick aggregates**",
+            "visualization": "**Visualization**",
+            "vizCaption": "Confusion matrix — human vs model grades (rows = human, cols = model)",
+            "artifactsMissing": "Artifacts not found yet. They’ll show up here after Admin run the evaluations and generate the reports."
+        },
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL not set in environment."
+        },
+        "warnings": {
+            "csvReadFail": "⚠️ Could not read {path}: {error}",
+            "imgOpenFail": "⚠️ Could not open image {path}: {error}"
+        }
+    },
+    "docs": {
+        "pageTitle": "📄 My Documents",
+        "subtitle": "View and manage your uploaded documents.",
+        "toolbar": {
+            "refresh": {
+                "label": "🔄 Refresh",
+                "help": "Get latest documents."
+            },
+            "deleteAll": {
+                "label": "🗑️ Delete All…",
+                "help": "Delete all documents."
+            }
+        },
+        "list": {
+            "empty": "ℹ️ No documents uploaded yet.",
+            "uploadedPrefix": "Uploaded: {date}",
+            "statusPrefix": "Status: {status}",
+            "preview": {
+                "label": "👁️ Preview",
+                "help": "View document."
+            },
+            "download": {
+                "label": "⬇️ Download",
+                "help": "Download document."
+            },
+            "downloadDisabled": "⬇️ Download",
+            "delete": {
+                "label": "🗑️ Delete…",
+                "help": "Delete document."
+            }
+        },
+        "dialogs": {
+            "single": {
+                "title": "Confirm deletion",
+                "body": "ℹ️ Are you sure you want to delete this document? This action cannot be undone.",
+                "confirm": {
+                    "label": "✅ Yes, delete",
+                    "help": "Delete document."
+                },
+                "cancel": {
+                    "label": "❌ No, keep it",
+                    "help": "Close the window."
+                }
+            },
+            "all": {
+                "title": "Delete ALL documents?",
+                "body": "ℹ️ This will permanently remove **all** of your uploaded documents and their embeddings.",
+                "confirm": {
+                    "label": "✅ Yes, delete all",
+                    "help": "Delete all documents."
+                },
+                "cancel": {
+                    "label": "❌ No, keep it",
+                    "help": "Close the window."
+                }
+            },
+            "preview": {
+                "title": "Document preview",
+                "noPreview": "ℹ️ No preview available.",
+                "categoryPrefix": "Category: {subtitle}",
+                "learningObjectivesTitle": "**Learning objectives**",
+                "quizTitle": "**Quiz**",
+                "type": "Type: {type}",
+                "optionsTitle": "Options:",
+                "answerPrefix": "**Answer:** {answer}",
+                "comprehensionTitle": "**Comprehension Questions**",
+                "noMarkdownPreview": "ℹ️ No markdown content available.",
+                "fullPreviewCaption": "Full-document preview",
+                "close": "❌ Close",
+                "closeHelp": "Close preview."
+            }
+        },
+        "toasts": {
+            "deleteOneSuccess": "Document deleted.",
+            "deleteAllSuccess": "All documents deleted.",
+            "deleteOneFailed": "Delete failed: {detail}",
+            "deleteOneFailedCode": "Delete failed ({status}): {text}",
+            "deleteAllFailed": "Delete-all failed: {detail}",
+            "deleteAllFailedCode": "Delete-all failed ({status}): {text}"
+        },
+        "warnings": {
+            "previewImageMissing": "⚠️ Preview image not available.",
+            "markdownPreviewFail": "⚠️ Unable to load markdown preview."
+        },
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL not set in environment."
+        }
+    },
+    "learnerDashboard": {
+        "pageTitle": "📊 Learner Dashboard",
+        "subtitle": "Welcome to your personalized learning dashboard.",
+        "sections": {
+            "stats": {
+                "title": "📈 Learning Statistics",
+                "desc": "Here you can monitor your learning progress and engagement."
+            }
+        },
+        "metrics": {
+            "coursesEnrolled": "📚 Courses Enrolled",
+            "coursesInProgress": "🎓 Courses In Progress",
+            "coursesCompleted": "✅ Courses Completed",
+            "overallProgress": "Overall Progress",
+            "examsPassed": "🏆 Exams Passed",
+            "examsFailed": "❌ Exams Failed",
+            "examsInProgress": "⌛ Exams In Progress",
+            "questionsAsked": "🤖 Questions Asked to Chat assistant",
+            "lastLogin": "🕒 Last time login"
+        },
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL not set in environment.",
+            "statsFetch": "❌ Error fetching learner stats: {detail}"
+        }
+    },
+    "knowledgeAssessment": {
+        "pageTitle": "🧠 Knowledge Assessment",
+        "subtitle": "A quick optional check to tailor your course recommendations.",
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL not set in environment.",
+            "quizFetch": "⚠️ Unable to fetch quiz.",
+            "quizFetchWithDetail": "⚠️ Unable to fetch quiz: {detail}",
+            "submitFailed": "❌ Submission failed",
+            "submitFailedWithDetail": "❌ Submission failed: {detail}"
+        },
+        "empty": {
+            "noQuestions": "ℹ️ No questions available right now.",
+            "noRecommendations": "ℹ️ No recommendations yet."
+        },
+        "form": {
+            "questionLine": "**{topic}** — {question}*",
+            "answerLabel": "Your answer",
+            "answerHelp": "Enter your answer.",
+            "submitLabel": "📊 Submit",
+            "submitHelp": "Submit your answers.",
+            "validateAllRequired": "⚠️ Please answer all questions before submitting."
+        },
+        "status": {
+            "evaluating": "📊 Evaluating your answers. This may take a bit longer depending on the number of questions."
+        }
+    },
+    "courseDetails": {
+        "pageTitle": "📘 Course Details",
+        "warnings": {
+            "noCourseSelected": "⚠️ No course selected."
+        },
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL not set in environment.",
+            "loadFailed": "❌ Failed to load course: {details}",
+            "enrollFailed": "❌ Enroll failed",
+            "unenrollFailed": "❌ Unenroll failed",
+            "loadFailedWithDetails": "❌ Failed to load course {cid}: {details}",
+            "noCourseJson": "❌ No Course JSON stored for this course. Recreate the course from the markdown template."
+        },
+        "toolbar": {
+            "back": {
+                "label": "⬅️ Back",
+                "help": "Go back to Course info."
+            },
+            "refresh": {
+                "label": "🔄 Refresh",
+                "help": "Fetch course details."
+            }
+        },
+        "header": {
+            "titleFallback": "Course #{id}",
+            "courseId": "Course ID: {id}",
+            "progress": "Progress: {percent}%"
+        },
+        "actions": {
+            "completed": {
+                "label": "✅ Completed",
+                "help": "Course is completed."
+            },
+            "unenroll": {
+                "label": "🗑️ Unenroll",
+                "help": "De-register from course."
+            },
+            "enroll": {
+                "label": "✅ Enroll",
+                "help": "Register to course."
+            }
+        },
+        "toasts": {
+            "enrolled": "✅ Enrolled",
+            "unenrolled": "🗑️ Unenrolled"
+        },
+        "dialogs": {
+            "enroll": {
+                "title": "Confirm enrollment",
+                "body": "ℹ️ Enroll in this course?",
+                "yes": {
+                    "label": "✅ Yes, enroll",
+                    "help": "Register to course."
+                },
+                "no": {
+                    "label": "❌ Cancel",
+                    "help": "Close the window."
+                }
+            },
+            "unenroll": {
+                "title": "Confirm unenroll",
+                "body": "ℹ️ Unenroll from this course?",
+                "yes": {
+                    "label": "✅ Yes, unenroll",
+                    "help": "De-register from course."
+                },
+                "no": {
+                    "label": "❌ Keep it",
+                    "help": "Close the window."
+                }
+            }
+        },
+        "sections": {
+            "summary": {
+                "title": "📄 Summary",
+                "empty": "_No summary available._"
+            },
+            "questions": {
+                "title": "❓ Questions",
+                "empty": "ℹ️ No questions attached to this course.",
+                "showAnswer": "Show answer"
+            }
+        }
+    },
+    "myCourses": {
+        "pageTitle": "📚 My Courses",
+        "subtitle": "Your enrolled and recommended courses.",
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL not set in environment.",
+            "enrolledLoad": "❌ Failed to load enrolled courses: {detail}",
+            "recommendedLoad": "❌ Failed to load recommended courses: {detail}",
+            "allLoad": "❌ Failed to load all courses: {detail}",
+            "enrollFailed": "❌ Enroll failed {status}",
+            "unenrollFailed": "❌ Unenroll failed {status}",
+            "dismissFailed": "❌ Dismiss failed {status}"
+        },
+        "toolbar": {
+            "refresh": {
+                "label": "🔄 Refresh",
+                "help": "Reload courses."
+            }
+        },
+        "sections": {
+            "enrolled": {
+                "title": "🎓 Enrolled Courses",
+                "empty": "ℹ️ You haven't enrolled in any courses yet."
+            },
+            "recommended": {
+                "title": "✨ Recommended For You",
+                "empty": "ℹ️ No recommendations yet.",
+                "fallback": "ℹ️ No personalized recommendations yet. ⚠️ showing available courses instead."
+            }
+        },
+        "cards": {
+            "untitled": "Untitled",
+            "id": "#{id}",
+            "progress": "Progress: {percent}%",
+            "why": "Why: {reason}",
+            "course_completed": "ℹ️ Course completion status: COMPLETE ✅",
+            "eligible_final_quiz": "ℹ️ Course completion status: Eligible for final quiz.",
+            "course_inprogress": "ℹ️ Course completion status: In-progress"
+        },
+        "actions": {
+            "view": {
+                "label": "👁️ View",
+                "help": "View course details."
+            },
+            "completed": {
+                "label": "✅ Completed",
+                "help": "Course is completed."
+            },
+            "unenroll": {
+                "label": "🗑️ Unenroll",
+                "help": "De-register from course."
+            },
+            "enroll": {
+                "label": "✅ Enroll",
+                "help": "Register to course."
+            },
+            "dismiss": {
+                "label": "🗑️ Dismiss",
+                "help": "Do not recommend."
+            }
+        },
+        "toasts": {
+            "enrolled": "✅ Enrolled",
+            "unenrolled": "🗑️ Unenrolled",
+            "dismissed": "🗑️ Recommendation dismissed"
+        },
+        "dialogs": {
+            "enroll": {
+                "title": "Confirm enrollment",
+                "body": "ℹ️ Enroll in course **{id}**?",
+                "yes": {
+                    "label": "✅ Yes, enroll",
+                    "help": "Register to course."
+                },
+                "no": {
+                    "label": "❌ Cancel",
+                    "help": "Close the window."
+                }
+            },
+            "unenroll": {
+                "title": "Confirm unenroll",
+                "body": "ℹ️ Unenroll from course **{id}**?",
+                "yes": {
+                    "label": "✅ Yes, unenroll",
+                    "help": "De-register from course."
+                },
+                "no": {
+                    "label": "❌ Keep it",
+                    "help": "Close the window."
+                }
+            },
+            "dismiss": {
+                "title": "Dismiss recommendation",
+                "body": "ℹ️ Remove recommendation for course **{id}**?",
+                "yes": {
+                    "label": "✅ Dismiss",
+                    "help": "Do not recommend."
+                },
+                "no": {
+                    "label": "❌ Cancel",
+                    "help": "Close the window."
+                }
+            }
+        }
+    },
+    "logout": {
+        "success": "✅ Logged out successfully! Redirecting to login page..."
+    },
+    "courseGenerator": {
+        "page": {
+            "pageTitle": "Document Summarizer and Question Generator",
+            "title": "✍️ Course Generator",
+            "subtitle": "Upload a PDF or Markdown (.md) file to generate a course about its content with summary and questions."
+        },
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL not set in environment.",
+            "emptyConfig": "❌ Empty response from backend. Please check the server logs.",
+            "invalidServerResponse": "❌ Invalid response from server.",
+            "unknownServerResponse": "❌ Unknown response from server.",
+            "missingModelConfig": "❌ Missing default model configuration. Please check backend settings.",
+            "processingError": "❌ An error occurred: {error}",
+            "questionsLoadFailed": "❌ Failed to load questions: {error}",
+            "fileDataMissing": "❌ File data missing. Please upload the document again.",
+            "apiURLRequired": "❌ api_url is required"
+        },
+        "upload": {
+            "uploaderLabel": "Choose a document (PDF or Markdown)",
+            "pdfOptions": {
+                "qaCountLabel": "Q&A pairs to generate",
+                "quizQuestionCountLabel": "Quiz questions to generate",
+                "quizOptionCountLabel": "Options per quiz question",
+                "caption": "For PDF uploads, AI generates Q&A and quiz. Max values: Q&A 10, quiz questions 4, options per question 4. Each quiz question has exactly one correct option."
+            },
+            "processButton": {
+                "label": "🚀 Process Document",
+                "help": "Start Processing."
+            },
+            "spinners": {
+                "processing": "⚙️📄 Processing document... This may take a bit depending on size.",
+                "replacing": "🔄📄 Replacing document..."
+            },
+            "fileExists": "⚠️ File already processed."
+        },
+        "replaceDialog": {
+            "title": "Replace existing document?",
+            "bodyDefault": "This upload will replace the stored markdown document. Proceed?",
+            "markdownId": "**Markdown ID:** {doc_id}",
+            "storedAs": "Currently stored as **{fileName}** (uploaded at {uploadedAt}).",
+            "replaceButton": "✅ Replace document",
+            "cancelButton": "❌ Cancel"
+        },
+         "pagination": {
+            "previous": "⬅️ Previous Page",
+            "previous_help": "Show previous page.",
+            "next": "Next Page ➡️",
+            "next_help": "Show next page.",
+            "rows_per_page": "Rows per page:",
+            "mid_page_label": "Page",
+            "editor_validation_errors": "ℹ️ Saving is disabled until all YAML validation errors are fixed."
+        },
+        "status": {
+            "processingComplete": "Processing complete!",
+            "success": "✅ Success",
+            "error": "❌ Error: {error}"
+        },
+        "summary": {
+            "header": "📃 Document Summary"
+        },
+        "quiz": {
+            "header": "🧩 Quiz",
+            "editorLabel": "Quiz (YAML)"
+        },
+        "download": {
+            "generatedMarkdownLabel": "⬇️ Download Generated Markdown",
+            "generatedMarkdownHelp": "Download the AI-generated KIKO markdown generated from your PDF upload."
+        },
+        "qa": {
+            "header": "⁉️ Questions and Answers",
+            "table": {
+                "no": "**No.**",
+                "question": "**Question**",
+                "llmAnswer": "**LLM Answer**",
+                "yourAnswer": "**Your Answer**",
+                "action": "**Action**",
+                "gradeSummary": "**LLM Grade Summary**",
+                "gradingModel": "**Grading Model**"
+            },
+            "rowYourAnswerLabel": "Your answer (row {row})",
+            "sendButton": {
+                "label": "📊 Send",
+                "help": "Evaluate answer."
+            },
+            "spinners": {
+                "grading": "📊 Grading your answer..."
+            },
+            "messages": {
+                "dash": "—",
+                "enterAnswerFirst": "Enter your answer first.",
+                "graded": "✅ Graded!",
+                "gradeFailed": "❌ Failed ({status})",
+                "gradeError": "❌ Error: {error}"
+            }
+        },
+        "save": {
+            "header": "💾 Save as Course",
+            "titleLabel": "Course Title",
+            "saveButton": {
+                "label": "💾 Save as Course",
+                "help": "Save in database."
+            },
+            "messages": {
+                "alreadySaved": "⚠️ You already saved this course output.",
+                "savedSuccess": "✅ Course and QAs saved successfully!",
+                "saveFailed": "❌ Failed to save course.",
+                "saveError": "❌ Error: {error}"
+            }
+        }
+    },
+    "mediaManager": {
+        "pageTitle": "Media Manager",
+        "title": "🖼️ Media Manager",
+        "subtitle": "Upload and manage images for your courses. Use the image URLs in your markdown files.",
+        "help": {
+            "expanderTitle": "ℹ️ **How to use images in your courses**",
+            "workflowTitle": "### Simple Workflow",
+            "steps": {
+                "one": "1. **Upload images** here in Media Manager",
+                "two": "2. **Copy the markdown reference** from below each image (looks like `![image.png](/api/course/123/images/abc.png)`)",
+                "three": "3. **Go to \"My Courses\"** → Click on a course → Edit the Summary field",
+                "four": "4. **Paste the markdown reference** anywhere in the summary text",
+                "five": "5. **Save** the course",
+                "six": "6. **View** the course to see your images rendered!"
+            },
+            "exampleTitle": "#### Example Course Summary:",
+            "exampleMarkdownBlock": "```markdown\n# Introduction to Machine Learning\n\nThis course covers the basics of ML:\n\n![ML Workflow](/api/course/1/images/ml-workflow.png)\n\n## Topics Covered\n- Supervised Learning\n- Neural Networks\n\n![Neural Network](/api/course/1/images/neural-net.png)\n```",
+            "tipsTitle": "#### Tips:",
+            "tips": {
+                "edit": "✅ You can edit course content anytime and add/remove images",
+                "linked": "✅ Images are linked to the course - they'll work wherever you paste the URL",
+                "formats": "✅ Supported formats: PNG, JPG, GIF, WebP, SVG",
+                "maxSize": "✅ Maximum file size: 10MB per image",
+                "copyPaste": "ℹ️ The markdown reference includes the full image URL - just copy and paste it!"
+            }
+        },
+        "actions": {
+            "refreshCourses": {
+                "label": "🔄 Refresh Courses",
+                "help": "Refresh the list of courses."
+            },
+            "uploadImage": {
+                "label": "⬆️ Upload Image",
+                "help": "Upload this image to the selected course"
+            }
+        },
+        "loading": {
+            "courses": "⏳📚 Loading courses..."
+        },
+        "status": {
+            "foundCourses": "Found {count} course(s)"
+        },
+        "empty": {
+            "noCourses": {
+                "title": "📚 No courses found. Create a course first to upload images.",
+                "tip": "Tip: After creating a course, click the 'Refresh Courses' button above.",
+                "troubleshooting": "🔧 Troubleshooting",
+                "apiUrl": "API URL: {url}",
+                "tokenPresent": "Token present: {value}",
+                "userRole": "User role: {role}"
+            },
+            "noImages": "No images uploaded yet for this course."
+        },
+        "courseSelector": {
+            "header": "Select Course",
+            "label": "Choose a course to manage its images:",
+            "help": "Select a course from the dropdown to view and manage its images."
+        },
+        "upload": {
+            "header": "📤 Upload Image",
+            "uploaderLabel": "Choose an image file",
+            "uploaderHelp": "Maximum file size: 10MB. Supported formats: PNG, JPG, GIF, WebP, SVG",
+            "previewCaption": "Preview: {filename}",
+            "sizeLabel": "Size: {size}"
+        },
+        "gallery": {
+            "header": "🖼️ Uploaded Images",
+            "total": "Total images: {count}",
+            "loadFailed": "Failed to load image",
+            "copyHint": "**📋 Copy below URL to use in course content:**",
+            "delete": {
+                "label": "🗑️ Delete",
+                "help": "Delete this image permanently"
+            },
+            "meta": {
+                "size": "Size: {size}",
+                "uploadedAt": "Uploaded: {date}"
+            }
+        },
+        "dialog": {
+            "delete": {
+                "title": "🗑️ Confirm Delete",
+                "body": "Are you sure you want to delete this image?",
+                "warning": "⚠️ This action cannot be undone.",
+                "yes": {
+                    "label": "✅ Yes, Delete",
+                    "help": "Permanently delete this image"
+                },
+                "no": {
+                    "label": "❌ Cancel",
+                    "help": "Cancel the delete operation"
+                }
+            }
+        },
+        "toast": {
+            "uploadSuccess": "✅ Image '{filename}' uploaded successfully!",
+            "deleteSuccess": "✅ Image deleted successfully!"
+        },
+        "errors": {
+            "uploadFailed": "❌ Upload failed: {detail}",
+            "uploadException": "❌ Error uploading image: {error}",
+            "deleteFailed": "❌ Delete failed: {detail}",
+            "deleteException": "❌ Error deleting image: {error}",
+            "fetchImages": "Error fetching images: {error}",
+            "fetchCoursesNetwork": "Network error fetching courses: {error}",
+            "fetchCoursesGeneric": "Error fetching courses: {error}"
+        },
+        "warnings": {
+            "endpointNotFound": "⚠️ Endpoint not found: {url}",
+            "badStatus": "⚠️ API returned status {status}: {text}"
+        }
+    },
+    "course_render":{
+        "no_contents": "ℹ️ No content available.",
+        "errors": {
+            "saveProgressFailed": "❌ Failed to save progress: {details}",
+            "submitQuizFailed": "❌ Failed to submit quiz attempt: {details}",
+            "evaluateAnswerFailed": "❌ Failed to evaluate answer: {details}"
+        },
+        "warnings": {
+            "missingModulesFinalQuiz": "⚠️ Complete and pass required modules first: {missing}",
+            "noProviderName": "⚠️ Provider name not provided",
+            "noLevelSet": "⚠️ Level not set",
+            "noLanguageSet": "⚠️ Language not set"
+        },
+        "difficulty": "Difficulty",
+        "duration": "Duration",
+        "modules": "Modules",
+        "previewCompleteness": "Preview completeness",
+        "assessmentProgress": "Assessment progress",
+        "nav_bar":{
+            "course_overview": "📖 Overview",
+            "course_info": "ℹ️ Course info",
+            "modules": "Modules",
+            "course_final_quiz": "📝 Final quiz",
+            "course_grades": "📊 Grades",
+            "course_resources": "📚 Resources"
+        },
+        "overview_tab":{
+            "title": "## 📖 Course overview"
+        },
+        "info_tab":{
+            "title": "## ℹ️ Course information",
+            "about_course": "About this course",
+            "learnings": "What you will learn?",
+            "tags": "Skills and tags",
+            "prerequisites": "Prerequisites",
+            "instructors": "Instructors",
+            "info":{
+                "no_overview": "ℹ️ No overview available.",
+                "no_learnings": "ℹ️ No structured learning outcomes found in the overview.",
+                "no_tags": "ℹ️ No tags provided.",
+                "no_prerequisites": "ℹ️ No formal prerequisites.",
+                "no_instructor_info": "ℹ️ No instructor information available."
+            }
+        },
+        "quiz_preview": {
+            "pass_thresold": "Pass threshold: **{pass_percent:.0f}%**",
+            "type_points": "Type: {qtype} · Points: {points}",
+            "free_text": "Free-text item. Review is manual or backend-defined.",
+            "correct_answer": "**Correct answer:** {answer}",
+            "target": "**Target:** {target}",
+            "info":{
+                "no_items": "ℹ️ No quiz items available."
+            },
+            "warnings": "⚠️ Unsupported question type: {qtype}"
+        },
+        "misconceptions": {
+            "misconception": "**Misconception:** {misconception}",
+            "correction": "**Correction:** {correction}",
+            "info": {
+                "no_misconceptions": "ℹ️ No misconceptions listed."
+            }
+        },
+        "prac_preview":{
+            "expander": "Suggested answer",
+            "info":{
+                "no_practices": "ℹ️ No practice exercises available."
+            }
+        },
+        "prac_questions":{
+            "info":{
+                "no_practices": "ℹ️ No practice questions available.",
+                "eval_completed": "ℹ️ Evaluation completed · Grade: **{grade_text}**"
+            },
+            "success":{
+                "eval_completed": "✅ Evaluation completed · Grade: **{grade_text}**"
+            },
+            "warning":{
+                "eval_completed": "⚠️ Evaluation completed · Grade: **{grade_text}**"
+            },
+            "error":{
+                "eval_completed": "❌ Evaluation completed · Grade: **{grade_text}**"
+            },
+            "text_area_answers":{
+                "label": "Your answer",
+                "help": "Enter your answer here."
+            },
+            "hide_show_answer_button":{
+                "hide_label": "🙈 Hide answer",
+                "show_label": "👁️ Show answer",
+                "help": "Toggle visibility of the suggested answer."
+            },
+            "clear_button":{
+                "label": "🧹 Clear",
+                "help": "Clear the answer."
+            },
+            "evaluate_button":{
+                "label": "📊 Evaluate answer",
+                "help": "Evaluate your answer",
+                "warning": "⚠️ Please enter an answer first.",
+                "spin_evaluate": "📊 Evaluating..."
+            },
+            "expander": {
+                "suggested_answer": "Suggested answer",
+                "evaluation": "Evaluation"
+            }
+        },
+        "quiz_interactive": {
+            "pass_thresold": "Pass threshold: **{pass_percent:.0f}%**",
+            "info":{
+                "no_quiz": "ℹ️ No quiz items available."
+            },
+            "text_area_response":{
+                "label": "Your response"
+            },
+            "warning": "⚠️ Unsupported question type: {qtype}",
+            "submit_button": {
+                "label": "📊 Submit",
+                "help": "Submit the quiz",
+                "spinner": "📊 Submitting quiz...",
+                "expander": "Detailed feedback"
+            },
+            "grading_text":{
+                "result_message":"Score: {score}/{total_points} ({percent}%) — {status} · German grade: {german_grade}",
+                "result_passed":"PASSED ✅",
+                "result_failed":"NOT PASSED ❌"
+            }
+        },
+        "gradebook":{
+            "title": "## 📊 Grades",
+            "weighted_grade": "Weighted grade",
+            "grade_not_met": "⚠️ Grade requirement not met (< {course_pass:.0f}%).",
+            "grade_met": "Grade requirement met (≥ {course_pass:.0f}%).",
+            "info": {
+                "no_graded_attempt": "ℹ️ No graded assessments attempted yet.",
+                "enroll_message": "ℹ️ Enroll in this course to view progress, grades, and completion status.",
+                "course_completed": "ℹ️ Course completion status: COMPLETE ✅",
+                "eligible_final_quiz": "ℹ️ Course completion status: Eligible for final quiz.",
+                "course_completed_status": "ℹ️ Course completion status: {status}"
+
+            },
+            "result":{
+                "not_attempted": "⚪ Not attempted",
+                "passed": "🟢 Passed ({row:.0f}%)",
+                "failed": "🔴 Failed ({row:.0f}%)"
+            }
+        },
+        "resources":{
+            "title": "## 📚 Resources",
+            "info": "ℹ️ No resources available."
+        },
+        "modules_sub": {
+            "tabs":{
+                "content": "📘 Content",
+                "practice": "🛠️ Practice",
+                "quiz": "📝 Quiz",
+                "reading": "📚 Further reading",
+                "misconceptions": "⚠️ Misconceptions",
+                "meta": "⚙️ Meta"
+            },
+            "info": {
+                "prac_no": "ℹ️ Practice interaction unavailable.",
+                "quiz_no": "ℹ️ Quiz interaction unavailable.",
+                "enroll_for_practice": "ℹ️ Enroll in this course to save answers and use practice evaluation.",
+                "enroll_for_quiz": "ℹ️ Enroll in this course to take the quiz.",
+                "enroll_for_final_quiz": "ℹ️ Enroll in this course to take the final quiz."
+            }
+        },
+        "render_experience":{
+            "nav_col_title": "### Curriculum",
+            "warning": "⚠️ Invalid module selection.",
+            "final_ass_title": "## 📝 Final assessment",
+            "final_quiz_intera_info": "ℹ️ Final quiz interaction unavailable." 
+        }
+    },
+    "instructor_course_editor":{
+        "course_title":"Course title",
+        "provider":"Provider",
+        "language":"Language",
+        "level":"Level",
+        "course_id":"Course ID",
+        "estimated_modules":"Estimated minutes",
+        "tags_comma":"Tags (comma-separated)",
+        "prerequisites":"Prerequisites (one per line)",
+        "course_overview":"Course overview (Markdown)",
+        "select_module":"Select module",
+        "module_title":"Module title",
+        "content_md": "Content (Markdown)",
+        "practice_que_yaml": "Practice questions YAML",
+        "quiz_yaml": "Quiz YAML",
+        "further_reading": "Further reading (Markdown)",
+        "common_misconceptions": "Common misconceptions YAML",
+        "grade_yaml": "Grade YAML",
+        "final_quiz_yaml": "Final quiz YAML",
+        "instructors_yaml": "Instructors YAML",
+        "resources_yaml": "Resources YAML",
+        "grading_yaml": "Grading YAML",
+        "tabs":{
+            "learner_preview": "👁️ Learner preview",
+            "course": "📘 Course",
+            "modules": "🧩 Modules",
+            "final_quiz": "📝 Final quiz",
+            "resources_grading": "⚙️ Resources & grading",
+            "raw_json": "🧾 Raw JSON"
+        },
+        "info":{
+            "no_modules": "ℹ️ No modules found in course_json."
+        },
+        "warning":{
+            "yaml_validation": "⚠️ Fix the YAML validation errors before saving this course."
+        }
+    }
+}

@@ -1,0 +1,30 @@
+Führen Sie als erfahrener Dokumentenanalyst eine umfassende Analyse dieser Dokumentseite durch:
+
+1. INHALTSEXTRAKT:
+– Extrahieren Sie den gesamten sichtbaren Text unter Beibehaltung der ursprünglichen Struktur und Formatierung.
+– Identifizieren und transkribieren Sie alle Tabellen mit ihren genauen Daten und ihrer Struktur.
+– Notieren Sie alle mathematischen Formeln, Gleichungen oder wissenschaftlichen Notationen.
+– Identifizieren Sie Formularfelder, Kontrollkästchen und Eingabebereiche mit ihren Beschriftungen.
+
+2. DOKUMENTSTRUKTUR:
+– Beschreiben Sie das allgemeine Layout und die Organisation.
+– Identifizieren Sie Überschriften, Unterüberschriften und Abschnittsunterteilungen.
+– Notieren Sie mehrspaltige Layouts oder spezielle Formatierungen.
+– Identifizieren Sie Aufzählungszeichen, nummerierte Listen und hierarchische Strukturen.
+
+3. VISUELLE ELEMENTE:
+– Beschreiben Sie alle Diagramme, Grafiken, Schaubilder oder Bilder.
+– Notieren Sie Logos, Wasserzeichen oder dekorative Elemente.
+– Identifizieren Sie Unterschriften, Stempel oder handschriftliche Anmerkungen.
+
+4. DOKUMENTART UND -ZWECK:
+– Klassifizieren Sie den Dokumenttyp (Formular, Bericht, Handbuch usw.).
+– Erschließen Sie den Zweck des Dokuments. und Zielgruppe
+– Notieren Sie Qualitätsprobleme oder Scan-Artefakte.
+
+5. WICHTIGE INFORMATIONEN:
+– Markieren Sie die wichtigsten Inhalte und Datenpunkte.
+– Identifizieren Sie Daten, Zahlen, Namen und Referenzen.
+– Notieren Sie alle Felder, die bearbeitet oder ausgefüllt werden müssen.
+
+Stellen Sie Ihre Analyse in einem strukturierten, detaillierten Format bereit, das alle Informationen enthält und gleichzeitig durchsuchbar und zugänglich macht.

@@ -1,0 +1,29 @@
+Analyze this document page and extract all form-related elements:
+
+1. FORM FIELDS:
+   - Identify all input fields, text boxes, and fillable areas
+   - Extract the label or description for each field
+   - Note any existing values or placeholder text
+   - Identify field types (text, number, date, checkbox, etc.)
+
+2. CHECKBOXES AND RADIO BUTTONS:
+   - Locate all checkboxes and their labels
+   - Note which ones are checked or unchecked
+   - Identify radio button groups and selections
+
+3. DROPDOWN LISTS AND SELECTIONS:
+   - Find any dropdown menus or selection lists
+   - Extract available options where visible
+   - Note any selected values
+
+4. FORM STRUCTURE:
+   - Identify form sections and groupings
+   - Note any required fields or validation markers
+   - Extract instructions or help text
+
+5. SIGNATURES AND DATES:
+   - Locate signature fields and date fields
+   - Note any existing signatures or dates
+   - Identify witness or approval sections
+
+Return the information in a structured JSON-like format with field names, types, values, and positions.

@@ -1,0 +1,9 @@
+Sie sind ein Assistent. Extrahieren Sie aus dem folgenden Text (Wissensbewertung + Lernpfad + erster Schritt),
+5–12 spezifische Themen, an denen der Benutzer am dringendsten arbeiten muss. Geben Sie striktes JSON zurück:
+{"topics": ["topic1", "topic2", ...]}.
+
+Konzentrieren Sie sich zunächst auf die wichtigsten Schwächen (Bewertung 4–5 in den zugrunde liegenden Signalen).
+Text:
+{blob}
+
+Bitte antworten Sie nur in {language}.

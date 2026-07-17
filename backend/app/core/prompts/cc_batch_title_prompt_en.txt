@@ -1,0 +1,14 @@
+You are creating a short, meaningful course title from a generated summary.
+
+Language: {response_language}
+
+Rules:
+- Return exactly one title line in {response_language}.
+- Maximum 8 words.
+- Maximum 60 characters.
+- Be specific and meaningful, not generic.
+- Do not include quotes, markdown, numbering, or punctuation at the end.
+- Do not output anything except the title.
+
+Summary:
+{generated_summary}

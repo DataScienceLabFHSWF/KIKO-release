@@ -1,0 +1,1348 @@
+{
+    "error": {
+        "env": "❌ BACKEND_API_URL oder Modellnamen nicht in der Umgebung gesetzt."
+    },
+    "topbar": {
+        "language": "Sprache",
+        "lang": {
+            "de": "Deutsch",
+            "en": "English"
+        }
+    },
+    "login": {
+        "pageTitle": "🔐 Anmelden",
+        "subtitle": "Bitte geben Sie Ihre Zugangsdaten ein, um die Plattform zu nutzen.",
+        "form": {
+            "email": {
+                "label": "E-Mail *",
+                "help": "Geben Sie Ihre registrierte E-Mail-Adresse ein"
+            },
+            "password": {
+                "label": "Passwort *",
+                "help": "Geben Sie Ihr Passwort ein"
+            },
+            "submit": {
+                "label": "🔐 Anmelden",
+                "help": "Zugangsdaten prüfen."
+            }
+        },
+        "linkToRegister": "Noch kein Konto? Weiter zu 📝 Registrieren →",
+        "validations": {
+            "required": "⚠️ Bitte füllen Sie alle Pflichtfelder aus.",
+            "emailInvalid": "⚠️ Bitte eine gültige E-Mail-Adresse eingeben.",
+            "passwordLen": "⚠️ Das Passwort muss mindestens 8 Zeichen lang sein."
+        },
+        "status": {
+            "loading": "🔄 Anmeldung läuft...",
+            "success": "✅ Erfolgreich angemeldet!",
+            "profileFailed": "❌ Benutzerprofil konnte nicht geladen werden. Bitte erneut versuchen.",
+            "invalid": "❌ Ungültige Zugangsdaten. Bitte erneut versuchen."
+        },
+        "dashboard": {
+            "goto": "📘 Zum Dashboard",
+            "help": "Dashboard anzeigen."
+        }
+    },
+    "main": {
+        "pageTitle": "🧠 KIKO Platform",
+        "role": {
+            "invalid": "❌ Ungültige Rolle. Bitte Support kontaktieren."
+        }
+    },
+    "register": {
+        "pageTitle": "📝 Benutzerregistrierung",
+        "subtitle": "Bitte geben Sie Ihre Daten ein, um ein Konto auf der KIKO-Plattform zu erstellen.",
+        "form": {
+            "username": {
+                "label": "Benutzername *",
+                "help": "Ihr eindeutiger Benutzername für das System."
+            },
+            "fullName": {
+                "label": "Vollständiger Name *",
+                "help": "Ihr vollständiger Name."
+            },
+            "role": {
+                "label": "Rolle *",
+                "help": "Wählen Sie Ihre Rolle.",
+                "options": {
+                    "instructor": "Dozent:in",
+                    "learner": "Lerner"
+                }
+            },
+            "email": {
+                "label": "E-Mail *",
+                "help": "Ihre E-Mail-Adresse. Wird für Anmelden und Benachrichtigungen verwendet."
+            },
+            "dob": {
+                "label": "Geburtsdatum *",
+                "help": "Ihr Geburtsdatum."
+            },
+            "password": {
+                "label": "Passwort * (mind. 8 Zeichen)",
+                "help": "Ihr Passwort muss mindestens 8 Zeichen lang sein."
+            },
+            "bio": {
+                "label": "Kurzprofil *",
+                "help": "Ein kurzer Text über Sie.",
+                "default": "Leidenschaftlich für saubere Energie."
+            },
+            "submit": {
+                "label": "📝 Konto erstellen",
+                "help": "Registrieren."
+            }
+        },
+        "linkToLogin": "Sie haben bereits ein Konto? Weiter zu 🔐 Anmelden →",
+        "validations": {
+            "required": "⚠️ Bitte füllen Sie alle Pflichtfelder aus.",
+            "emailInvalid": "⚠️ Bitte eine gültige E-Mail-Adresse eingeben.",
+            "passwordLen": "⚠️ Das Passwort muss mindestens 8 Zeichen lang sein."
+        },
+        "status": {
+            "creating": "👤➕ Ihr Konto wird erstellt...",
+            "success": "🎉 Konto erfolgreich erstellt! Sie können sich jetzt anmelden.",
+            "failed": "❌ Registrierung fehlgeschlagen.",
+            "networkError": "❌ Netzwerkfehler: {error}"
+        },
+        "alreadyLoggedIn": {
+            "info": "ℹ️ Sie sind bereits angemeldet. Bitte melden Sie sich ab, um ein neues Konto zu registrieren.",
+            "goToLogin": "🔐 Zum Anmelden",
+            "help": "Zum Anmelden"
+        }
+    },
+    "profile": {
+        "pageTitle": "👤 Profil",
+        "subtitle": "Zeigen und verwalten Sie Ihre Profildaten.",
+        "errors": {
+            "loadFailed": "❌ Profil konnte nicht geladen werden. Bitte versuchen Sie es später erneut."
+        },
+        "leftCard": {
+            "fullName": "Vollständiger Name",
+            "username": "Benutzername",
+            "email": "E-Mail",
+            "dob": "Geburtsdatum",
+            "role": "Rolle",
+            "joined": "Registriert am",
+            "lastLogin": "Letzte Anmeldung"
+        },
+        "bio": {
+            "title": "📝 Bio",
+            "empty": "ℹ️ Keine Bio vorhanden."
+        }
+    },
+    "chat": {
+        "pageTitle": "🤖 Chat-Assistent",
+        "subtitle": "Ihr Chat-Assistent!",
+        "history": {
+            "loadWarn": "⚠️ Chatverlauf konnte nicht geladen werden: {error}",
+            "loadFailLog": "Laden des Chatverlaufs fehlgeschlagen: {status} - {text}",
+            "loadedLog": "✅ Chatverlauf geladen.",
+            "countLog": "ℹ️ Nachrichten aus dem Verlauf geladen."
+        },
+        "input": {
+            "label": "Nachricht",
+            "placeholder": "Fragen Sie mich … (mit modernster KI) 🚀",
+            "send": {
+                "label": "🚀 Mit KI senden",
+                "help": "Assistenten fragen.",
+                "loader": "🚀 Generierung von Reaktionen mithilfe modernster KI..."
+            }
+        },
+        "config": {
+            "upload": {
+                "title": "📄 Dokumente hochladen",
+                "uploaderLabel": "Legen Sie ein oder mehrere PDFs für eine Analyse mit modernster KI ab",
+                "uploaderHelp": "Ziehen & ablegen mehrerer PDFs; sie werden mit fortschrittlichen KI-Modellen verarbeitet",
+                "process": {
+                    "label": "🚀 Mit fortschrittlicher KI verarbeiten",
+                    "help": "Verarbeitung starten.",
+                    "spinner": "🔄 PDFs werden hochgeladen und mit modernsten Modellen verarbeitet …",
+                    "fileEmptyWarn": "⚠️ {file} war leer — übersprungen.",
+                    "noFilesWarn": "⚠️ Keine gültigen Dateien zum Hochladen.",
+                    "error": "❌ Fehler bei der Dokumentverarbeitung: {status} - {detail}",
+                    "networkError": "❌ Fehler beim Hochladen/Verarbeiten: {error}"
+                }
+            },
+            "models": {
+                "llmLabel": "Large Language Model (LLM)",
+                "llmHelp": "Wählen Sie das Modell für die Beantwortung von Fragen",
+                "switchedWarn": "🔄 Wechsel zu {model}. Die Kette wird in der nächsten Abfrage initialisiert."
+            },
+            "system": {
+                "expander": "ℹ️ Systeminformationen",
+                "modelsTitle": "🚀 Verfügbare KI-Modelle:",
+                "vlmAdvanced": "👁️\u200d🗨️ Erweiterte VLM-Modelle",
+                "vlmBasic": "⚠️ Nur Basis-Modelle",
+                "ocrSurya": "📝 Surya-OCR (State of the Art)",
+                "ocrTrocr": "📝 TrOCR verfügbar",
+                "cvOn": "📷 OpenCV-Computervision",
+                "cvOff": "⚠️ Eingeschränkte CV-Funktionen",
+                "embAndLlmTitle": "🤖 Embedding- und LLM-Modell:",
+                "embedding": "🧬 Embedding-Modell: {model}",
+                "llm": "🧠 Large Language Model: {model}",
+                "systemTitle": "💻 System:",
+                "python": "🐍 Python: {version}",
+                "pytorch": "🔥 PyTorch: {version}",
+                "cuda": "⚡ CUDA: {version}, {device} ({memory} GB)",
+                "cpu": "💻 CPU verfügbar"
+            },
+            "clear": {
+                "button": {
+                    "label": "🗑️ Chat leeren …",
+                    "help": "Chats löschen."
+                },
+                "dialog": {
+                    "title": "Gesamten Chat löschen?",
+                    "body": "Dadurch wird Ihr gesamter Chatverlauf dauerhaft entfernt.",
+                    "yes": "✅ Ja, löschen",
+                    "yes_help": "Chats löschen.",
+                    "no": "❌ Nein, abbrechen",
+                    "no_help": "Schließen Sie das Fenster.",
+                    "toast": "✅ Chatverlauf gelöscht.",
+                    "error": "❌ Chat konnte nicht gelöscht werden: {status} – {text}",
+                    "exception": "❌ Fehler beim Löschen des Chats: {error}"
+                }
+            },
+            "usage": {
+                "expander": "📊 Nutzungsstatistiken",
+                "total": "Gesamtanzahl Anfragen",
+                "avgTime": "Durchschn. Antwortzeit",
+                "avgConfidence": "Durchschn. Konfidenz"
+            }
+        },
+        "errors": {
+            "env": "❌ BACKEND_API_URL ist nicht in der Umgebung gesetzt.",
+            "configFetch": "❌ Anwendungs\u00adkonfigurationen konnten nicht geladen werden. Bitte erneut versuchen.",
+            "configEmpty": "❌ Leere Antwort vom Backend. Bitte Server-Logs prüfen.",
+            "configMissing": "❌ Fehlende Anwendungs\u00adkonfigurationen in der Backend-Antwort."
+        }
+    },
+    "helper": {
+        "status": {
+            "processed": "🟢 Verarbeitet und indexiert.",
+            "exists": "🔵 Bereits verarbeitet und indexiert.",
+            "error": "🔴 Fehler.",
+            "unknown": "⚪ Unbekannt"
+        },
+        "grade": {
+            "very_good": "1 · Sehr gut",
+            "good": "2 · Gut",
+            "satisfactory": "3 · Befriedigend",
+            "sufficient": "4 · Ausreichend",
+            "insufficient": "5 · Mangelhaft"
+        },
+        "date": {
+            "invalid": "Ungültiges Datum"
+        },
+        "fileStatus": {
+            "noResults": "❌ Keine Dateiergebnisse zurückgegeben.",
+            "uploadResults": "📑 Upload-Ergebnisse"
+        },
+        "download": {
+            "failed": "Download fehlgeschlagen: {error}"
+        },
+        "image": {
+            "notFound": "⚠️ Bild nicht gefunden (Status {status}): {url}",
+            "noAuth": "⚠️ Bild kann nicht geladen werden (keine Authentifizierung): {url}",
+            "loadError": "❌ Fehler beim Laden des Bildes {url}: {error}",
+            "unsupportedPath": "⚠️ Nicht unterstützter Bildpfad: {url}. Verwenden Sie den vollständigen Pfad wie /api/course/ID/images/dateiname.png"
+        }
+    },
+    "instructorCourses": {
+        "pageTitle": "📚 Meine Kurse",
+        "subtitle": "Erstellen, anzeigen, bearbeiten und löschen Sie Ihre Kurse.",
+        "no_available_courses": "Sie haben noch keine Kurse erstellt. Klicken Sie auf „Neuen Kurs erstellen“, um zu beginnen.",
+        "course_json_error": "❌ Dieser Kurs enthält keine gespeicherte course_json-Datei. Speichern Sie sie bitte zuerst im neuen Template-Flow erneut.",
+        "errors": {
+            "fetch": "❌ Kurse konnten nicht geladen werden ({code})",
+            "details": "❌ Kursdetails konnten nicht geladen werden",
+            "delete": "❌ Löschen fehlgeschlagen ({code}) — {detail}",
+            "update": "❌ Aktualisierung fehlgeschlagen ({code})",
+            "qaDelete": "❌ Löschen fehlgeschlagen: {error}"
+        },
+        "warning": {
+            "atleast": "Wählen Sie mindestens ein Q&A-Paar zum Löschen aus."
+        },
+        "empty": "Sie haben noch keine Kurse erstellt. Klicken Sie auf „Neuen Kurs erstellen“, um zu beginnen.",
+        "toolbar": {
+            "create": "➕ Neuen Kurs erstellen",
+            "help": "Erstellen"
+        },
+        "table": {
+            "headers": {
+                "courseId": "**Kurs-ID**",
+                "title": "**Titel**",
+                "dateCreated": "**Erstellt am**",
+                "view": "**Ansicht**",
+                "delete": "**Löschen**"
+            },
+            "row": {
+                "view": {
+                    "label": "🔽 Anzeigen",
+                    "help": "Details anzeigen."
+                },
+                "delete": {
+                    "label": "🗑️ Löschen",
+                    "help": "Kurs löschen."
+                }
+            }
+        },
+        "confirmDelete": {
+            "title": "Löschen bestätigen",
+            "message": "ℹ️ Möchten Sie den Kurs **{courseId}** wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+            "yes": {
+                "label": "✅ Ja, löschen",
+                "help": "Kurs löschen."
+            },
+            "no": {
+                "label": "❌ Nein, behalten",
+                "help": "Fenster schließen."
+            },
+            "toast": "🗑️ Kurs gelöscht."
+        },
+        "expander": {
+            "id": "Kurs #{id}: {title}",
+            "prefix": "**Zusammenfassung:** {summary}",
+            "courseContent": "📄 Kursinhalt",
+            "editCourse": "✏️ Kurs bearbeiten",
+            "title": "Titel",
+            "summary": "Zusammenfassung",
+            "summaryHelp": "Sie können Markdown-Syntax und Bilder verwenden",
+            "quiz": "Quiz (YAML)",
+            "qa_header": "**Fragen & Antworten**",
+            "viewMode": {
+                "preview": "👁 Vorschau",
+                "previewHelp": "Kursinhalt im schreibgeschützten Modus anzeigen",
+                "edit": "✏️ Bearbeiten",
+                "editHelp": "Kurstitel, Zusammenfassung, Fragen und Quiz bearbeiten"
+            }
+        },
+        "qa": {
+            "toolbar": {
+                "remove": {
+                    "label": "🗑️ Entfernen",
+                    "help": "Q&A-Einträge zum Löschen auswählen."
+                },
+                "exit": {
+                    "label": "🗑️ Löschen",
+                    "help": "Ausgewählte Q&A-Einträge löschen."
+                },
+                "cancel": {
+                    "label": "❌ Abbrechen",
+                    "help": "Löschmodus verlassen."
+                }
+            },
+            "checkbox": {
+                "help": "Zum Löschen dieses Q&A-Paares auswählen."
+            },
+            "addNew": {
+                "toggle": "Neue Frage hinzufügen",
+                "q": "Neue Frage",
+                "a": "Neue Antwort"
+            },
+            "confirmDelete": {
+                "title": "Ausgewählte Q&A löschen?",
+                "none": "ℹ️ Keine Fragen ausgewählt.",
+                "message": "ℹ️ Möchten Sie {count} ausgewählte Frage{plural} wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+                "yes": {
+                    "label": "✅ Ja, löschen",
+                    "help": "Ausgewählte Fragen löschen."
+                },
+                "no": {
+                    "label": "❌ Nein, behalten",
+                    "help": "Fenster schließen."
+                },
+                "toast": "🧹 Ausgewählte Q&A gelöscht."
+            },
+            "validation": {
+                "empty": "Q&A Nummer {n} darf keine leere Frage oder Antwort enthalten."
+            },
+            "models": {
+                "llmLabel": "Inferenz LLM",
+                "llmHelp": "Wählen Sie das Inferenzmodell zur Bewertung Ihrer Antwort."
+            },
+            "exitBeforeSave": "Beenden Sie den Löschmodus, bevor Sie Änderungen speichern oder neue Fragen hinzufügen."
+        },
+        "save": {
+            "label": "💾 Änderungen speichern",
+            "help": "Änderungen in der Datenbank speichern.",
+            "success": "✅ Kurs aktualisiert"
+        },
+        "raw_markdown": {
+            "expander": "📄 Roh-Markdown",
+            "no_stored": "Kein gespeicherter Preisnachlass gefunden."
+        },
+        "reset_changes": {
+            "label": "⚠️ Änderungen verwerfen",
+            "help": "Alle nicht gespeicherten Änderungen zurücksetzen."
+        }
+    },
+    "faq": {
+        "pageTitle": "❓ FAQ — Häufig gestellte Fragen",
+        "welcome": "Willkommen {fullName}! Diese Seite zeigt Tipps und Links, die auf deine Rolle zugeschnitten sind.",
+        "quickLinks": {
+            "title": "### 🔗 Schnellzugriff",
+            "learner": {
+                "dashboard": "📊 Lern-Dashboard",
+                "chat": "🤖 Chat-Assistent",
+                "myCourses": "📚 Meine Kurse",
+                "assessment": "🧠 Wissensüberprüfung",
+                "documents": "📄 Meine Dokumente",
+                "profile": "👤 Profil",
+                "results": "🔍 Ergebnisse"
+            },
+            "instructor": {
+                "chat": "🤖 Chat-Assistent",
+                "courseSetup": "✍️ Kurs-Erstellung",
+                "myCourses": "📚 Meine Kurse",
+                "documents": "📄 Meine Dokumente",
+                "profile": "👤 Profil",
+                "results": "🔍 Ergebnisse"
+            },
+            "unknownRole": {
+                "learnerHeader": "👩‍🎓 Lerner",
+                "instructorHeader": "👨‍🏫 Dozent:in"
+            }
+        },
+        "sections": {
+            "learner": {
+                "header": "👩‍🎓 Für Lerner",
+                "learningDashboard": {
+                    "title": "📊 Lern-Dashboard — was ist das und wie nutze ich es?",
+                    "body": "- Das Dashboard zeigt eine **Übersicht** deiner Aktivitäten (aktuelle Chats, eingeschriebene Kurse, Fortschritt).\n- Nutze es als **Startpunkt**: in Kurse springen oder mit Empfehlungen weitermachen.\n- Wenn Kacheln leer wirken, melde dich zuerst über **Meine Kurse** für einen Kurs an."
+                },
+                "chatAssistant": {
+                    "title": "🤖 Chat-Assistent — Tipps für gute Antworten",
+                    "body": "- Stelle Fragen zu deinen hochgeladenen Dokumenten oder Kursthemen.\n- Nutze **Quellenangaben/Zitationen** unter Antworten zum Vorschau- oder **Download**.\n- Zum Herunterladen einer Quelle verwende die **Download**-Schaltfläche beim Assistenten.\n- Chat leeren: **Clear Chat** in der Konfiguration (mit Bestätigung)."
+                },
+                "myCourses": {
+                    "title": "📚 Meine Kurse — einschreiben, anzeigen, verwalten",
+                    "body": "- **Eingeschrieben** zeigt Kurse, die du aktuell belegst.\n- Bei **100%** siehst du **Abgeschlossen** (kein Abmelden-Button).\n- Andernfalls kannst du **Anzeigen** oder **Abmelden** (Bestätigung erscheint).\n- **Empfohlen** zeigt Kurse aus deiner **Wissensüberprüfung** und Lerndaten.\n- Mit **Einschreiben** beitreten (Bestätigung).\n- **Aktualisieren** lädt den neuesten Stand (Fortschritt/Empfehlungen)."
+                },
+                "assessment": {
+                    "title": "🧠 Wissensüberprüfung — so funktioniert’s",
+                    "body": "- Beantworte kurze Fragen; ein **KI-Bewerter** vergibt Noten 1–6 (1=sehr gut, 6=ungenügend).\n- Du erhältst eine **Wissensbewertung**, **Lernpfad** und einen **ersten Lernschritt**.\n- Empfehlungen erscheinen unter **Meine Kurse → Empfohlen**.\n- Reiche **alle Antworten** ein; das Formular prüft auf fehlende Felder."
+                },
+                "documents": {
+                    "title": "📄 Meine Dokumente — Vorschau, Download, Löschen",
+                    "body": "- Zeigt deine hochgeladenen Dateien. Miniaturen (PDF) bieten **Vorschau**; **Download** lädt die Datei.\n- **Löschen…** fragt nach Bestätigung.\n- **Alle löschen…** entfernt alle Dateien (ebenfalls mit Bestätigung).\n- Für Markdown wird ein Dateisymbol statt PDF-Seitenminiatur angezeigt."
+                },
+                "profileResults": {
+                    "title": "👤 Profil & 🔍 Ergebnisse",
+                    "body": "- **Profil** zeigt deine Kontoinformationen.\n- **Ergebnisse** bündeln Bewertungen aus aktuellen Überprüfungen (Scores, Zusammenfassungen, Lernartefakte)."
+                }
+            },
+            "instructor": {
+                "header": "👨‍🏫 Für Dozent:in",
+                "chatAssistant": {
+                    "title": "🤖 Chat-Assistent — Tipps für gute Antworten",
+                    "body": "- Stelle Fragen zu deinen hochgeladenen Dokumenten oder Kursthemen.\n- Nutze **Quellenangaben/Zitationen** unter Antworten zum Vorschau- oder **Download**.\n- Zum Herunterladen einer Quelle verwende die **Download**-Schaltfläche beim Assistenten.\n- Chat leeren: **Clear Chat** in der Konfiguration (mit Bestätigung)."
+                },
+                "courseSetup": {
+                    "title": "✍️ Kurs-Erstellung — Kurse aus Dokumenten",
+                    "body": "- **PDF** oder **Markdown** hochladen, dann **Verarbeiten** zum Extrahieren.\n- Das System kann **Zusammenfassung** + **Q&A** generieren, die du bearbeiten und speichern kannst.\n- Gespeicherte Kurse erscheinen unter **Meine Kurse (Lehrende)**\n- Beim ersten Login wird ein Beispiel-Markdown (**gamma_scanning_EducTUM.md**) bei **Meine Dokumente** auto-geladen, falls nicht vorhanden."
+                },
+                "myCourses": {
+                    "title": "📚 Meine Kurse — anzeigen, bearbeiten, löschen",
+                    "body": "- Liste zeigt ID, Titel, erstellt am, Anzahl Fragen.\n- **Anzeigen** zum Bearbeiten von Titel/Zusammenfassung/Q&A.\n- **Löschen** entfernt den Kurs (Bestätigung) und bereinigt abhängige Daten."
+                },
+                "documents": {
+                    "title": "📄 Meine Dokumente — Kursdateien verwalten",
+                    "body": "- Verwalte alle hochgeladenen Dateien, inkl. des Standard-Markdown-Templates.\n- Vorschau, Download, Löschen; **Alle löschen…** mit Bestätigung."
+                },
+                "profileResults": {
+                    "title": "👤 Profil & 🔍 Ergebnisse",
+                    "body": "- **Profil** zeigt deine Kontoinformationen.\n- **Ergebnisse** bündeln Bewertungen aus aktuellen Überprüfungen (Scores, Zusammenfassungen, Lernartefakte)."
+                }
+            }
+        },
+        "common": {
+            "header": "🌐 Allgemeine Fragen",
+            "dialogs": {
+                "title": "Wie funktionieren Bestätigungen und Dialoge?",
+                "body": "- Jede destruktive Aktion (Löschen, Abmelden, Chat leeren) zeigt einen **Bestätigungsdialog** mit **Bestätigen** und **Abbrechen**.\n- So werden versehentliche Datenverluste verhindert.\n- Mit **Abbrechen** brichst du sicher ab."
+            },
+            "recommendations": {
+                "title": "Warum sehe ich noch keine Empfehlungen?",
+                "body": "- Zuerst die **Wissensüberprüfung** abschließen (für Lernende).\n- **Aktualisieren** in **Meine Kurse** klicken.\n- Möglicherweise passen aktuelle Kataloginhalte noch nicht stark zu deinen Themen."
+            },
+            "uploads": {
+                "title": "Probleme bei Uploads & Vorschau",
+                "body": "- Verschlüsselte/beschädigte PDFs können nicht angezeigt werden.\n- Markdown zeigt ein Dateisymbol (keine Seitenminiaturen), funktioniert aber im Chat.\n- Doppelte Inhalte führen zu der Meldung „bereits verarbeitet“."
+            },
+            "contact": "Brauchst du Hilfe? Kontaktiere das Support-Team unter **{email}**"
+        }
+    },
+    "sidebar": {
+        "welcome": "👋 Willkommen, {fullName} ({role})",
+        "roles": {
+            "learner": "Lernende/r",
+            "instructor": "Lehrende/r",
+            "admin": "Admin"
+        },
+        "menus": {
+            "learner": {
+                "dashboard": "Lern-Dashboard",
+                "chat": "Chat-Assistent",
+                "myCourses": "Meine Kurse",
+                "assessment": "Wissensüberprüfung"
+            },
+            "instructor": {
+                "chat": "Chat-Assistent",
+                "courseSetup": "Kurseinrichtung",
+                "myCourses": "Meine Kurse",
+                "mediaManager": "Medienverwaltung"
+            },
+            "admin": {
+                "knowledgeConfig": "Wissens-Check Konfiguration",
+                "dashboard": "Admin-Dashboard",
+                "console": "Admin-Konsole"
+            },
+            "common": {
+                "documents": "Meine Dokumente",
+                "profile": "Profil",
+                "faq": "FAQ",
+                "results": "Ergebnisse",
+                "logout": {
+                    "label": "🚪Abmelden",
+                    "help": "Melde dich ab."
+                }
+            }
+        }
+    },
+    "eval": {
+        "pageTitle": "🔍 Auswertungsergebnisse — Warum unterscheiden sich Modelle in Geschwindigkeit & Qualität?",
+        "subtitle": "Hier sehen Sie die LLM-Ergebnisse!",
+        "tabs": {
+            "dataset": "Datensatz (was getestet wurde)",
+            "chatApertus": "Chat: Apertus-8B",
+            "chatLlama3": "Chat: Llama3.3:70B",
+            "chatKimik2": "Chat: Kimi-K2-Instruct-0905",
+            "grading": "Benotung: DeepSeek-R1-32B"
+        },
+        "dataset": {
+            "subheader": "📚 Auswertungsdatensatz (was getestet wurde)",
+            "caption": "Unten sehen Sie den für die Auswertungen verwendeten Korpus – kurz und nicht-technisch erläutert.",
+            "explainerTitle": "**Was ist dieser Datensatz und wie wurde er genutzt?**",
+            "explainer": "- **Was Sie sehen:** eine Auswahl realer Fragen, kurzer Textpassagen und – falls relevant – Zielnoten.\n- **Warum das wichtig ist:** zeigt genau das Material, mit dem Antwortqualität und Benotungszuverlässigkeit geprüft wurden.\n- **Wie wir ihn genutzt haben:**\n  - Für **Chat** vergleichen wir Modellantworten mit einer Referenzantwort.\n  - Für **Benotung** vergleichen wir die Modellnote mit der menschlichen Note.\n- **Wie man die Tabelle liest:** jede Zeile ist ein Testfall.\n- **Grenzen:** es ist nur ein Sample; ungewöhnliche Fragen können sich anders verhalten.\n- **Tipp:** Wenn Sie Lücken sehen, sagen Sie uns Bescheid — wir können den Datensatz erweitern.",
+            "statsTitle": "**Statistiken**",
+            "stats": {
+                "rows": "Zeilen",
+                "columns": "Spalten",
+                "missing": "Fehlende Werte",
+                "avgChars": "Ø Zeichen/Zeile"
+            },
+            "previewTitle": "**Vorschau**",
+            "missingDataset": "Datensatz unter `{path}` nicht gefunden. Sobald Ihr Auswertungs-Notebook exportiert, erscheint er hier."
+        },
+        "chatApertus": {
+            "subheader": "🤖 Chat-Qualität — Apertus-8B-Instruct-2509",
+            "explainerTitle": "**Wie liest man diese Ergebnisse (Apertus-8B)?**",
+            "explainer": "- **Tabelle:** Eine Zeile pro Test mit Angabe der Ergebnisse pro Metrik und der Laufzeit.\n- **Diagramm:** zeigt die Verteilung der Antwortqualität (höher ist besser).\n- **Einflussfaktoren für Tempo/Qualität:** längere Fragen, größerer Kontext verlangsamen; initiales Laden aus Hugging Face kostet Zeit.\n- **Fazit:** Apertus-8B ist der schnelle Responder; für sehr komplexe Aufgaben besser ein größeres Modell nutzen.",
+            "resultsTable": "**Ergebnistabelle**",
+            "quickAggregates": "**Schnell-Aggregate**",
+            "visualization": "**Visualisierung**",
+            "vizCaption": "Verteilung der Chat-Qualität (BERTScore F1) — Apertus",
+            "artifactsMissing": "Artefakte noch nicht vorhanden. Sie erscheinen hier, nachdem Admin die Auswertungen ausgeführt und Berichte erzeugt hat."
+        },
+        "chatLlama3": {
+            "subheader": "🤖 Chat-Qualität — Llama3.3:70B",
+            "explainerTitle": "**Wie liest man diese Ergebnisse (Llama3.3:70B)?**",
+            "explainer": "- **Warum dieses Modell:** größer = detailliertere Antworten, aber langsamer.\n- **Tabelle:** Eine Zeile pro Test mit Angabe der Ergebnisse pro Metrik und der Laufzeit.\n- **Diagramm:** Gesamtqualität meist höher als bei kleineren Modellen.\n- **Wann einsetzen:** komplexe, mehrstufige Fragen; Tiefe statt Tempo.\n- **Fazit:** Llama3.3:70B taucht tief; etwas längere Antwortzeiten sind zu erwarten.",
+            "resultsTable": "**Ergebnistabelle**",
+            "quickAggregates": "**Schnell-Aggregate**",
+            "visualization": "**Visualisierung**",
+            "vizCaption": "Verteilung der Chat-Qualität (BERTScore F1) — Llama3",
+            "artifactsMissing": "Artefakte noch nicht vorhanden. Sie erscheinen hier, nachdem Admin die Auswertungen ausgeführt und Berichte erzeugt hat."
+        },
+        "chatKimik2": {
+            "subheader": "🤖 Chat-Qualität — Kimi-K2-Instruct-0905",
+            "explainerTitle": "**Wie liest man diese Ergebnisse (Kimi-K2-Instruct-0905)?**",
+            "explainer": "- **Warum dieses Modell:** Ausgewählt als Langkontext-Anweisungsmodell, um die semantische Qualität und die Fundierung von Chat-artigen Inhalten zu bewerten.\n- **Tabelle:** Eine Zeile pro Test mit Angabe der Ergebnisse pro Metrik und der Laufzeit.\n- **Diagramm:** Histogramm der BERTScore F1-Werte pro Test, wobei die meisten Antworten um ~0,60–0,62 gruppiert sind.\n- **Wann einsetzen:** Wenn semantische Ähnlichkeit akzeptabel ist, jedoch nicht für striktes Grounding/RAG ohne Verbesserung von Retrieval und Attribution.\n- **Fazit:** Mäßige semantische Qualität (durchschnittlicher BERTScore F1 ≈ 0,61) mit schwacher Fundierung (Recall@k/MRR mäßig; AttributionMatch sehr niedrig).",
+            "resultsTable": "**Ergebnistabelle**",
+            "quickAggregates": "**Schnell-Aggregate**",
+            "visualization": "**Visualisierung**",
+            "vizCaption": "Verteilung der Chat-Qualität (BERTScore F1) — Kimi-K2-Instruct-0905",
+            "artifactsMissing": "Artefakte noch nicht vorhanden. Sie erscheinen hier, nachdem Admin die Auswertungen ausgeführt und Berichte erzeugt hat."
+        },
+        "grading": {
+            "subheader": "📝 Benotung — DeepSeek-R1-32B",
+            "explainerTitle": "**Wie liest man die Benotungsergebnisse?**",
+            "explainer": "- **Ziel:** wie nah liegen die Modellnoten an den menschlichen Noten?\n- **Konfusionsmatrix:** Zeilen = menschliche Note, Spalten = Modellnote; dunkler auf der Diagonalen ist gut.\n- **Metriken:** Accuracy (höher besser), MAE (niedriger besser), Übereinstimmung κ (näher an 1 besser).\n- **Reality-Check:** sehr gut bei klaren Fällen; Grenzfälle können variieren – wie bei unterschiedlichen Lehrkräften.\n- **Tipp:** Modellnote als Ausgangspunkt nutzen; für wichtige Entscheidungen kurze menschliche Checks beibehalten.",
+            "resultsTable": "**Ergebnistabelle**",
+            "quickAggregates": "**Schnell-Aggregate**",
+            "visualization": "**Visualisierung**",
+            "vizCaption": "Konfusionsmatrix — Mensch vs. Modell (Zeilen = Mensch, Spalten = Modell)",
+            "artifactsMissing": "Artefakte noch nicht vorhanden. Sie erscheinen hier, nachdem Admin die Auswertungen ausgeführt und Berichte erzeugt hat."
+        },
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL ist nicht in der Umgebung gesetzt."
+        },
+        "warnings": {
+            "csvReadFail": "⚠️ Konnte {path} nicht lesen: {error}",
+            "imgOpenFail": "⚠️ Konnte Bild {path} nicht öffnen: {error}"
+        }
+    },
+    "docs": {
+        "pageTitle": "📄 Meine Dokumente",
+        "subtitle": "Anzeige und Verwaltung Ihrer hochgeladenen Dokumente.",
+        "toolbar": {
+            "refresh": {
+                "label": "🔄 Aktualisieren",
+                "help": "Neueste Dokumente laden."
+            },
+            "deleteAll": {
+                "label": "🗑️ Alle löschen…",
+                "help": "Alle Dokumente löschen."
+            }
+        },
+        "list": {
+            "empty": "ℹ️ Noch keine Dokumente hochgeladen.",
+            "uploadedPrefix": "Hochgeladen: {date}",
+            "statusPrefix": "Status: {status}",
+            "preview": {
+                "label": "👁️ Vorschau",
+                "help": "Dokument anzeigen."
+            },
+            "download": {
+                "label": "⬇️ Herunterladen",
+                "help": "Dokument herunterladen."
+            },
+            "downloadDisabled": "⬇️ Herunterladen",
+            "delete": {
+                "label": "🗑️ Löschen…",
+                "help": "Dokument löschen."
+            }
+        },
+        "dialogs": {
+            "single": {
+                "title": "Löschen bestätigen",
+                "body": "ℹ️ Möchten Sie dieses Dokument wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+                "confirm": {
+                    "label": "✅ Ja, löschen",
+                    "help": "Dokument löschen."
+                },
+                "cancel": {
+                    "label": "❌ Nein, abbrechen",
+                    "help": "Schließen Sie das Fenster."
+                }
+            },
+            "all": {
+                "title": "WIRKLICH alle Dokumente löschen?",
+                "body": "ℹ️ Dadurch werden **alle** hochgeladenen Dokumente und deren Embeddings dauerhaft entfernt.",
+                "confirm": {
+                    "label": "✅ Ja, alle löschen",
+                    "help": "Alle Dokumente löschen."
+                },
+                "cancel": {
+                    "label": "❌ Nein, abbrechen",
+                    "help": "Schließen Sie das Fenster."
+                }
+            },
+            "preview": {
+                "title": "Dokumentvorschau",
+                "noPreview": "ℹ️ Keine Vorschau verfügbar.",
+                "categoryPrefix": "Kategorie: {subtitle}",
+                "learningObjectivesTitle": "**Lernziele**",
+                "quizTitle": "**Quiz**",
+                "type": "Typ: {type}",
+                "optionsTitle": "Optionen:",
+                "answerPrefix": "**Antwort:** {answer}",
+                "comprehensionTitle": "**Verständnisfragen**",
+                "noMarkdownPreview": "ℹ️ Keine Markdown-Inhalte verfügbar.",
+                "fullPreviewCaption": "Vorschau des gesamten Dokuments",
+                "close": "❌ Schließen",
+                "closeHelp": "Vorschau schließen."
+            }
+        },
+        "toasts": {
+            "deleteOneSuccess": "Dokument gelöscht.",
+            "deleteAllSuccess": "Alle Dokumente gelöscht.",
+            "deleteOneFailed": "Löschen fehlgeschlagen: {detail}",
+            "deleteOneFailedCode": "Löschen fehlgeschlagen ({status}): {text}",
+            "deleteAllFailed": "Löschen-alle fehlgeschlagen: {detail}",
+            "deleteAllFailedCode": "Löschen-alle fehlgeschlagen ({status}): {text}"
+        },
+        "warnings": {
+            "previewImageMissing": "⚠️ Keine Vorschaubild verfügbar.",
+            "markdownPreviewFail": "⚠️ Markdown-Vorschau konnte nicht geladen werden."
+        },
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL ist nicht in der Umgebung gesetzt."
+        }
+    },
+    "learnerDashboard": {
+        "pageTitle": "📊 Lernenden-Dashboard",
+        "subtitle": "Willkommen in deinem personalisierten Lern-Dashboard.",
+        "sections": {
+            "stats": {
+                "title": "📈 Lernstatistiken",
+                "desc": "Hier kannst du deinen Lernfortschritt und deine Aktivität verfolgen."
+            }
+        },
+        "metrics": {
+            "coursesEnrolled": "📚 Eingeschriebene Kurse",
+            "coursesInProgress": "🎓 Laufende Kurse",
+            "coursesCompleted": "✅ Abgeschlossene Kurse",
+            "overallProgress": "Gesamtfortschritt",
+            "examsPassed": "🏆 Bestandene Prüfungen",
+            "examsFailed": "❌ Fehlgeschlagene Prüfungen",
+            "examsInProgress": "⌛ Prüfungen in Bearbeitung",
+            "questionsAsked": "🤖 Anfragen an den Chat-Assistenten",
+            "lastLogin": "🕒 Letzte Anmeldung"
+        },
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL ist nicht in der Umgebung gesetzt.",
+            "statsFetch": "❌ Fehler beim Abrufen der Lernstatistiken: {detail}"
+        }
+    },
+    "knowledgeAssessment": {
+        "pageTitle": "🧠 Wissensüberprüfung",
+        "subtitle": "Ein kurzer optionaler Check, um deine Kursempfehlungen zu personalisieren.",
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL ist nicht in der Umgebung gesetzt.",
+            "quizFetch": "⚠️ Quiz konnte nicht abgerufen werden.",
+            "quizFetchWithDetail": "⚠️ Quiz konnte nicht abgerufen werden: {detail}",
+            "submitFailed": "❌ Übermittlung fehlgeschlagen",
+            "submitFailedWithDetail": "❌ Übermittlung fehlgeschlagen: {detail}"
+        },
+        "empty": {
+            "noQuestions": "ℹ️ Derzeit sind keine Fragen verfügbar.",
+            "noRecommendations": "ℹ️ Noch keine Empfehlungen."
+        },
+        "form": {
+            "questionLine": "**{topic}** — {question}*",
+            "answerLabel": "Deine Antwort",
+            "answerHelp": "Gib deine Antwort ein.",
+            "submitLabel": "📊 Absenden",
+            "submitHelp": "Antworten absenden.",
+            "validateAllRequired": "⚠️ Bitte beantworte alle Fragen, bevor du absendest."
+        },
+        "status": {
+            "evaluating": "📊 Wir bewerten deine Antworten. Dies kann je nach Anzahl der Fragen etwas länger dauern."
+        }
+    },
+    "courseDetails": {
+        "pageTitle": "📘 Kursdetails",
+        "warnings": {
+            "noCourseSelected": "⚠️ Kein Kurs ausgewählt."
+        },
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL ist nicht in der Umgebung gesetzt.",
+            "loadFailed": "❌ Kurs konnte nicht geladen werden: {details}",
+            "enrollFailed": "❌ Einschreibung fehlgeschlagen",
+            "unenrollFailed": "❌ Abmeldung fehlgeschlagen",
+            "loadFailedWithDetails": "❌ Kurs konnte nicht geladen werden {cid}: {details}",
+            "noCourseJson": "❌ Kein Kurs-JSON gespeichert für diesen Kurs. Erstelle den Kurs erneut aus der Markdown-Vorlage."
+        },
+        "toolbar": {
+            "back": {
+                "label": "⬅️ Zurück",
+                "help": "Zur Kursübersicht zurückkehren."
+            },
+            "refresh": {
+                "label": "🔄 Aktualisieren",
+                "help": "Kursdetails neu laden."
+            }
+        },
+        "header": {
+            "titleFallback": "Kurs #{id}",
+            "courseId": "Kurs-ID: {id}",
+            "progress": "Fortschritt: {percent}%"
+        },
+        "actions": {
+            "completed": {
+                "label": "✅ Abgeschlossen",
+                "help": "Kurs ist abgeschlossen."
+            },
+            "unenroll": {
+                "label": "🗑️ Abmelden",
+                "help": "Vom Kurs abmelden."
+            },
+            "enroll": {
+                "label": "✅ Einschreiben",
+                "help": "Für den Kurs einschreiben."
+            }
+        },
+        "toasts": {
+            "enrolled": "✅ Eingeschrieben",
+            "unenrolled": "🗑️ Abgemeldet"
+        },
+        "dialogs": {
+            "enroll": {
+                "title": "Einschreibung bestätigen",
+                "body": "ℹ️ In diesen Kurs einschreiben?",
+                "yes": {
+                    "label": "✅ Ja, einschreiben",
+                    "help": "Für den Kurs einschreiben."
+                },
+                "no": {
+                    "label": "❌ Abbrechen",
+                    "help": "Fenster schließen."
+                }
+            },
+            "unenroll": {
+                "title": "Abmeldung bestätigen",
+                "body": "ℹ️ Von diesem Kurs abmelden?",
+                "yes": {
+                    "label": "✅ Ja, abmelden",
+                    "help": "Vom Kurs abmelden."
+                },
+                "no": {
+                    "label": "❌ Behalten",
+                    "help": "Fenster schließen."
+                }
+            }
+        },
+        "sections": {
+            "summary": {
+                "title": "📄 Zusammenfassung",
+                "empty": "_Keine Zusammenfassung verfügbar._"
+            },
+            "questions": {
+                "title": "❓ Fragen",
+                "empty": "ℹ️ Diesem Kurs sind keine Fragen zugeordnet.",
+                "showAnswer": "Antwort anzeigen"
+            }
+        }
+    },
+    "myCourses": {
+        "pageTitle": "📚 Meine Kurse",
+        "subtitle": "Ihre belegten und empfohlenen Kurse.",
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL ist nicht in der Umgebung gesetzt.",
+            "enrolledLoad": "❌ Belegte Kurse konnten nicht geladen werden: {detail}",
+            "recommendedLoad": "❌ Empfohlene Kurse konnten nicht geladen werden: {detail}",
+            "allLoad": "❌ Alle Kurse konnten nicht geladen werden: {detail}",
+            "enrollFailed": "❌ Einschreibung fehlgeschlagen {status}",
+            "unenrollFailed": "❌ Abmeldung fehlgeschlagen {status}",
+            "dismissFailed": "❌ Entfernen der Empfehlung fehlgeschlagen {status}"
+        },
+        "toolbar": {
+            "refresh": {
+                "label": "🔄 Aktualisieren",
+                "help": "Kurse neu laden."
+            }
+        },
+        "sections": {
+            "enrolled": {
+                "title": "🎓 Belegte Kurse",
+                "empty": "ℹ️ Sie haben noch keine Kurse belegt."
+            },
+            "recommended": {
+                "title": "✨ Empfehlungen für Sie",
+                "empty": "ℹ️ Noch keine Empfehlungen.",
+                "fallback": "ℹ️ Noch keine personalisierten Empfehlungen. ⚠️ Stattdessen werden verfügbare Kurse angezeigt."
+            }
+        },
+        "cards": {
+            "untitled": "Ohne Titel",
+            "id": "#{id}",
+            "progress": "Fortschritt: {percent}%",
+            "why": "Warum: {reason}",
+            "course_completed": "ℹ️ Kursabschlussstatus: ABGESCHLOSSEN ✅",
+            "eligible_final_quiz": "ℹ️ Kursabschlussstatus: Teilnahmeberechtigt am Abschlusstest.",
+            "course_inprogress": "ℹ️ Kursstatus: In Bearbeitung"
+        },
+        "actions": {
+            "view": {
+                "label": "👁️ Anzeigen",
+                "help": "Kursdetails ansehen."
+            },
+            "completed": {
+                "label": "✅ Abgeschlossen",
+                "help": "Kurs ist abgeschlossen."
+            },
+            "unenroll": {
+                "label": "🗑️ Abmelden",
+                "help": "Vom Kurs abmelden."
+            },
+            "enroll": {
+                "label": "✅ Einschreiben",
+                "help": "Für den Kurs einschreiben."
+            },
+            "dismiss": {
+                "label": "🗑️ Entfernen",
+                "help": "Nicht mehr empfehlen."
+            }
+        },
+        "toasts": {
+            "enrolled": "✅ Eingeschrieben",
+            "unenrolled": "🗑️ Abgemeldet",
+            "dismissed": "🗑️ Empfehlung entfernt"
+        },
+        "dialogs": {
+            "enroll": {
+                "title": "Einschreibung bestätigen",
+                "body": "ℹ️ In Kurs **{id}** einschreiben?",
+                "yes": {
+                    "label": "✅ Ja, einschreiben",
+                    "help": "Für den Kurs einschreiben."
+                },
+                "no": {
+                    "label": "❌ Abbrechen",
+                    "help": "Fenster schließen."
+                }
+            },
+            "unenroll": {
+                "title": "Abmeldung bestätigen",
+                "body": "ℹ️ Von Kurs **{id}** abmelden?",
+                "yes": {
+                    "label": "✅ Ja, abmelden",
+                    "help": "Vom Kurs abmelden."
+                },
+                "no": {
+                    "label": "❌ Behalten",
+                    "help": "Fenster schließen."
+                }
+            },
+            "dismiss": {
+                "title": "Empfehlung entfernen",
+                "body": "ℹ️ Empfehlung für Kurs **{id}** entfernen?",
+                "yes": {
+                    "label": "✅ Entfernen",
+                    "help": "Nicht mehr empfehlen."
+                },
+                "no": {
+                    "label": "❌ Abbrechen",
+                    "help": "Fenster schließen."
+                }
+            }
+        }
+    },
+    "logout": {
+        "success": "✅ Erfolgreich abgemeldet! ​​Weiterleitung zur Anmeldeseite..."
+    },
+    "courseGenerator": {
+        "page": {
+            "pageTitle": "Dokument-Zusammenfassung und Fragengenerator",
+            "title": "✍️ Kursgenerator",
+            "subtitle": "Laden Sie eine PDF- oder Markdown-Datei (.md) hoch, um daraus einen Kurs mit Zusammenfassung und Fragen zu erstellen."
+        },
+        "errors": {
+            "envMissing": "❌ BACKEND_API_URL ist nicht in der Umgebung gesetzt.",
+            "emptyConfig": "❌ Leere Antwort vom Backend. Bitte prüfen Sie die Server-Logs.",
+            "invalidServerResponse": "❌ Ungültige Antwort vom Server.",
+            "unknownServerResponse": "❌ Unbekannte Antwort vom Server.",
+            "missingModelConfig": "❌ Standardmodell-Konfiguration fehlt. Bitte prüfen Sie die Backend-Einstellungen.",
+            "processingError": "❌ Ein Fehler ist aufgetreten: {error}",
+            "questionsLoadFailed": "❌ Fragen konnten nicht geladen werden: {error}",
+            "fileDataMissing": "❌ Dateidaten fehlen. Bitte laden Sie das Dokument erneut hoch.",
+            "apiURLRequired": "❌ api_url ist erforderlich."
+        },
+        "upload": {
+            "uploaderLabel": "Dokument auswählen (PDF oder Markdown)",
+            "pdfOptions": {
+                "qaCountLabel": "Anzahl zu erzeugender Fragen/Antworten",
+                "quizQuestionCountLabel": "Anzahl zu erzeugender Quizfragen",
+                "quizOptionCountLabel": "Antwortoptionen pro Quizfrage",
+                "caption": "Nur bei PDF-Uploads werden Fragen/Antworten und Quiz per KI erzeugt. Maximalwerte: Fragen/Antworten 10, Quizfragen 4, Optionen pro Frage 4. Jede Quizfrage hat genau eine richtige Option."
+            },
+            "processButton": {
+                "label": "🚀 Dokument verarbeiten",
+                "help": "Verarbeitung starten."
+            },
+            "spinners": {
+                "processing": "⚙️📄 Dokument wird verarbeitet... Das kann je nach Größe etwas dauern.",
+                "replacing": "🔄📄 Dokument wird ersetzt..."
+            },
+            "fileExists": "⚠️ Datei wurde bereits verarbeitet."
+        },
+        "replaceDialog": {
+            "title": "Vorhandenes Dokument ersetzen?",
+            "bodyDefault": "Dieser Upload ersetzt das gespeicherte Markdown-Dokument. Fortfahren?",
+            "markdownId": "**Markdown-ID:** {doc_id}",
+            "storedAs": "Aktuell gespeichert als **{fileName}** (hochgeladen am {uploadedAt}).",
+            "replaceButton": "✅ Dokument ersetzen",
+            "cancelButton": "❌ Abbrechen"
+        },
+        "pagination": {
+            "previous": "⬅️ Vorherige Seite",
+            "previous_help": "Vorherige Seite anzeigen.",
+            "next": "Nächste Seite ➡️",
+            "next_help": "Nächste Seite anzeigen.",
+            "rows_per_page": "Zeilen pro Seite:",
+            "mid_page_label": "Seite",
+            "editor_validation_errors": "ℹ️ Das Speichern ist deaktiviert, bis alle YAML-Validierungsfehler behoben sind."
+        },
+        "status": {
+            "processingComplete": "Verarbeitung abgeschlossen!",
+            "success": "✅ Erfolg",
+            "error": "❌ Fehler"
+        },
+        "summary": {
+            "header": "📃 Dokument-Zusammenfassung"
+        },
+        "quiz": {
+            "header": "🧩 Quiz",
+            "editorLabel": "Quiz (YAML)"
+        },
+        "download": {
+            "generatedMarkdownLabel": "⬇️ Generiertes Markdown herunterladen",
+            "generatedMarkdownHelp": "Laden Sie das KI-generierte KIKO-Markdown aus Ihrem PDF-Upload herunter."
+        },
+        "qa": {
+            "header": "⁉️ Fragen und Antworten",
+            "table": {
+                "no": "**Nr.**",
+                "question": "**Frage**",
+                "llmAnswer": "**LLM-Antwort**",
+                "yourAnswer": "**Ihre Antwort**",
+                "action": "**Aktion**",
+                "gradeSummary": "**LLM-Bewertungszusammenfassung**",
+                "gradingModel": "**Bewertungsmodell**"
+            },
+            "rowYourAnswerLabel": "Ihre Antwort (Zeile {row})",
+            "sendButton": {
+                "label": "📊 Senden",
+                "help": "Antwort bewerten."
+            },
+            "spinners": {
+                "grading": "📊 Ihre Antwort wird bewertet..."
+            },
+            "messages": {
+                "dash": "—",
+                "enterAnswerFirst": "Bitte zuerst eine Antwort eingeben.",
+                "graded": "✅ Bewertet!",
+                "gradeFailed": "❌ Fehlgeschlagen ({status})",
+                "gradeError": "❌ Fehler: {error}"
+            }
+        },
+        "save": {
+            "header": "💾 Als Kurs speichern",
+            "titleLabel": "Kurstitel",
+            "saveButton": {
+                "label": "💾 Als Kurs speichern",
+                "help": "In der Datenbank speichern."
+            },
+            "messages": {
+                "alreadySaved": "⚠️ Sie haben dieses Kursergebnis bereits gespeichert.",
+                "savedSuccess": "✅ Kurs und Fragen/Antworten erfolgreich gespeichert!",
+                "saveFailed": "❌ Kurs konnte nicht gespeichert werden.",
+                "saveError": "❌ Fehler: {error}"
+            }
+        }
+    },
+    "mediaManager": {
+        "pageTitle": "Medienverwaltung",
+        "title": "🖼️ Medienverwaltung",
+        "subtitle": "Bilder für deine Kurse hochladen und verwalten. Verwende die Bild-URLs in deinen Markdown-Dateien.",
+        "help": {
+            "expanderTitle": "ℹ️ **So verwendest du Bilder in deinen Kursen**",
+            "workflowTitle": "### Einfacher Ablauf",
+            "steps": {
+                "one": "1. **Bilder hier in der Medienverwaltung hochladen**",
+                "two": "2. **Die Markdown-Referenz** unter dem Bild kopieren (z. B. `![image.png](/api/course/123/images/abc.png)`)",
+                "three": "3. **Zu „Meine Kurse“** → Kurs öffnen → Feld „Summary“ bearbeiten",
+                "four": "4. **Die Markdown-Referenz** an der gewünschten Stelle im Text einfügen",
+                "five": "5. **Kurs speichern**",
+                "six": "6. **Kurs ansehen**, um die Bilder gerendert zu sehen!"
+            },
+            "exampleTitle": "#### Beispiel für eine Kursbeschreibung:",
+            "exampleMarkdownBlock": "```markdown\n# Einführung in Machine Learning\n\nDieser Kurs behandelt die Grundlagen von ML:\n\n![ML Workflow](/api/course/1/images/ml-workflow.png)\n\n## Behandelte Themen\n- Überwachtes Lernen\n- Neuronale Netze\n\n![Neural Network](/api/course/1/images/neural-net.png)\n```",
+            "tipsTitle": "#### Tipps:",
+            "tips": {
+                "edit": "✅ Du kannst Kursinhalte jederzeit bearbeiten und Bilder hinzufügen/entfernen",
+                "linked": "✅ Bilder sind mit dem Kurs verknüpft – sie funktionieren überall, wo du die URL einfügst",
+                "formats": "✅ Unterstützte Formate: PNG, JPG, GIF, WebP, SVG",
+                "maxSize": "✅ Maximale Dateigröße: 10 MB pro Bild",
+                "copyPaste": "ℹ️ Die Markdown-Referenz enthält die vollständige Bild-URL – einfach kopieren und einfügen!"
+            }
+        },
+        "actions": {
+            "refreshCourses": {
+                "label": "🔄 Kurse aktualisieren",
+                "help": "Die Kursliste neu laden."
+            },
+            "uploadImage": {
+                "label": "⬆️ Bild hochladen",
+                "help": "Dieses Bild in den ausgewählten Kurs hochladen"
+            }
+        },
+        "loading": {
+            "courses": "⏳📚 Kurse werden geladen..."
+        },
+        "status": {
+            "foundCourses": "{count} Kurs(e) gefunden"
+        },
+        "empty": {
+            "noCourses": {
+                "title": "📚 Keine Kurse gefunden. Erstelle zuerst einen Kurs, um Bilder hochzuladen.",
+                "tip": "Tipp: Nach dem Erstellen eines Kurses oben auf „Kurse aktualisieren“ klicken.",
+                "troubleshooting": "🔧 Fehlerbehebung",
+                "apiUrl": "API-URL: {url}",
+                "tokenPresent": "Token vorhanden: {value}",
+                "userRole": "Benutzerrolle: {role}"
+            },
+            "noImages": "Für diesen Kurs wurden noch keine Bilder hochgeladen."
+        },
+        "courseSelector": {
+            "header": "Kurs auswählen",
+            "label": "Wähle einen Kurs, um dessen Bilder zu verwalten:",
+            "help": "Die Bilder sind mit diesem Kurs verknüpft, aber du kannst die URLs in jedem Kurs verwenden."
+        },
+        "upload": {
+            "header": "📤 Bild hochladen",
+            "uploaderLabel": "Bilddatei auswählen",
+            "uploaderHelp": "Maximale Dateigröße: 10 MB. Unterstützte Formate: PNG, JPG, GIF, WebP, SVG",
+            "previewCaption": "Vorschau: {filename}",
+            "sizeLabel": "Größe: {size}"
+        },
+        "gallery": {
+            "header": "🖼️ Hochgeladene Bilder",
+            "total": "Bilder insgesamt: {count}",
+            "loadFailed": "Bild konnte nicht geladen werden",
+            "copyHint": "**📋 Kopieren Sie die unten stehende URL, um sie im Kursinhalt zu verwenden:**",
+            "delete": {
+                "label": "🗑️ Löschen",
+                "help": "Dieses Bild dauerhaft löschen"
+            },
+            "meta": {
+                "size": "Größe: {size}",
+                "uploadedAt": "Hochgeladen: {date}"
+            }
+        },
+        "dialog": {
+            "delete": {
+                "title": "🗑️ Löschen bestätigen",
+                "body": "Möchtest du dieses Bild wirklich löschen?",
+                "warning": "⚠️ Diese Aktion kann nicht rückgängig gemacht werden.",
+                "yes": {
+                    "label": "✅ Ja, löschen",
+                    "help": "Dieses Bild dauerhaft löschen"
+                },
+                "no": {
+                    "label": "❌ Abbrechen",
+                    "help": "Löschvorgang abbrechen"
+                }
+            }
+        },
+        "toast": {
+            "uploadSuccess": "✅ Bild „{filename}“ wurde erfolgreich hochgeladen!",
+            "deleteSuccess": "✅ Bild wurde erfolgreich gelöscht!"
+        },
+        "errors": {
+            "uploadFailed": "❌ Upload fehlgeschlagen: {detail}",
+            "uploadException": "❌ Fehler beim Hochladen: {error}",
+            "deleteFailed": "❌ Löschen fehlgeschlagen: {detail}",
+            "deleteException": "❌ Fehler beim Löschen: {error}",
+            "fetchImages": "Fehler beim Laden der Bilder: {error}",
+            "fetchCoursesNetwork": "Netzwerkfehler beim Laden der Kurse: {error}",
+            "fetchCoursesGeneric": "Fehler beim Laden der Kurse: {error}"
+        },
+        "warnings": {
+            "endpointNotFound": "⚠️ Endpoint nicht gefunden: {url}",
+            "badStatus": "⚠️ API-Status {status}: {text}"
+        }
+    },
+    "course_render":{
+        "no_contents": "ℹ️ Kein Inhalt verfügbar.",
+        "errors": {
+            "saveProgressFailed": "❌ Fortschritt konnte nicht gespeichert werden: {details}",
+            "submitQuizFailed": "❌ Quizversuch konnte nicht eingereicht werden: {details}",
+            "evaluateAnswerFailed": "❌ Antwort konnte nicht ausgewertet werden: {details}"
+        },
+        "warnings": {
+            "missingModulesFinalQuiz": "⚠️ Erforderliche Module müssen zuerst abgeschlossen und bestanden werden: {missing}",
+            "noProviderName": "⚠️ Anbietername nicht angegeben",
+            "noLevelSet": "⚠️ Level nicht festgelegt",
+            "noLanguageSet": "⚠️ Sprache nicht festgelegt"
+        },
+        "difficulty": "Schwierigkeitsgrad",
+        "duration": "Dauer",
+        "modules": "Module",
+        "previewCompleteness": "Vorschau-Vollständigkeit",
+        "assessmentProgress": "Bewertungsfortschritt",
+        "nav_bar":{
+            "course_overview": "📖 Übersicht",
+            "course_info": "ℹ️ Kursinformationen",
+            "modules": "Module",
+            "course_final_quiz": "📝 Abschlussquiz",
+            "course_grades": "📊 Noten",
+            "course_resources": "📚 Ressourcen"
+        },
+        "overview_tab":{
+            "title": "## 📖 Kursübersicht"
+        },
+        "info_tab":{
+            "title": "## ℹ️ Kursinformationen",
+            "about_course": "Über diesen Kurs",
+            "learnings": "Was Sie lernen werden",
+            "tags": "Fähigkeiten und Tags",
+            "prerequisites": "Voraussetzungen",
+            "instructors": "Dozenten",
+            "info":{
+                "no_overview": "ℹ️ Keine Übersicht verfügbar.",
+                "no_learnings": "ℹ️ Keine strukturierten Lernziele in der Übersicht gefunden.",
+                "no_tags": "ℹ️ Keine Tags angegeben.",
+                "no_prerequisites": "ℹ️ Keine formalen Voraussetzungen.",
+                "no_instructor_info": "ℹ️ Keine Dozenteninformationen verfügbar."
+            }
+        },
+        "quiz_preview": {
+            "pass_thresold": "Bestehensschwelle: **{pass_percent:.0f}%**",
+            "type_points": "Typ: {qtype} · Punkte: {points}",
+            "free_text": "Freitextfeld. Die Überprüfung erfolgt manuell oder im Backend.",
+            "correct_answer": "**Richtige Antwort:** {answer}",
+            "target": "**Ziel:** {target}",
+            "info":{
+                "no_items": "ℹ️ Keine Quizfragen verfügbar."
+            },
+            "warnings": "⚠️ Nicht unterstützter Fragetyp: {qtype}"
+        },
+        "misconceptions": {
+            "misconception": "**Missverständnis:** {misconception}",
+            "correction": "**Korrektur:** {correction}",
+            "info": {
+                "no_misconceptions": "ℹ️ Keine Missverständnisse aufgeführt."
+            }
+        },
+        "prac_preview":{
+            "expander": "Vorgeschlagene Antwort",
+            "info":{
+                "no_practices": "ℹ️ Keine Übungsaufgaben verfügbar."
+            }
+        },
+        "prac_questions":{
+            "info":{
+                "no_practices": "ℹ️ Keine Übungsfragen verfügbar.",
+                "eval_completed": "ℹ️ Bewertung abgeschlossen · Note: **{grade_text}**"
+            },
+            "success":{
+                "eval_completed": "✅ Bewertung abgeschlossen · Note: **{grade_text}**"
+            },
+            "warning":{
+                "eval_completed": "⚠️ Bewertung abgeschlossen · Note: **{grade_text}**"
+            },
+            "error":{
+                "eval_completed": "❌ Bewertung abgeschlossen · Note: **{grade_text}**"
+            },
+            "text_area_answers":{
+                "label": "Ihre Antwort",
+                "help": "Geben Sie hier Ihre Antwort ein."
+            },
+            "hide_show_answer_button":{
+                "hide_label": "🙈 Antwort ausblenden",
+                "show_label": "👁️ Antwort anzeigen",
+                "help": "Sichtbarkeit der vorgeschlagenen Antwort umschalten."
+            },
+            "clear_button":{
+                "label": "🧹 Löschen",
+                "help": "Antwort löschen."
+            },
+            "evaluate_button":{
+                "label": "📊 Antwort bewerten",
+                "help": "Ihre Antwort bewerten",
+                "warning": "⚠️ Bitte geben Sie zuerst eine Antwort ein.",
+                "spin_evaluate": "📊 Wird ausgewertet..."
+            },
+            "expander": {
+                "suggested_answer": "Vorgeschlagene Antwort",
+                "evaluation": "Bewertung"
+            }
+        },
+        "quiz_interactive": {
+            "pass_thresold": "Bestehensschwelle: **{pass_percent:.0f}%**",
+            "info":{
+                "no_quiz": "ℹ️ Keine Quizfragen verfügbar."
+            },
+            "text_area_response":{
+                "label": "Ihre Antwort"
+            },
+            "warning": "⚠️ Nicht unterstützter Fragetyp: {qtype}",
+            "submit_button": {
+                "label": "📊 Absenden",
+                "help": "Quiz absenden",
+                "spinner": "📊 Quiz wird gesendet...",
+                "expander": "Detailliertes Feedback"
+            },
+            "grading_text":{
+                "result_message":"Ergebnis: {score}/{total_points} ({percent}%) — {status} · Deutsche Note: {german_grade}",
+                "result_passed":"BESTANDEN ✅",
+                "result_failed":"NICHT BESTANDEN ❌"
+            }
+        },
+        "gradebook":{
+            "title": "## 📊 Noten",
+            "weighted_grade": "Gewichtete Note",
+            "grade_not_met": "⚠️ Notenanforderung nicht erfüllt (< {course_pass:.0f}%).",
+            "grade_met": "Notenanforderung erfüllt (≥ {course_pass:.0f}%).",
+            "info": {
+                "no_graded_attempt": "ℹ️ Noch keine bewerteten Aufgaben bearbeitet.",
+                "enroll_message": "ℹ️ Melden Sie sich für diesen Kurs an, um Ihren Fortschritt, Ihre Noten und Ihren Abschlussstatus einzusehen.",
+                "course_completed": "ℹ️ Kursabschlussstatus: ABGESCHLOSSEN ✅",
+                "eligible_final_quiz": "ℹ️ Kursabschlussstatus: Teilnahmeberechtigt am Abschlusstest.",
+                "course_completed_status": "ℹ️ Kursabschlussstatus: {status}"
+
+            },
+            "result":{
+                "not_attempted": "⚪ Nicht versucht",
+                "passed": "🟢 Bestanden ({row:.0f}%)",
+                "failed": "🔴 Fehlgeschlagen ({row:.0f}%)"
+            }
+        },
+        "resources":{
+            "title": "## 📚 Ressourcen",
+            "info": "ℹ️ Keine Ressourcen verfügbar."
+        },
+        "modules_sub": {
+            "tabs":{
+                "content": "📘 Inhalte",
+                "practice": "🛠️ Übungen",
+                "quiz": "📝 Quiz",
+                "reading": "📚 Weiterführende Literatur",
+                "misconceptions": "⚠️ Missverständnisse",
+                "meta": "⚙️ Meta"
+            },
+            "info": {
+                "prac_no": "ℹ️ Interaktion mit Übungen nicht verfügbar.",
+                "quiz_no": "ℹ️ Interaktion mit Quiz nicht verfügbar.",
+                "enroll_for_practice": "ℹ️ Melden Sie sich für diesen Kurs an, um Antworten zu speichern und die Übungsbewertung zu nutzen.",
+                "enroll_for_quiz": "ℹ️ Melden Sie sich für diesen Kurs an, um am Quiz teilzunehmen.",
+                "enroll_for_final_quiz": "ℹ️ Melden Sie sich für diesen Kurs an, um am Abschlusstest teilnehmen zu können."
+            }
+        },
+        "render_experience":{
+            "nav_col_title": "### Curriculum",
+            "warning": "⚠️ Ungültige Modulauswahl.",
+            "final_ass_title": "## 📝 Abschlussprüfung",
+            "final_quiz_intera_info": "ℹ️ Interaktion im Abschlussquiz nicht verfügbar." 
+        }
+    },
+    "instructor_course_editor":{
+        "course_title":"Kurstitel",
+        "provider":"Anbieter",
+        "language":"Sprache",
+        "level":"Niveau",
+        "course_id":"Kurs-ID",
+        "estimated_modules":"Geschätzte Minuten",
+        "tags_comma":"Schlagwörter (kommagetrennt)",
+        "prerequisites":"Voraussetzungen (eine pro Zeile)",
+        "course_overview":"Kursübersicht (Markdown)",
+        "select_module":"Modul auswählen",
+        "module_title":"Modultitel",
+        "content_md": "Inhalt (Markdown)",
+        "practice_que_yaml": "Übungsfragen (YAML)",
+        "quiz_yaml": "Quiz YAML",
+        "further_reading": "Weiterführende Literatur (Markdown)",
+        "common_misconceptions": "Häufige Missverständnisse (YAML)",
+        "grade_yaml": "Note YAML",
+        "final_quiz_yaml": "YAML-Datei für das Abschlussquiz",
+        "instructors_yaml": "YAML-Datei für Dozenten",
+        "resources_yaml": "YAML-Datei für Ressourcen",
+        "grading_yaml": "YAML-Datei für die Bewertung",
+        "tabs":{
+            "learner_preview": "👁️ Vorschau für Lernende",
+            "course": "📘 Kurs",
+            "modules": "🧩 Module",
+            "final_quiz": "📝 Abschlussquiz",
+            "resources_grading": "⚙️ Ressourcen & Bewertung",
+            "raw_json": "🧾 Rohes JSON"
+        },
+        "info":{
+            "no_modules": "ℹ️ Keine Module in course_json gefunden."
+        },
+        "warning":{
+            "yaml_validation": "⚠️ Beheben Sie die YAML-Validierungsfehler, bevor Sie diesen Kurs speichern."
+        }
+    }
+}

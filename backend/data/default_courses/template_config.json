@@ -1,0 +1,45 @@
+{
+  "grundlagen-strahlung-strahlenschutz.md":{    
+  },
+  "nukleare-sicherheit.md": {
+    "images": [
+      {"filename": "nuclear_safety_course_1_defence_in_depth.png"},
+      {"filename": "nuclear_safety_course_2_barriers.png"},
+      {"filename": "nuclear_safety_course_3_emergency_preparedness.png"}
+    ]
+  },
+  "nukleare-sicherheit-intermediate.md": {
+    "images": [
+      {"filename": "nuclear_safety_intermediate_course_1_safety_assessment.png"},
+      {"filename": "nuclear_safety_intermediate_course_2_psa_ageing.png"},
+      {"filename": "nuclear_safety_intermediate_course_3_severe_accident_management.png"}
+    ]
+  },
+  "birds.md": {
+    "images": [
+      {"filename": "birds_course_1_anatomy.png"},
+      {"filename": "birds_course_2_heads.png"},
+      {"filename": "birds_course_3_flying.gif"}
+    ]
+  },
+  "climate.md": {
+    "images": [
+      {"filename": "climate_change_course_1_greenhouse.png"},
+      {"filename": "climate_change_course_2_changes.png"}
+    ]
+  },
+  "smr.md": {
+    "images": [
+      {"filename": "SMR_course_1_title.png"},
+      {"filename": "SMR_course_2_comparison.jpg"},
+      {"filename": "SMR_course_3_figure.jpg"}
+    ]
+  },
+  "fusion.md": {
+    "images": [
+      {"filename": "Fusion_course_1_atoms.png"},
+      {"filename": "Fusion_course_2_states.jpg"},
+      {"filename": "Fusion_course_3_tokamak.gif"}
+    ]
+  }  
+}

@@ -1,0 +1,24 @@
+Analysieren Sie diese Dokumentseite und extrahieren Sie alle mathematischen Inhalte:
+
+1. MATHEMATISCHE FORMELN:
+– Identifizieren Sie alle mathematischen Gleichungen, Formeln und Ausdrücke.
+– Geben Sie nach Möglichkeit LaTeX-Notation an.
+– Fügen Sie Variablen, Konstanten und Operatoren ein.
+– Notieren Sie alle komplexen mathematischen Strukturen (Brüche, Integrale, Summationen).
+
+2. WISSENSCHAFTLICHE NOTATION:
+– Extrahieren Sie alle wissenschaftlichen Notationen oder Exponentialausdrücke.
+– Identifizieren Sie Maßeinheiten.
+– Notieren Sie alle chemischen Formeln oder physikalischen Konstanten.
+
+3. NUMERISCHE DATEN:
+– Extrahieren Sie alle Zahlen, Messwerte und quantitativen Daten.
+– Identifizieren Sie Prozentsätze, Verhältnisse und statistische Werte.
+– Notieren Sie alle Berechnungen oder Rechenergebnisse.
+
+4. VARIABLENDEFINITIONEN:
+– Identifizieren Sie, wo Variablen definiert oder erklärt werden.
+– Extrahieren Sie alle Legenden oder Notationserklärungen.
+– Notieren Sie tiefgestellte und hochgestellte Zeichen und Sonderzeichen.
+
+Formatieren Sie Ihre Antwort als strukturierte Daten, die leicht analysiert und zum Ausfüllen von Formularen oder für Berechnungen verwendet werden können.

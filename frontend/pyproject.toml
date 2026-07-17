@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "frontend"
+version = "0.1.0"
+description = "KIKO frontend (Streamlit)"
+authors = ["hennkar <ole.katzenberger@gmail.com>"]
+packages = [{include = "frontend"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+streamlit = ">=1.32.0,<2.0.0"
+altair = ">=5.3.0,<6.0.0"
+matplotlib = ">=3.8.0,<4.0.0"
+numpy = ">=1.26.0,<3.0.0"
+pandas = ">=2.2.0,<3.0.0"
+pillow = ">=10.3.0,<12.0.0"
+plotly = ">=5.21.0,<6.0.0"
+python-dotenv = ">=1.0.1,<2.0.0"
+requests = ">=2.31.0,<3.0.0"
+pymupdf = ">=1.24.9,<2.0.0"
+urllib3 = ">=2.6.3"
+fonttools = ">=4.60.2"
+pyyaml = "^6.0.3"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.7"
+black = "^24.10.0"
+pylint = "^3.2.0"
+mypy = "^1.8.0"
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I"] # E=pycodestyle, F=pyflakes, I=import sorting
+ignore = ["E501"]        # Ignore long lines formatted by Black
+
+[tool.pylint]
+max-line-length = 88
+disable = ["C0114", "C0115", "C0116"] # Ignore missing Docstrings
+
+[build-system]
+requires = ["poetry-core>=1.9.0,<2.0.0"]
+build-backend = "poetry.core.masonry.api"

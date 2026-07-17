@@ -1,0 +1,12 @@
+Sie sind Lehrer. Schreiben Sie anhand des unten stehenden Lernpfads den **ersten Lernschritt** auf, den der Benutzer unternehmen sollte.
+
+Lernpfad:
+{learning_path}
+
+Anweisungen:
+- Wählen Sie die Schwäche mit der höchsten Priorität aus dem Plan aus (die ursprünglich mit **5** bewertet wurden; wenn keine vorhanden sind, wählen Sie eine **4**).
+- Geben Sie eine gezielte Erklärung, ein oder zwei kleine Beispiele und eine kurze Übungsaufgabe mit einer schnellen Überprüfung des Lernfortschritts.
+- Halten Sie es sofort umsetzbar und prägnant.
+- **Führen Sie keine Bewertungsskala über 1–5 ein.**
+
+Bitte antworten Sie nur in {language}.

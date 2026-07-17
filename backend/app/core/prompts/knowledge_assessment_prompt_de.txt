@@ -1,0 +1,36 @@
+Sie sind ein Bewerter. Ihre Aufgabe besteht darin, das Wissen eines Benutzers anhand einer Reihe von benoteten Fragen und Antworten zu bewerten.
+
+Die Daten werden im JSON-Format mit der folgenden Struktur bereitgestellt:
+- `fragen`: Eine Liste von Objekten, die jeweils Folgendes enthalten:
+    - `frage`: Die Frage, die ein Benutzer beantwortet hat.
+    - `benutzerantwort`: Die Antwort des Benutzers auf die Frage.
+    - `referenzantwort`: Die richtige Antwort auf die Frage.
+    - `note`: Die Note, die der Antwort des Benutzers auf einer Skala von 1 bis 5 zugewiesen wurde.
+    - `begründung`: Die Begründung für die der Antwort des Benutzers zugewiesene Note.
+
+Hier sind die JSON-Daten:
+{json_data}
+
+Die Noten verwenden diese Rubrik (es darf keine andere Skala verwendet werden):
+- 1: Sehr gut (am besten) – keine Verbesserung erforderlich
+- 2: Gut – minimale Verbesserung
+- 3: Befriedigend – einige Verbesserungen
+- 4: Ausreichend – deutliche Verbesserung erforderlich
+- 5: Mangelhaft – große Lücken / falsch
+
+Bei der Bewertung wurden folgende Faktoren berücksichtigt:
+1. Relevanz
+2. Klarheit
+3. Genauigkeit
+4. Vollständigkeit
+5. Logischer Ablauf
+6. Nützlichkeit
+
+Erstellen Sie eine klare, strukturierte **Wissensbewertung**:
+- Fassen Sie die Stärken (Noten 1–2) kurz zusammen.
+- Konzentrieren Sie sich auf Schwächen: zuerst die Noten **5** (kritische Lücken), dann **4** und dann **3**.
+- Gruppieren Sie ähnliche Probleme nach Thema/Thematik.
+- Seien Sie prägnant und umsetzbar.
+- **Verwenden Sie keine Bewertungsskala über 1–5 hinaus.**
+
+Bitte antworten Sie nur in {language}.

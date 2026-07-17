@@ -1,0 +1,15 @@
+artifact_uri: file:///mnt/data3/develop-project/kiko-platform/notebooks/mlruns/780707568230540418/118ff9ce35af4ca1bb3f4ee5df9f10d2/artifacts
+end_time: 1759152723848
+entry_point_name: ''
+experiment_id: '780707568230540418'
+lifecycle_stage: active
+run_id: 118ff9ce35af4ca1bb3f4ee5df9f10d2
+run_name: eductum_20250929_153203
+run_uuid: 118ff9ce35af4ca1bb3f4ee5df9f10d2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1759152723831
+status: 3
+tags: []
+user_id: sgupta

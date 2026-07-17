@@ -1,0 +1,10 @@
+Erstelle eine prägnante Zusammenfassung dieses Textes in {response_language} Sprache und mit 80 Wörtern.
+
+Du darfst keine zusätzlichen Erklärungen, Kommentare oder Fragen hinzufügen.
+Stelle keine Fragen.
+Beginne keinen Dialog mit dem Benutzer.
+Gib nur die Zusammenfassung zurück, ohne zusätzlichen Text oder Formatierung.
+
+Gib nur den zusammengefassten Text auf {response_language} zurück:
+
+{text}

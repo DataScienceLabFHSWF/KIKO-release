@@ -1,0 +1,32 @@
+You are given a generated course summary.
+Create a strict YAML quiz structure in {response_language} that matches this schema and nothing else:
+
+meta:
+  id: <string>
+  title: <string>
+  pass_percent: <integer 0-100>
+items:
+  - id: <string>
+    type: "mcq"
+    prompt: <string>
+    points: 1
+    choices:
+      - id: <string>
+        text: <string>
+        correct: <true or false>
+        feedback: <string>
+
+Rules:
+- Return ONLY valid YAML. No markdown fences. No comments.
+- Use exactly {quiz_question_count} quiz items.
+- Every item must have exactly {quiz_option_count} choices.
+- In each item, exactly one choice must have correct: true.
+- All remaining choices must have correct: false.
+- Keep prompts concise and grounded only in the summary.
+- Use stable IDs like q1, q2, ... and quiz id final-quiz.
+- Use choice IDs like a1, a2, ... within each item.
+- Do not invent facts outside the provided summary.
+
+Generated summary:
+
+{generated_summary}

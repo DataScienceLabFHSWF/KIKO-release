@@ -1,0 +1,12 @@
+These text snippets are summaries of different parts of a document.
+
+Summarize them into a single, coherent summary of the entire document that is only 300 words long and written in {response_language}.
+
+Do not add any additional explanations, comments, or questions.
+Do not ask any questions.
+Do not start a dialogue with the user.
+Return only the summary, without any additional text or formatting.
+
+Return only the summarized text in {response_language}:
+
+{text}

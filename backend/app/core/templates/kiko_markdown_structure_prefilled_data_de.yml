@@ -1,0 +1,78 @@
+front_matter:
+  course:
+    version: "1.1"
+    provider: "KIKO Auto-Generated"
+    language: "German"
+    level: "Einsteiger"
+    tags:
+      - auto-generated
+      - pdf-conversion
+      - kiko
+    estimated_minutes: 60
+    published: true
+    prerequisites: []
+  instructors:
+    - id: "inst-1"
+      name: "KIKO AI"
+      bio: "Automatisch aus dem hochgeladenen PDF generiert."
+  grading:
+    pass_percent: 70
+    assessment_weights:
+      m1: 1.0
+    policy:
+      calculation:
+        type: "weighted_modules"
+        weights_ref: "grading.assessment_weights"
+      completion:
+        required_modules:
+          - "m1"
+        required_assessments:
+          - "m1-quiz"
+        assessment_pass_percent: 70
+      notes:
+        - "Die Gesamtnote ist der gewichtete Mittelwert der Modul-Quiz-Ergebnisse."
+        - "Das Modul-Quiz muss bestanden werden, um den Kurs abzuschließen."
+  resources: []
+
+content:
+  no_summary: "Keine Zusammenfassung erzeugt."
+  headings:
+    course_overview: "Kursübersicht"
+    learning_outcomes: "Lernziele"
+    modules: "Module"
+    module_1_title: "Modul 1: Automatisch generiertes Modul {#m1}"
+    overall_quiz: "Gesamtquiz"
+    content: "Inhalt"
+    questions: "Fragen (Übung / Freitext)"
+    quiz: "Quiz (automatisch bewertet)"
+    further_reading: "Weiterführende Inhalte"
+    misconceptions: "Häufige Missverständnisse"
+    grade: "Bewertung"
+  learning_outcomes:
+    - "Die zentralen Inhalte des Dokuments verstehen."
+    - "Wichtige Konzepte strukturiert wiedergeben."
+    - "Quiz- und Verständnisfragen zum Thema beantworten."
+  further_reading:
+    - "N/A"
+  misconceptions:
+    - misconception: ""
+      correction: ""
+
+defaults:
+  qa:
+    id_prefix: "m1-q"
+    points: 1
+  quiz:
+    meta:
+      id: "m1-quiz"
+      title: "Modul-Quiz 1"
+      pass_percent: 70
+    item:
+      id_prefix: "m1-quiz"
+      type: "mcq"
+      points: 1
+  grade:
+    completion:
+      required: true
+      passing_percent: 70
+    grade_item_id: "m1-quiz"

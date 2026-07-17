@@ -1,0 +1,32 @@
+Du erhältst eine generierte Kurszusammenfassung.
+Erzeuge daraus eine strikt formatierte YAML-Quizstruktur in {response_language}, die exakt diesem Schema entspricht und nichts anderes enthält:
+
+meta:
+  id: <string>
+  title: <string>
+  pass_percent: <Ganzzahl 0-100>
+items:
+  - id: <string>
+    type: "mcq"
+    prompt: <string>
+    points: 1
+    choices:
+      - id: <string>
+        text: <string>
+        correct: <true oder false>
+        feedback: <string>
+
+Regeln:
+- Gib NUR gültiges YAML zurück. Keine Markdown-Codeblöcke. Keine Kommentare.
+- Erzeuge genau {quiz_question_count} Quiz-Items.
+- Jedes Item muss genau {quiz_option_count} Antwortoptionen (`choices`) haben.
+- Pro Item muss genau eine Antwortoption `correct: true` sein.
+- Alle übrigen Antwortoptionen müssen `correct: false` sein.
+- Formuliere Fragen knapp und nur auf Basis der Zusammenfassung.
+- Verwende stabile IDs wie q1, q2, ... sowie quiz id final-quiz.
+- Verwende innerhalb jedes Items Choice-IDs wie a1, a2, ...
+- Erfinde keine Fakten außerhalb der bereitgestellten Zusammenfassung.
+
+Generierte Zusammenfassung:
+
+{generated_summary}

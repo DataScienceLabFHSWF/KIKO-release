@@ -1,0 +1,78 @@
+front_matter:
+  course:
+    version: "1.1"
+    provider: "KIKO Auto-Generated"
+    language: "English"
+    level: "Beginner"
+    tags:
+      - auto-generated
+      - pdf-conversion
+      - kiko
+    estimated_minutes: 60
+    published: true
+    prerequisites: []
+  instructors:
+    - id: "inst-1"
+      name: "KIKO AI"
+      bio: "Automatically generated from uploaded PDF."
+  grading:
+    pass_percent: 70
+    assessment_weights:
+      m1: 1.0
+    policy:
+      calculation:
+        type: "weighted_modules"
+        weights_ref: "grading.assessment_weights"
+      completion:
+        required_modules:
+          - "m1"
+        required_assessments:
+          - "m1-quiz"
+        assessment_pass_percent: 70
+      notes:
+        - "The final grade is the weighted average of module quiz results."
+        - "The module quiz must be passed to complete the course."
+  resources: []
+
+content:
+  no_summary: "No summary generated."
+  headings:
+    course_overview: "Course overview"
+    learning_outcomes: "Learning outcomes"
+    modules: "Modules"
+    module_1_title: "Module 1: Auto-generated module {#m1}"
+    overall_quiz: "Overall Quiz"
+    content: "Content"
+    questions: "Questions (practice / free-response)"
+    quiz: "Quiz (auto-graded)"
+    further_reading: "Further reading"
+    misconceptions: "Common misconceptions"
+    grade: "Grade"
+  learning_outcomes:
+    - "Understand the core content of the document."
+    - "Explain key concepts in a structured way."
+    - "Answer quiz and comprehension questions on the topic."
+  further_reading:
+    - "N/A"
+  misconceptions:
+    - misconception: ""
+      correction: ""
+
+defaults:
+  qa:
+    id_prefix: "m1-q"
+    points: 1
+  quiz:
+    meta:
+      id: "m1-quiz"
+      title: "Module 1 quiz"
+      pass_percent: 70
+    item:
+      id_prefix: "m1-quiz"
+      type: "mcq"
+      points: 1
+  grade:
+    completion:
+      required: true
+      passing_percent: 70
+    grade_item_id: "m1-quiz"

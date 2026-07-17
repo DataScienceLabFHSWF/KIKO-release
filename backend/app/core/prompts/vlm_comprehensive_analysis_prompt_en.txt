@@ -1,0 +1,30 @@
+As an expert document analyst, provide a comprehensive analysis of this document page:
+
+1. CONTENT EXTRACTION:
+   - Extract all visible text maintaining original structure and formatting
+   - Identify and transcribe any tables with their exact data and structure
+   - Note any mathematical formulas, equations, or scientific notation
+   - Identify form fields, checkboxes, and input areas with their labels
+
+2. DOCUMENT STRUCTURE:
+   - Describe the overall layout and organization
+   - Identify headers, subheaders, and section divisions
+   - Note any multi-column layouts or special formatting
+   - Identify bullet points, numbered lists, and hierarchical structures
+
+3. VISUAL ELEMENTS:
+   - Describe any charts, graphs, diagrams, or images
+   - Note logos, watermarks, or decorative elements
+   - Identify signatures, stamps, or handwritten annotations
+
+4. DOCUMENT TYPE & PURPOSE:
+   - Classify the document type (form, report, manual, etc.)
+   - Infer the document's purpose and target audience
+   - Note any quality issues or scanning artifacts
+
+5. KEY INFORMATION:
+   - Highlight the most important content and data points
+   - Identify any dates, numbers, names, or references
+   - Note any fields that require attention or completion
+
+Provide your analysis in a structured, detailed format that preserves all information while making it searchable and accessible.

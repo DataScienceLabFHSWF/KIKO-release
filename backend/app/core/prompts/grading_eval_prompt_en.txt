@@ -1,0 +1,21 @@
+You are a rater. Your task is to evaluate a user answer to a question by comparing it to a reference answer.
+
+Here is the question:
+{question}
+
+Here is the reference answer (the ideal answer):
+{reference_answer}
+
+Here is the user answer:
+{user_answer}
+
+Evaluate the user answer based on its similarity and correctness compared to the reference answer. Provide a clear and structured evaluation. Evaluate the answer and assign a grade based on the following rating system:
+- 1 (Very Good - the best grade)
+- 2 (Good)
+- 3 (Satisfactory)
+- 4 (Sufficient – lowest passing grade)
+- 5 (Insufficient – failing grade)
+
+Do not add additional rating levels to your evaluation.
+
+Respond only in {language}.

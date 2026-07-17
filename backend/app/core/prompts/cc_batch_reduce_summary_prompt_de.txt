@@ -1,0 +1,12 @@
+Diese Textabschnitte sind Zusammenfassungen verschiedener Teile eines Dokuments.
+
+Fasse sie zu einer einzigen, zusammenhängenden Zusammenfassung des gesamten Dokuments zusammen, die nur 300 Wörter in {response_language} Sprache umfasst.
+
+Du darfst keine zusätzlichen Erklärungen, Kommentare oder Fragen hinzufügen.
+Stelle keine Fragen.
+Beginne keinen Dialog mit dem Benutzer.
+Gib nur die Zusammenfassung zurück, ohne zusätzlichen Text oder Formatierung.
+
+Gib nur den zusammengefassten Text auf {response_language} zurück:
+
+{text}

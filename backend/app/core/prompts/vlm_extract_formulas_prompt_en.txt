@@ -1,0 +1,24 @@
+Analyze this document page and extract all mathematical content:
+
+1. MATHEMATICAL FORMULAS:
+   - Identify all mathematical equations, formulas, and expressions
+   - Provide LaTeX notation where possible
+   - Include variables, constants, and operators
+   - Note any complex mathematical structures (fractions, integrals, summations)
+
+2. SCIENTIFIC NOTATION:
+   - Extract any scientific notation or exponential expressions
+   - Identify units of measurement
+   - Note any chemical formulas or physical constants
+
+3. NUMERICAL DATA:
+   - Extract all numbers, measurements, and quantitative data
+   - Identify percentages, ratios, and statistical values
+   - Note any calculations or computational results
+
+4. VARIABLE DEFINITIONS:
+   - Identify where variables are defined or explained
+   - Extract any legends or notation explanations
+   - Note subscripts, superscripts, and special symbols
+
+Format your response as structured data that can be easily parsed and used for form filling or calculations.

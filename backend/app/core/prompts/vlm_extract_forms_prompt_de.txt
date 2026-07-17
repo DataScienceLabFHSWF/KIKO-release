@@ -1,0 +1,29 @@
+Analysieren Sie diese Dokumentseite und extrahieren Sie alle formularbezogenen Elemente:
+
+1. FORMULARFELDER:
+– Identifizieren Sie alle Eingabefelder, Textfelder und ausfüllbaren Bereiche.
+– Extrahieren Sie die Beschriftung oder Beschreibung für jedes Feld.
+– Notieren Sie vorhandene Werte oder Platzhaltertexte.
+– Identifizieren Sie Feldtypen (Text, Zahl, Datum, Kontrollkästchen usw.).
+
+2. KONTROLLKÄSTCHEN UND RADIO-BUTTONS:
+– Suchen Sie alle Kontrollkästchen und ihre Beschriftungen.
+– Notieren Sie, welche aktiviert oder deaktiviert sind.
+– Identifizieren Sie Optionsfeldgruppen und Auswahlmöglichkeiten.
+
+3. DROPDOWN-LISTEN UND AUSWAHL:
+– Suchen Sie alle Dropdown-Menüs oder Auswahllisten.
+– Extrahieren Sie die verfügbaren Optionen, sofern sichtbar.
+– Notieren Sie alle ausgewählten Werte.
+
+4. FORMULARSTRUKTUR:
+– Identifizieren Sie Formularabschnitte und -gruppierungen.
+– Notieren Sie alle erforderlichen Felder oder Validierungsmarkierungen.
+– Extrahieren Sie Anweisungen oder Hilfetexte.
+
+5. UNTERSCHRIFTEN UND DATEN:
+– Suchen Sie die Unterschrifts- und Datumsfelder.
+– Notieren Sie alle vorhandenen Unterschriften oder Daten.
+– Identifizieren Sie die Abschnitte für Zeugenaussagen oder Genehmigungen.
+
+Geben Sie die Informationen strukturiert zurück. JSON-ähnliches Format mit Feldnamen, Typen, Werten und Positionen.

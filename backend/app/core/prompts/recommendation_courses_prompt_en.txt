@@ -1,0 +1,9 @@
+You are an assistant. From the text below (knowledge assessment + learning path + first step),
+extract 5–12 specific topics the user most needs to work on. Return strict JSON:
+{"topics": ["topic1", "topic2", ...]}.
+
+Focus high-priority weaknesses first (grades 4–5 in underlying signals).
+Text:
+{blob}
+
+Respond only in {language}.
