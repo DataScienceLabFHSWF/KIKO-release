@@ -52,7 +52,7 @@ pymupdf = ">=1.24.9,<2.0.0"
 opencv-python = ">=4.10.0,<5.0.0"
 pytesseract = ">=0.3.10,<0.4.0"     # needs Tesseract binary on system
 pdf2image = ">=1.17.0,<2.0.0"
-surya-ocr = ">=0.4.0,<0.5.0"
+surya-ocr = ">=0.14.1,<0.15.0"
 timm = ">=1.0.3,<1.1.0"
 decord = ">=0.6.0,<0.7.0"
 qwen-vl-utils = {version = ">=0.0.8,<0.1.0", extras = ["decord"]}
