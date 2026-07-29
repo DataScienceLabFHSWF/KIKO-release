@@ -8,6 +8,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import joinedload
 from app.schemas import QuestionAnswerList
+from .course_generation_config import (
+    get_course_generation_count_defaults,
+    validate_course_generation_count,
+    validate_course_generation_counts,
+)
 from langchain_ollama import OllamaLLM
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_community.document_loaders import PyMuPDFLoader
@@ -25,12 +30,16 @@ from app.utils import rewrite_markdown_image_urls, lang_display
 
 load_dotenv()
 DOCKER_OLLAMA_URL = os.getenv("DOCKER_OLLAMA_URL")
+COURSE_CREATOR_NUM_CTX = int(os.getenv("COURSE_CREATOR_NUM_CTX", "8192"))
+COURSE_CREATOR_KEEP_ALIVE = os.getenv("COURSE_CREATOR_KEEP_ALIVE", "10m")
 CC_MAP_PROMPT_NAME = "cc_batch_map_summary_prompt"
 CC_REDUCE_PROMPT_NAME = "cc_batch_reduce_summary_prompt"
 CC_QUESTION_PROMPT_NAME = "cc_batch_question_prompt"
 CC_QUIZ_PROMPT_NAME = "cc_batch_quiz_prompt"
+CC_MISCONCEPTION_PROMPT_NAME = "cc_batch_misconception_prompt"
 CC_TITLE_PROMPT_NAME = "cc_batch_title_prompt"
 KIKO_MD_TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "..", "core", "templates")
+COURSE_GENERATION_COUNT_DEFAULTS = get_course_generation_count_defaults()
 
 
 def _slugify(value: str) -> str:
@@ -192,13 +201,15 @@ class AsyncBatchProcessor:
         response_language, 
         batch_size=10000, 
         chunk_overlap=300, 
-        max_concurrency=20
+        max_concurrency=1,
     ):
         self.prompt_manager = prompt_manager
         self.llm = OllamaLLM(
             model=llm_model_name,
             temperature=0,
             base_url=DOCKER_OLLAMA_URL,
+            num_ctx=COURSE_CREATOR_NUM_CTX,
+            keep_alive=COURSE_CREATOR_KEEP_ALIVE,
         )   
         self.batch_size = batch_size
         self.chunk_overlap = chunk_overlap
@@ -247,6 +258,37 @@ class AsyncBatchProcessor:
             return fenced_match.group(1).strip()
         return text
 
+    def _quote_unquoted_quiz_text_fields(self, quiz_yaml_text: str) -> str:
+        """Quote generated quiz text fields that commonly break YAML parsing."""
+        repaired_lines: list[str] = []
+        text_field_pattern = re.compile(
+            r"^(?P<indent>\s*)(?P<key>title|prompt|text|feedback):\s*(?P<value>.+?)\s*$"
+        )
+
+        for line in str(quiz_yaml_text or "").splitlines():
+            match = text_field_pattern.match(line)
+            if not match:
+                repaired_lines.append(line)
+                continue
+
+            value = match.group("value").strip()
+            if not value or value[0] in {"\"", "'", "|", ">", "[", "{"}:
+                repaired_lines.append(line)
+                continue
+
+            quoted_value = yaml.safe_dump(
+                value,
+                sort_keys=False,
+                allow_unicode=True,
+                default_style='"',
+                width=1000,
+            ).strip()
+            repaired_lines.append(
+                f"{match.group('indent')}{match.group('key')}: {quoted_value}"
+            )
+
+        return "\n".join(repaired_lines)
+
     def _normalize_quiz_yaml(
         self,
         quiz_yaml_text: str,
@@ -254,7 +296,10 @@ class AsyncBatchProcessor:
         expected_option_count: int,
     ) -> str:
         """Validate and normalize generated quiz YAML."""
-        parsed = yaml.safe_load(quiz_yaml_text)
+        try:
+            parsed = yaml.safe_load(quiz_yaml_text)
+        except yaml.YAMLError:
+            parsed = yaml.safe_load(self._quote_unquoted_quiz_text_fields(quiz_yaml_text))
         if not isinstance(parsed, dict):
             raise ValueError("Generated quiz must be a YAML mapping")
 
@@ -304,12 +349,118 @@ class AsyncBatchProcessor:
                 )
 
         return yaml.safe_dump(parsed, sort_keys=False, allow_unicode=True).strip()
+
+    def _normalize_misconceptions_yaml(
+        self,
+        misconceptions_yaml_text: str,
+        expected_count: int,
+    ) -> list[dict[str, str]]:
+        """Validate and normalize generated misconceptions YAML."""
+        if expected_count < 1:
+            raise ValueError("expected_count must be at least 1")
+
+        parsed = yaml.safe_load(misconceptions_yaml_text)
+        if not isinstance(parsed, list):
+            raise ValueError("Generated misconceptions must be a YAML list")
+
+        if len(parsed) != expected_count:
+            raise ValueError(
+                f"Generated misconceptions must include exactly {expected_count} items"
+            )
+
+        normalized: list[dict[str, str]] = []
+        for index, item in enumerate(parsed, start=1):
+            if not isinstance(item, dict):
+                raise ValueError(f"Misconception #{index} must be a mapping")
+
+            misconception = str(item.get("misconception") or "").strip()
+            correction = str(item.get("correction") or "").strip()
+            if not misconception or not correction:
+                raise ValueError(
+                    f"Misconception #{index} must include misconception and correction"
+                )
+
+            normalized.append(
+                {
+                    "misconception": misconception,
+                    "correction": correction,
+                }
+            )
+
+        return normalized
+
+    def _fallback_misconceptions(self, misconception_count: int) -> list[dict[str, str]]:
+        """Return safe generic misconception items when LLM generation fails."""
+        count = max(1, int(misconception_count))
+        if self.response_language == "de":
+            templates = [
+                {
+                    "misconception": "Man kann das Thema durch das Auswendiglernen einzelner Fakten vollständig verstehen.",
+                    "correction": "Konzentriere dich darauf, wie die zentralen Ideen im Modul zusammenhängen.",
+                },
+                {
+                    "misconception": "Alle Details im Modul sind gleich wichtig.",
+                    "correction": "Priorisiere die Konzepte und Zusammenhänge, die in der Zusammenfassung betont werden.",
+                },
+                {
+                    "misconception": "Die Zusammenfassung ersetzt das ursprüngliche Kursmaterial vollständig.",
+                    "correction": "Nutze die Zusammenfassung als Lernhilfe und prüfe genaue Details im Modulinhalt.",
+                },
+                {
+                    "misconception": "Ein einzelnes Beispiel erklärt das gesamte Thema.",
+                    "correction": "Betrachte Beispiele immer zusammen mit dem vollständigen Kontext des Moduls.",
+                },
+            ]
+        else:
+            templates = [
+                {
+                    "misconception": "The topic can be fully understood by memorizing isolated facts.",
+                    "correction": "Focus on how the main ideas in the module relate to each other.",
+                },
+                {
+                    "misconception": "Every detail in the module has the same importance.",
+                    "correction": "Prioritize the concepts and relationships emphasized in the summary.",
+                },
+                {
+                    "misconception": "The summary completely replaces the original course material.",
+                    "correction": "Use the summary as a study aid and check precise details in the module content.",
+                },
+                {
+                    "misconception": "One example explains the whole topic.",
+                    "correction": "Use examples together with the full context of the module.",
+                },
+            ]
+
+        return [dict(templates[index % len(templates)]) for index in range(count)]
+
+    def _clean_misconceptions_for_markdown(
+        self,
+        misconceptions: list[dict[str, str]] | None,
+        fallback_count: int,
+    ) -> list[dict[str, str]]:
+        cleaned: list[dict[str, str]] = []
+        if isinstance(misconceptions, list):
+            for item in misconceptions:
+                if not isinstance(item, dict):
+                    continue
+                misconception = str(item.get("misconception") or "").strip()
+                correction = str(item.get("correction") or "").strip()
+                if misconception and correction:
+                    cleaned.append(
+                        {
+                            "misconception": misconception,
+                            "correction": correction,
+                        }
+                    )
+
+        return cleaned or self._fallback_misconceptions(fallback_count)
     
     def _initialize_chains(self):
         map_prompt_template = self._load_prompt(CC_MAP_PROMPT_NAME)
         reduce_prompt_template = self._load_prompt(CC_REDUCE_PROMPT_NAME)
         question_prompt_template = self._load_prompt(CC_QUESTION_PROMPT_NAME)
         quiz_prompt_template = self._load_prompt(CC_QUIZ_PROMPT_NAME)
+        misconception_prompt_template = self._load_prompt(CC_MISCONCEPTION_PROMPT_NAME)
         title_prompt_template = self._load_prompt(CC_TITLE_PROMPT_NAME)
         
         self.map_chain = LLMChain(
@@ -358,6 +509,15 @@ class AsyncBatchProcessor:
             )
         )
 
+        self.misconception_chain = LLMChain(
+            llm=self.llm,
+            prompt=PromptTemplate(
+                template=misconception_prompt_template,
+                input_variables=["generated_summary", "misconception_count"],
+                partial_variables={"response_language": lang_display(self.response_language)}
+            )
+        )
+
         self.title_chain = LLMChain(
             llm=self.llm,
             prompt=PromptTemplate(
@@ -399,17 +559,21 @@ class AsyncBatchProcessor:
     async def generate_structured_quiz_yaml(
         self,
         generated_summary: str,
-        quiz_question_count: int = 3,
-        quiz_option_count: int = 3,
+        quiz_question_count: int = COURSE_GENERATION_COUNT_DEFAULTS["quiz_question_count"],
+        quiz_option_count: int = COURSE_GENERATION_COUNT_DEFAULTS["quiz_option_count"],
     ) -> str:
         """Generate strict YAML quiz structure from a generated summary using the same LLM."""
         if not isinstance(generated_summary, str) or not generated_summary.strip():
             raise ValueError("generated_summary must be a non-empty string")
 
-        if quiz_question_count < 1 or quiz_question_count > 4:
-            raise ValueError("quiz_question_count must be between 1 and 4")
-        if quiz_option_count < 2 or quiz_option_count > 4:
-            raise ValueError("quiz_option_count must be between 2 and 4")
+        quiz_question_count = validate_course_generation_count(
+            "quiz_question_count",
+            quiz_question_count,
+        )
+        quiz_option_count = validate_course_generation_count(
+            "quiz_option_count",
+            quiz_option_count,
+        )
 
         quiz_result = await self.quiz_chain.ainvoke(
             {
@@ -426,6 +590,65 @@ class AsyncBatchProcessor:
             expected_option_count=quiz_option_count,
         )
 
+    async def generate_structured_misconceptions(
+        self,
+        generated_summary: str,
+        misconception_count: int = COURSE_GENERATION_COUNT_DEFAULTS["misconception_count"],
+    ) -> list[dict[str, str]]:
+        """Generate common misconception/correction pairs from a generated summary."""
+        if not isinstance(generated_summary, str) or not generated_summary.strip():
+            raise ValueError("generated_summary must be a non-empty string")
+
+        misconception_count = validate_course_generation_count(
+            "misconception_count",
+            misconception_count,
+        )
+
+        misconception_result = await self.misconception_chain.ainvoke(
+            {
+                "generated_summary": generated_summary,
+                "misconception_count": misconception_count,
+            }
+        )
+        raw_misconceptions_text = misconception_result.get("text", "")
+        yaml_text = self._extract_yaml_content(raw_misconceptions_text)
+        return self._normalize_misconceptions_yaml(
+            yaml_text,
+            expected_count=misconception_count,
+        )
+
+    async def generate_structured_misconceptions_or_fallback(
+        self,
+        generated_summary: str,
+        misconception_count: int,
+        context_label: str = "",
+        timeout_seconds: int = 120,
+    ) -> list[dict[str, str]]:
+        """Generate misconceptions, falling back to valid generic items if needed."""
+        try:
+            generated = await asyncio.wait_for(
+                self.generate_structured_misconceptions(
+                    generated_summary,
+                    misconception_count=misconception_count,
+                ),
+                timeout=timeout_seconds,
+            )
+            return self._clean_misconceptions_for_markdown(
+                generated,
+                fallback_count=misconception_count,
+            )
+        except asyncio.TimeoutError:
+            suffix = f" ({context_label})" if context_label else ""
+            print(
+                f"⚠️ Misconception generation timed out after "
+                f"{timeout_seconds}s{suffix}; using fallback misconceptions."
+            )
+        except Exception as exc:
+            suffix = f" ({context_label})" if context_label else ""
+            print(f"⚠️ Misconception generation failed{suffix}: {exc}")
+
+        return self._fallback_misconceptions(misconception_count)
+
     async def process_chunk(self, chunk: Dict, semaphore: asyncio.Semaphore) -> str:
         async with semaphore:
             for attempt in range(3):
@@ -437,6 +660,19 @@ class AsyncBatchProcessor:
                         print(f"Chunk failed after retries: {e}")
                         return ""
                     await asyncio.sleep(1)
+
+    async def _maybe_report_progress(
+        self,
+        progress_callback,
+        progress: float,
+        message: str,
+    ) -> None:
+        if progress_callback is not None:
+            await progress_callback(progress, message)
+
+    async def _maybe_check_cancel(self, cancellation_check) -> None:
+        if cancellation_check is not None:
+            await cancellation_check()
 
     async def batch_reduce(self, summaries):
         """
@@ -469,17 +705,31 @@ class AsyncBatchProcessor:
     async def summarize_document(
         self,
         path: str,
-        qa_count: int = 5,
-        quiz_question_count: int = 3,
-        quiz_option_count: int = 3,
+        qa_count: int = COURSE_GENERATION_COUNT_DEFAULTS["qa_count"],
+        quiz_question_count: int = COURSE_GENERATION_COUNT_DEFAULTS["quiz_question_count"],
+        quiz_option_count: int = COURSE_GENERATION_COUNT_DEFAULTS["quiz_option_count"],
+        misconception_count: int = COURSE_GENERATION_COUNT_DEFAULTS["misconception_count"],
+        progress_callback=None,
+        cancellation_check=None,
     ) -> Dict[str, Any]:
-        if qa_count < 1 or qa_count > 10:
-            raise ValueError("qa_count must be between 1 and 10")
+        counts = validate_course_generation_counts(
+            qa_count=qa_count,
+            quiz_question_count=quiz_question_count,
+            quiz_option_count=quiz_option_count,
+            misconception_count=misconception_count,
+        )
+        qa_count = counts["qa_count"]
+        quiz_question_count = counts["quiz_question_count"]
+        quiz_option_count = counts["quiz_option_count"]
+        misconception_count = counts["misconception_count"]
 
         start_time = time.time()
+        await self._maybe_report_progress(progress_callback, 0.14, "Reading PDF...")
+        await self._maybe_check_cancel(cancellation_check)
 
         loader = PyMuPDFLoader(path)
         docs = loader.load()
+        await self._maybe_check_cancel(cancellation_check)
 
         splitter = RecursiveCharacterTextSplitter(
             chunk_size=self.batch_size,
@@ -488,27 +738,76 @@ class AsyncBatchProcessor:
         )
         chunks = splitter.split_documents(docs)
         print(f"Document split into {len(chunks)} chunks.")
+        await self._maybe_report_progress(
+            progress_callback,
+            0.2,
+            f"Prepared {len(chunks)} PDF chunks for summarization.",
+        )
+        await self._maybe_check_cancel(cancellation_check)
 
         if len(chunks) == 1:
             print("Single chunk detected. Using reduce on original content.")
+            await self._maybe_report_progress(
+                progress_callback,
+                0.45,
+                "Generating summary from the PDF content...",
+            )
+            await self._maybe_check_cancel(cancellation_check)
             reduce_input = chunks[0].page_content
             reduce_out = await self.reduce_chain.ainvoke({"text": reduce_input})
             final_summary = reduce_out.get("text", "")
         else:
             semaphore = asyncio.Semaphore(self.max_concurrency)
             tasks = [
-                self.process_chunk(chunk.page_content, semaphore)
+                asyncio.create_task(self.process_chunk(chunk.page_content, semaphore))
                 for chunk in chunks
             ]
-            summaries = await asyncio.gather(*tasks)
-            summaries = [s for s in summaries if s]
+            summaries = []
+            total_tasks = len(tasks)
+            completed_tasks = 0
+
+            try:
+                for finished_task in asyncio.as_completed(tasks):
+                    await self._maybe_check_cancel(cancellation_check)
+                    summary = await finished_task
+                    if summary:
+                        summaries.append(summary)
+                    completed_tasks += 1
+                    await self._maybe_report_progress(
+                        progress_callback,
+                        0.2 + (0.42 * (completed_tasks / total_tasks)),
+                        (
+                            f"Summarizing PDF chunks "
+                            f"({completed_tasks}/{total_tasks})..."
+                        ),
+                    )
+            except asyncio.CancelledError:
+                for task in tasks:
+                    task.cancel()
+                raise
+            except Exception:
+                for task in tasks:
+                    task.cancel()
+                raise
 
             print("Generating final summary...")
+            await self._maybe_report_progress(
+                progress_callback,
+                0.65,
+                "Combining chunk summaries into the final summary...",
+            )
+            await self._maybe_check_cancel(cancellation_check)
             final_summary = await self.batch_reduce(summaries)
 
         generated_quiz = None
         try:
             print("Generating structured quiz YAML...")
+            await self._maybe_report_progress(
+                progress_callback,
+                0.76,
+                "Generating the quiz draft...",
+            )
+            await self._maybe_check_cancel(cancellation_check)
             generated_quiz = await asyncio.wait_for(
                 self.generate_structured_quiz_yaml(
                     final_summary,
@@ -522,7 +821,26 @@ class AsyncBatchProcessor:
         except Exception as exc:
             print(f"⚠️ Quiz generation failed: {exc}")
 
+        print("Generating common misconceptions...")
+        await self._maybe_report_progress(
+            progress_callback,
+            0.82,
+            "Generating common misconceptions...",
+        )
+        await self._maybe_check_cancel(cancellation_check)
+        generated_misconceptions = await self.generate_structured_misconceptions_or_fallback(
+            final_summary,
+            misconception_count=misconception_count,
+            context_label="PDF",
+        )
+
         print("Generating questions...")
+        await self._maybe_report_progress(
+            progress_callback,
+            0.88,
+            "Generating study questions and answers...",
+        )
+        await self._maybe_check_cancel(cancellation_check)
         qa_list_obj: QuestionAnswerList = await self.question_chain.ainvoke(
             {
                 "text": final_summary,
@@ -534,6 +852,12 @@ class AsyncBatchProcessor:
         processing_time = round(time.time() - start_time, 2)
         print(f"Total processing time: {processing_time} seconds")
 
+        await self._maybe_report_progress(
+            progress_callback,
+            0.94,
+            "Finalizing the generated course markdown...",
+        )
+        await self._maybe_check_cancel(cancellation_check)
         generated_course_title = await self.generate_short_course_title(
             generated_summary=final_summary,
             source_filename=os.path.basename(path),
@@ -550,6 +874,8 @@ class AsyncBatchProcessor:
             summary_text=final_summary,
             questions_dict=questions_dict,
             quiz_yaml_text=generated_quiz,
+            misconceptions=generated_misconceptions,
+            misconception_count=misconception_count,
             course_title_override=generated_course_title,
             slug_suffix=slug_suffix,
         )
@@ -558,6 +884,7 @@ class AsyncBatchProcessor:
             "final_summary": final_summary,
             "questions": questions_dict,
             "quiz": generated_quiz,
+            "misconceptions": generated_misconceptions,
             "generated_markdown": generated_markdown,
             "generated_markdown_file_name": markdown_file_name,
             "processing_time_seconds": processing_time
@@ -566,14 +893,23 @@ class AsyncBatchProcessor:
     async def summarize_text(
         self,
         text: str,
-        qa_count: int = 5,
-        quiz_question_count: int = 3,
-        quiz_option_count: int = 3,
+        qa_count: int = COURSE_GENERATION_COUNT_DEFAULTS["qa_count"],
+        quiz_question_count: int = COURSE_GENERATION_COUNT_DEFAULTS["quiz_question_count"],
+        quiz_option_count: int = COURSE_GENERATION_COUNT_DEFAULTS["quiz_option_count"],
+        misconception_count: int = COURSE_GENERATION_COUNT_DEFAULTS["misconception_count"],
     ) -> Dict[str, Any]:
         start_time = time.time()
 
-        if qa_count < 1 or qa_count > 10:
-            raise ValueError("qa_count must be between 1 and 10")
+        counts = validate_course_generation_counts(
+            qa_count=qa_count,
+            quiz_question_count=quiz_question_count,
+            quiz_option_count=quiz_option_count,
+            misconception_count=misconception_count,
+        )
+        qa_count = counts["qa_count"]
+        quiz_question_count = counts["quiz_question_count"]
+        quiz_option_count = counts["quiz_option_count"]
+        misconception_count = counts["misconception_count"]
 
         splitter = RecursiveCharacterTextSplitter(
             chunk_size=self.batch_size,
@@ -612,6 +948,13 @@ class AsyncBatchProcessor:
         except Exception as exc:
             print(f"⚠️ Quiz generation failed (text): {exc}")
 
+        print("Generating common misconceptions (text)...")
+        generated_misconceptions = await self.generate_structured_misconceptions_or_fallback(
+            final_summary,
+            misconception_count=misconception_count,
+            context_label="text",
+        )
+
         print("Generating questions (text)...")
         qa_list_obj: QuestionAnswerList = await self.question_chain.ainvoke(
             {
@@ -628,6 +971,7 @@ class AsyncBatchProcessor:
             "final_summary": final_summary,
             "questions": questions_dict,
             "quiz": generated_quiz,
+            "misconceptions": generated_misconceptions,
             "processing_time_seconds": processing_time
         }
 
@@ -637,6 +981,8 @@ class AsyncBatchProcessor:
         summary_text: str,
         questions_dict: Dict[str, Any],
         quiz_yaml_text: str | None,
+        misconceptions: list[dict[str, str]] | None = None,
+        misconception_count: int = COURSE_GENERATION_COUNT_DEFAULTS["misconception_count"],
         course_title_override: str | None = None,
         slug_suffix: str | None = None,
     ) -> str:
@@ -655,7 +1001,7 @@ class AsyncBatchProcessor:
         headings = _template_require(content_template, "headings", dict)
         learning_outcomes = _template_require(content_template, "learning_outcomes", list)
         further_reading = _template_require(content_template, "further_reading", list)
-        misconceptions = _template_require(content_template, "misconceptions", list)
+        template_misconceptions = _template_require(content_template, "misconceptions", list)
         no_summary_text = _template_require(content_template, "no_summary", str)
 
         qa_defaults = _template_require(defaults_template, "qa", dict)
@@ -813,7 +1159,15 @@ class AsyncBatchProcessor:
         front_matter_text = yaml.safe_dump(front_matter, sort_keys=False, allow_unicode=True).strip()
         qa_yaml_text = yaml.safe_dump(qa_items, sort_keys=False, allow_unicode=True).strip() if qa_items else "[]"
         quiz_yaml_block = yaml.safe_dump(quiz_dict, sort_keys=False, allow_unicode=True).strip()
-        misconceptions_yaml_block = yaml.safe_dump(misconceptions, sort_keys=False, allow_unicode=True).strip()
+        misconception_items = self._clean_misconceptions_for_markdown(
+            misconceptions if isinstance(misconceptions, list) else template_misconceptions,
+            fallback_count=misconception_count,
+        )
+        misconceptions_yaml_block = yaml.safe_dump(
+            misconception_items,
+            sort_keys=False,
+            allow_unicode=True,
+        ).strip()
 
         learning_outcomes_text = "\n".join(f"- {str(item)}" for item in learning_outcomes if str(item).strip())
         if not learning_outcomes_text:

@@ -935,7 +935,8 @@
                 "qaCountLabel": "Q&A pairs to generate",
                 "quizQuestionCountLabel": "Quiz questions to generate",
                 "quizOptionCountLabel": "Options per quiz question",
-                "caption": "For PDF uploads, AI generates Q&A and quiz. Max values: Q&A 10, quiz questions 4, options per question 4. Each quiz question has exactly one correct option."
+                "misconceptionCountLabel": "Misconceptions to generate",
+                "caption": "For PDF uploads, AI generates Q&A, quiz, and common misconceptions. Max values: Q&A {qa_max}, quiz questions {quiz_question_max}, options per question {quiz_option_max}, misconceptions {misconception_max}. Each quiz question has exactly one correct option."
             },
             "processButton": {
                 "label": "🚀 Process Document",

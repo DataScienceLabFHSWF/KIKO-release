@@ -1,0 +1,53 @@
+---
+alwaysApply: true
+---
+
+# KIKO Platform Knowledge Base
+
+## Project Requirements
+- **Problem**: AI-supported competence development for nuclear facility decommissioning
+- **Target Users**: Learners, Instructors, and Admins in nuclear industry
+- **Functional Requirements**: Document processing, Q&A system, role-based access, course management, vector search
+- **Non-Functional Requirements**: Security compliance, low latency (<2s), high availability (99.9%)
+- Files: @README.md, @.cursor/rules/project_purpose.mdc
+
+## Project Structure
+- @backend/app/main.py - FastAPI entry point
+- @frontend/main.py - Streamlit entry point
+- @backend/app/services/ - AI/ML services
+- @frontend/pages/ - Role-specific UI
+
+## Tech Stack
+- **Backend**: FastAPI, SQLAlchemy, PostgreSQL + pgvector, JWT auth
+    - Relevant files: @backend/requirements.txt, @backend/app/main.py, @backend/init_db.py
+- **Frontend**: Streamlit, requests, plotly, pandas
+    - Relevant files: @frontend/requirements.txt, @frontend/main.py
+- **AI/ML**: sentence-transformers, FAISS, transformers, torch
+- **Infrastructure**: Docker, Docker Compose, pytest
+- **Security**: bcrypt, python-jose, cryptography
+
+
+## Implementation Plan (File: @cursor/rules/implementation_plan.mdc)
+1. Data Ingestion & Knowledge Curation
+2. Knowledge Graph & Digital Twin Creation
+3. Learning Content Generation
+4. Assessment & Evaluation
+5. User Interaction & Tutoring
+6. Human Performance & Safety Monitoring
+7. Platform Integration & Deployment
+8. Continuous Improvement & Feedback
+
+
+## User Journey
+- **Learner**: Login → View courses → Ask questions → Track progress
+- **Instructor**: Login → Upload documents → Create courses → Monitor learners
+- **Admin**: Login → Manage system → Monitor performance → Configure settings
+- **Edge Cases**: Document processing failures, AI model unavailability, role conflicts
+- Files: @frontend/pages/, @.cursor/rules/frontend_development.mdc
+
+## Decision Log
+**Purpose:** Key architectural and technology decisions for the KIKO platform
+- Structure: Date-Title: Reason
+- Example:  2025-01-FastAPI: Rapid prototyping 
+
+

@@ -1,0 +1,36 @@
+---
+alwaysApply: true
+---
+
+# Core Development Guidelines
+
+## Code Standards
+- **Naming**: Use `snake_case` for variables, functions, files, and folders
+- **Type Hints with pydantic**: Always use type hints for function parameters and return values
+- **Docstrings**: Every function must have clear docstrings explaining purpose, parameters, and return value
+- **Comments**: Add short, meaningful comments only above non-obvious or complex logic blocks
+- **Logging**: Use project-wide `logger` instance instead of `print()`
+- **Technology**: Don't introduce new patterns without exhausting existing options
+
+## Code Organization
+- **DRY Principle**: Avoid code duplication, check for existing similar functionality
+- **Modular Design**: Break code into logical, reusable modules
+- **Separation of Concerns**: Separate business logic from presentation
+- **Early Returns**: Favor one-line conditionals and avoid deep nesting
+- **Minimize Else**: Avoid unnecessary `else` blocks when early return is possible
+
+## Error Handling
+- **Graceful Degradation**: Handle errors gracefully without crashing
+- **User-friendly Messages**: Provide clear error messages to users
+- **Structured Logging**: Use appropriate log levels (debug, info, warning, error)
+- **Exception Types**: Use appropriate exception types for different errors
+
+## Security
+- **Authentication**: Implement proper JWT-based authentication
+- **Role-based Access**: Use `Depends(require_role(["Learner", "Instructor", "Admin"]))`
+
+## Testing
+- **Test-First Development**: Phase 1 (Tests) → Phase 2 (Implementation)
+- **Coverage**: Maintain high test coverage (aim for 80%+)
+- **Test Types**: Unit tests
+- **Fixtures**: Create reusable test fixtures and factories

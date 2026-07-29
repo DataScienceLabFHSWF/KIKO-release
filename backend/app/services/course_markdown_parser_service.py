@@ -1,3 +1,5 @@
+# kiko-platform/backend/app/services/course_markdown_parser_service.py
+
 import re, yaml
 from typing import Any, Optional
 
@@ -134,11 +136,20 @@ def parse_module_header(header: str) -> tuple[str, str]:
     """
     Example:
       Module 1: 1_Einleitung und Lernziele {#m1}
+      Module 2.1: Atome und Atomkerne {#m2.1}
+      Module 2.1: Atome und Atomkerne {#m2-1}
+      Modul 2.1: Atome und Atomkerne {#m2.1}
     """
     pattern = re.compile(
-        r"^(?:Module|Modul)\s+\d+\s*:\s*(?P<title>.*?)\s*(?:\{#(?P<anchor>[^}]+)\})?\s*$",
+        r"^(?:Module|Modul)\s+"
+        r"(?P<number>\d+(?:\.\d+)*)"
+        r"\s*:\s*"
+        r"(?P<title>.*?)"
+        r"\s*(?:\{#(?P<anchor>[A-Za-z0-9][A-Za-z0-9_.-]*)\})?"
+        r"\s*$",
         re.IGNORECASE,
     )
+    
     match = pattern.match(header.strip())
     if not match:
         raise CourseMarkdownStructureError(f"❌Invalid module header: '{header}'")
@@ -230,10 +241,18 @@ def validate_misconceptions(raw_data: Any, module_title: str) -> list[dict[str, 
             raise CourseMarkdownStructureError(
                 f"❌ Module '{module_title}' misconception #{idx} must be a YAML mapping"
             )
+        misconception = str(item.get("misconception") or "").strip()
+        correction = str(item.get("correction") or "").strip()
+        if not misconception and not correction:
+            continue
+        if not misconception or not correction:
+            raise CourseMarkdownStructureError(
+                f"❌ Module '{module_title}' misconception #{idx} must include misconception and correction"
+            )
         validated.append(
             {
-                "misconception": str(item.get("misconception") or "").strip(),
-                "correction": str(item.get("correction") or "").strip(),
+                "misconception": misconception,
+                "correction": correction,
             }
         )
     return validated

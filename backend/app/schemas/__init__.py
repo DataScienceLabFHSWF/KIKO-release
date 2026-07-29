@@ -10,7 +10,11 @@ from .app_config_schema import AppConfigSchema
 from .qa_structure_schema import QuestionAnswer, QuestionAnswerList
 from .grade_schema import GradePayload, GradedAnswer
 from .knowledge_assessment_schema import (AssessmentQuestion, AssessmentPayload, AssessmentResult)
-from .course_schema import CourseUpdateRequest
+from .course_schema import (
+    CourseUpdateRequest,
+    CourseUploadJobResponse,
+    CourseUploadPdfJobRequest,
+)
 
 __all__ = [
     "Token",
@@ -33,4 +37,6 @@ __all__ = [
     "LearnerSubmitQuizRequest",
     "LearnerProgressUpdateRequest",
     "CourseUpdateRequest",
+    "CourseUploadJobResponse",
+    "CourseUploadPdfJobRequest",
 ]

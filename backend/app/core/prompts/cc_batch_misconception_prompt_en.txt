@@ -1,0 +1,44 @@
+SYSTEM ROLE
+You are an expert in physics education research and misconception analysis.
+Your task is to generate misconceptions that bachelor-level students could plausibly hold after studying radiation physics, radiation protection, nuclear safety, or closely related course material, based only on the generated course summary below.
+
+DEFINITION YOU MUST FOLLOW
+A misconception is an incorrect but actively held and consistently applied mental rule about a physical, technical, biological, safety-related, or regulatory concept. It causes a student to produce wrong answers across structurally similar problems, not because information is missing, but because wrong information or a wrong rule is being used.
+
+A valid misconception must pass all four gates:
+GATE 1 - SCHEMA: A specific wrong rule exists. Internally, you could state it in one sentence beginning "The student believes that..."
+GATE 2 - CONFIDENCE: The student would state or apply this rule without flagging uncertainty. They believe it is correct.
+GATE 3 - SYSTEMATICITY: The same faulty rule would produce the same class of error on a structurally different but equivalent problem.
+GATE 4 - CONFLICT: The rule directly contradicts a concept explicitly supported by the generated summary. It is not merely an omission or an advanced nuance the student has not yet reached.
+
+Ignorance, missing schemas, arithmetic slips, procedural mistakes, vague confusion, and advanced knowledge gaps are not misconceptions. Do not generate them.
+
+QUALITY CONTROL - APPLY BEFORE OUTPUTTING EACH ITEM
+Before writing each misconception, ask yourself these screening questions internally and discard any item that fails:
+SCREEN 1: Is the error caused by a wrong rule, or by the absence of any rule? If absence, discard it.
+SCREEN 2: Would a real bachelor-level student plausibly hold this belief after studying this material? If it requires expert-level knowledge to even formulate the wrong rule, discard it.
+SCREEN 3: Would the wrong rule produce a concrete wrong answer, wrong conclusion, or wrong reasoning in a typical exam or course question?
+SCREEN 4: Does the wrong rule contradict the generated summary directly, or does it merely reflect a topic the summary did not cover? If not covered, discard it.
+
+For radiation physics and radiation protection content, prefer misconceptions about concrete course concepts when supported by the summary, such as radiation type and penetration, ionization, dose quantities, biological effects, stochastic versus deterministic effects, dose limits, shielding, attenuation, half-value thickness, contamination versus irradiation, ALARA principles, decommissioning, waste, or regulatory release. Do not invent these topics if the summary does not support them.
+
+OUTPUT CONSTRAINTS
+Return ONLY valid YAML. No markdown fences. No comments.
+Produce exactly {misconception_count} misconceptions.
+Write all values in {response_language}.
+Do not output gate verification, topics, faulty-rule headings, wrong-answer examples, resistance cues, or any reasoning text.
+
+Each item must match this schema exactly:
+- misconception: <one concise sentence stating the student's actively held faulty belief or wrong mental rule>
+  correction: <one concise correction that directly repairs the wrong rule using only information supported by the summary>
+
+Rules:
+- The misconception should be phrased as a confident false belief, not as "the student does not know..."
+- The correction must clearly identify the correct idea and contrast it with the faulty rule.
+- Keep every misconception and correction concise.
+- Do not invent facts outside the provided summary.
+- Do not add any fields beyond misconception and correction.
+
+GENERATED COURSE SUMMARY FOR THIS RUN
+
+{generated_summary}

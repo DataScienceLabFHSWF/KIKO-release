@@ -9,7 +9,7 @@ x-gpu-1: &gpu-1
         devices:
           - driver: nvidia
             device_ids:
-              - "GPU-200f4134-9819-7f05-da71-75cc1d3b7112"
+              - "${NVIDIA_GPU_DEVICE_ID:-}"
             capabilities: [gpu]
 
 services:

@@ -1,6 +1,8 @@
 # backend/app/api/routes/course.py
 import os, json
 from datetime import datetime
+from typing import Annotated
+
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Form, Body, Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.responses import JSONResponse, FileResponse
@@ -14,22 +16,149 @@ from app.services import (
     get_request_lang, upload_course_image, list_course_images, get_course_image_path, delete_course_image,
     get_app_config_and_libary_available, parse_course_markdown,
     CourseMarkdownStructureError, get_doc_by_derivation, save_doc_to_db, get_embeddings_from_db,
+    course_upload_job_manager,
+    get_course_generation_count_defaults,
+    validate_course_generation_counts,
 )
 from app.database import get_db
 from app.utils import compute_sha256, canonical_storage_path, canonical_storage_path_for_ext
-from app.schemas import GradePayload, CourseUpdateRequest
+from app.schemas import (
+    CourseUpdateRequest,
+    CourseUploadJobResponse,
+    CourseUploadPdfJobRequest,
+    GradePayload,
+)
 from app.core import PromptManager
 
 router = APIRouter()
+
+COURSE_GENERATION_COUNT_DEFAULTS = get_course_generation_count_defaults()
+
+
+def _validate_pdf_generation_counts_or_422(
+    qa_count: int,
+    quiz_question_count: int,
+    quiz_option_count: int,
+    misconception_count: int,
+) -> dict[str, int]:
+    try:
+        return validate_course_generation_counts(
+            qa_count=qa_count,
+            quiz_question_count=quiz_question_count,
+            quiz_option_count=quiz_option_count,
+            misconception_count=misconception_count,
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"{exc} for PDF uploads.",
+        ) from exc
+
+
+@router.post(
+    "/upload_course_document_pdf_job",
+    response_model=CourseUploadJobResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
+async def upload_course_document_pdf_job(
+    payload: Annotated[CourseUploadPdfJobRequest, File()],
+    user=Depends(require_role(["Instructor"])),
+    response_language: str = Depends(get_request_lang),
+    db: AsyncSession = Depends(get_db),
+):
+    file = payload.file
+    contents = await file.read()
+    if not contents:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"❌ Uploaded file {file.filename} is empty.",
+        )
+
+    filename_lower = (file.filename or "").lower()
+    if not filename_lower.endswith(".pdf"):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="❌ This endpoint only supports PDF uploads.",
+        )
+
+    counts = _validate_pdf_generation_counts_or_422(
+        payload.qa_count,
+        payload.quiz_question_count,
+        payload.quiz_option_count,
+        payload.misconception_count,
+    )
+
+    user_profile = await get_user_profile_by_email(user["email"], db)
+    if not user_profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="❌ User not found",
+        )
+
+    job = await course_upload_job_manager.start_pdf_job(
+        user_id=user_profile.user_id,
+        file_name=file.filename or "uploaded.pdf",
+        file_bytes=contents,
+        embedding_model_name=payload.embedding_model_name,
+        llm_model_name=payload.llm_model_name,
+        response_language=response_language,
+        qa_count=counts["qa_count"],
+        quiz_question_count=counts["quiz_question_count"],
+        quiz_option_count=counts["quiz_option_count"],
+        misconception_count=counts["misconception_count"],
+    )
+
+    return job.snapshot()
+
+
+@router.get(
+    "/upload_course_document_pdf_job/{job_id}",
+    response_model=CourseUploadJobResponse,
+)
+async def get_upload_course_document_pdf_job(
+    job_id: str,
+    user=Depends(require_role(["Instructor"])),
+    db: AsyncSession = Depends(get_db),
+):
+    user_profile = await get_user_profile_by_email(user["email"], db)
+    if not user_profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="❌ User not found",
+        )
+
+    job = await course_upload_job_manager.get_job(job_id, user_profile.user_id)
+    return job.snapshot()
+
+
+@router.post(
+    "/upload_course_document_pdf_job/{job_id}/cancel",
+    response_model=CourseUploadJobResponse,
+)
+async def cancel_upload_course_document_pdf_job(
+    job_id: str,
+    user=Depends(require_role(["Instructor"])),
+    db: AsyncSession = Depends(get_db),
+):
+    user_profile = await get_user_profile_by_email(user["email"], db)
+    if not user_profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="❌ User not found",
+        )
+
+    job = await course_upload_job_manager.cancel_job(job_id, user_profile.user_id)
+    return job.snapshot()
 
 @router.post("/upload_course_document")
 async def upload_course_document(
     file: UploadFile = File(...),
     embedding_model_name: str = Form(...),
     llm_model_name: str = Form(...),
-    qa_count: int = Form(5),
-    quiz_question_count: int = Form(3),
-    quiz_option_count: int = Form(3),
+    qa_count: int = Form(COURSE_GENERATION_COUNT_DEFAULTS["qa_count"]),
+    quiz_question_count: int = Form(COURSE_GENERATION_COUNT_DEFAULTS["quiz_question_count"]),
+    quiz_option_count: int = Form(COURSE_GENERATION_COUNT_DEFAULTS["quiz_option_count"]),
+    misconception_count: int = Form(COURSE_GENERATION_COUNT_DEFAULTS["misconception_count"]),
     replace_existing: bool = Form(False),
     user=Depends(require_role(["Instructor"])),
     response_language: str = Depends(get_request_lang),
@@ -44,7 +173,8 @@ async def upload_course_document(
             "ℹ️ upload_course_document API: "
             f"llm:{llm_model_name}, embedding:{embedding_model_name}, lang:{response_language}, "
             f"qa_count:{qa_count}, "
-            f"quiz_questions:{quiz_question_count}, quiz_options:{quiz_option_count}"
+            f"quiz_questions:{quiz_question_count}, quiz_options:{quiz_option_count}, "
+            f"misconceptions:{misconception_count}"
         )
         contents = await file.read()
         if not contents:
@@ -54,21 +184,16 @@ async def upload_course_document(
         is_markdown = filename_lower.endswith(".md") or filename_lower.endswith(".markdown")
 
         if not is_markdown:
-            if qa_count < 1 or qa_count > 10:
-                raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    detail="qa_count must be between 1 and 10 for PDF uploads.",
-                )
-            if quiz_question_count < 1 or quiz_question_count > 4:
-                raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    detail="quiz_question_count must be between 1 and 4 for PDF uploads.",
-                )
-            if quiz_option_count < 2 or quiz_option_count > 4:
-                raise HTTPException(
-                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                    detail="quiz_option_count must be between 2 and 4 for PDF uploads.",
-                )
+            counts = _validate_pdf_generation_counts_or_422(
+                qa_count,
+                quiz_question_count,
+                quiz_option_count,
+                misconception_count,
+            )
+            qa_count = counts["qa_count"]
+            quiz_question_count = counts["quiz_question_count"]
+            quiz_option_count = counts["quiz_option_count"]
+            misconception_count = counts["misconception_count"]
 
         user_profile = await get_user_profile_by_email(user["email"], db)
         if not user_profile:
@@ -259,6 +384,7 @@ async def upload_course_document(
                     "qa_count": qa_count,
                     "quiz_question_count": quiz_question_count,
                     "quiz_option_count": quiz_option_count,
+                    "misconception_count": misconception_count,
                 },
                 sort_keys=True,
             ).encode("utf-8")
@@ -332,6 +458,7 @@ async def upload_course_document(
             qa_count=qa_count,
             quiz_question_count=quiz_question_count,
             quiz_option_count=quiz_option_count,
+            misconception_count=misconception_count,
         )
 
         generated_markdown = course_data.get("generated_markdown")
@@ -524,7 +651,7 @@ async def answer_grading(
         inference_model_name=reasoning_model_name,
         reference_answer=reference_answer,
         no_max_tokens=1024,
-        response_language=response_language
+        response_language=response_language,
     )
     
     print(f"ℹ️ Response from answer_grading services: {graded_response}")
@@ -706,4 +833,3 @@ async def delete_image(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     
     return await delete_course_image(course_id, stored_filename, user_profile.user_id, db)
-

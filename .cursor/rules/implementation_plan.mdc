@@ -1,0 +1,61 @@
+---
+description: Can be used when the agent is asked to create a step by step implementation based on the overall implementation plan
+alwaysApply: false
+---
+
+# Implementation Plan — KIKO (High-Level Modules)
+
+Tasks that are worked on are marked with "active:True"
+
+## 1.1 Interactive Knowledge Delivery
+[] Automatic course creation from curated knowledge (PDFs, expert notes, regulations)
+[x] Conversational interface with AI mentor
+[] Conversation history  
+[] Source-document references in responses (e.g., legal texts, technical reports)  
+[] Explanation-reformulation option (simplified, detailed, alternative)  
+[] Contextual annotations alongside documents/forms  
+[] KG-backed RAG for contextual Q&A  
+
+## 1.2 Learning Path Navigation
+[] Learning-path structure with module division  
+[] Content customization – flexibility in course design (what is presented where)  
+[] Progress-tracking and visual indicators  
+[] Next-step recommendations via backend  
+[] Session-resume  
+[] Adaptive learning paths by role, prior knowledge, and performance  
+
+## 1.3 Interactive Exercises and Assessments
+[x] Exam mode: generate questions, collect answers, auto-score  
+[] Multiple-choice quizzes with instant feedback  
+[] Open-text tasks with LLM evaluation  
+[] Input-based scoring and personalized feedback  
+[] Task-reformulation based on performance  
+[] Scenario-based simulations / decision exercises  
+[] Performance tracking across assessments with feedback loops  
+
+## 1.4 Agent-Based Support
+[] Tutor-agent selection (e.g., expert avatars)  
+[] Agent-feedback with questions and strategy suggestions  
+[] Agent-guided learning with gap detection  
+[] Digital twins / virtual mentors embodying expert knowledge  
+[] Intelligent tutoring: real-time hints, explanations, context-aware assistance  
+
+## 1.5 Multimedia Content Integration
+[] Learning-material display in multiple formats:  
+  [] Structured-PDF and text display  
+  [] Diagram, measurement, and image display  
+  [] Video and audio content display (e.g., lectures, tutorials)  
+[] Multimedia integration of images, diagrams, and video explanations  
+
+## 1.6 Feedback and Evaluation
+[] Helpfulness-rating by users  
+[] Platform-improvement via text feedback  
+[] Learning-objective and usage-context display (e.g., “used in Module 2”)  
+[] User feedback loop (structured inputs from learners and experts)  
+
+## 1.7 Personalization and Navigation
+[] User-profile content: learning-progress overview  
+[] Activity history and saved content  
+[] Topic-preference settings  
+[] Topic/difficulty/source-based filtering and search  
+[] Resource bookmarking and tagging 

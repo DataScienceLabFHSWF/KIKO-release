@@ -1,0 +1,28 @@
+---
+alwaysApply: true
+---
+
+# Testing & Development Phases
+
+## Phase 0 — Implementation Planning (for bigger tasks):
+- For complex tasks with multiple components, first create a detailed implementation plan
+- Create a markdown file (`implementation_plan_<task_name>.md`) with numbered steps
+- Each step should be specific, testable, and implementable independently
+- Include clear acceptance criteria for each step
+- Only proceed with Phase 1 for the first step initially
+- After completing Phase 1 and Phase 2 for a step, mark it as done in the plan ([x])
+- Then proceed to the next step's Phase 1
+
+## Phase 1 — Test Creation:
+- Only generate tests for the new functionality (current step from Phase 0 plan)
+- Tests must fully describe the intended behavior before any implementation exists
+- Include positive, negative, and edge case scenarios
+- Follow the project's testing conventions and framework (e.g., pytest, unittest)
+- Wait for explicit user approval before moving to Phase 2
+
+## Phase 2 — Implementation:
+- Only after tests from Phase 1 are approved, implement the feature code to make these tests pass
+- Maintain type hints, docstrings, and logging conventions as defined in other MDC rules
+- Ensure all tests pass before finalizing
+- Upon completion, mark the current step as done (✅) in the Phase 0 implementation plan
+

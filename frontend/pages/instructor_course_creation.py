@@ -1,6 +1,6 @@
 # frontend/pages/instructor_course_creation.py
 import os, io, streamlit as st, requests, json, yaml
-from typing import Optional
+from typing import Optional, Any
 from pages.sidebar import render_sidebar
 from utils import require_login, get_backend_app_config_library
 from i18n import translate
@@ -68,9 +68,6 @@ SESSION_DEFAULTS = {
     "last_upload_mime": None,
     "last_upload_embedding": None,
     "last_upload_llm": None,
-    "last_upload_quiz_question_count": 3,
-    "last_upload_quiz_option_count": 3,
-    "last_upload_qa_count": 5,
     "generated_markdown": None,
     "generated_markdown_file_name": "generated-course.md",
     "qa_user_answers": {},
@@ -80,6 +77,13 @@ SESSION_DEFAULTS = {
     "save_course_clicked": False,
     "course_saved_for_upload": False,
     "course_saved_filename": None,
+    "pdf_upload_job_id": None,
+    "pdf_upload_job_status": None,
+    "pdf_upload_job_progress": 0.0,
+    "pdf_upload_job_message": None,
+    "pdf_upload_job_stage_key": None,
+    "upload_status_message_level": None,
+    "upload_status_message_text": None,
 }
 
 for _key, _value in SESSION_DEFAULTS.items():
@@ -90,6 +94,44 @@ def last_upload_is_pdf() -> bool:
     """Return True if the most recent document upload was a PDF."""
     mime = (st.session_state.get("last_upload_mime") or "").lower()
     return mime == "application/pdf"
+
+
+def set_upload_status_message(level: str, text: str):
+    st.session_state.upload_status_message_level = level
+    st.session_state.upload_status_message_text = text
+
+
+def render_upload_status_message():
+    level = st.session_state.get("upload_status_message_level")
+    text = st.session_state.get("upload_status_message_text")
+    if not level or not text:
+        return
+
+    if level == "success":
+        st.success(text)
+    elif level == "warning":
+        st.warning(text)
+    else:
+        st.error(text)
+
+    st.session_state.upload_status_message_level = None
+    st.session_state.upload_status_message_text = None
+
+
+def clear_pdf_upload_job_state():
+    st.session_state.pdf_upload_job_id = None
+    st.session_state.pdf_upload_job_status = None
+    st.session_state.pdf_upload_job_progress = 0.0
+    st.session_state.pdf_upload_job_message = None
+    st.session_state.pdf_upload_job_stage_key = None
+
+
+def pdf_upload_job_is_active() -> bool:
+    return (
+        bool(st.session_state.get("pdf_upload_job_id"))
+        and st.session_state.get("pdf_upload_job_status") in {None, "queued", "processing", "cancelling"}
+    )
+
 
 def reset_replace_prompt_state():
     st.session_state.markdown_replace_prompt = False
@@ -135,9 +177,10 @@ def send_course_upload_request(
     mime: str,
     embedding_model: str,
     llm_model: str,
-    qa_count: int = 5,
-    quiz_question_count: int = 3,
-    quiz_option_count: int = 3,
+    qa_count: int,
+    quiz_question_count: int,
+    quiz_option_count: int,
+    misconception_count: int,
     replace_existing: bool = False,
 ):
     if not api_url:
@@ -152,6 +195,7 @@ def send_course_upload_request(
         "qa_count": str(int(qa_count)),
         "quiz_question_count": str(int(quiz_question_count)),
         "quiz_option_count": str(int(quiz_option_count)),
+        "misconception_count": str(int(misconception_count)),
         "replace_existing": str(bool(replace_existing)).lower(),
     }
     return requests.post(
@@ -161,15 +205,76 @@ def send_course_upload_request(
         data=data_payload,
     )
 
-def handle_course_upload_response(response, success_notice: Optional[str] = "Processing complete!"):
-    try:
-        data = response.json()
-    except Exception:
-        st.error(translate("courseGenerator.errors.invalidServerResponse"))
-        return "error"
+def start_pdf_course_upload_job(
+    api_url: Optional[str],
+    headers: dict[str, str],
+    file_name: str,
+    file_bytes: bytes,
+    mime: str,
+    embedding_model: str,
+    llm_model: str,
+    qa_count: int,
+    quiz_question_count: int,
+    quiz_option_count: int,
+    misconception_count: int,
+):
+    if not api_url:
+        raise ValueError(translate("courseGenerator.errors.apiURLRequired"))
 
-    if response.status_code != 200:
-        st.error(data.get("detail", translate("courseGenerator.status.error", error=response.status_code)))
+    files = {
+        "file": (file_name, io.BytesIO(file_bytes), mime),
+    }
+    data_payload = {
+        "embedding_model_name": embedding_model,
+        "llm_model_name": llm_model,
+        "qa_count": str(int(qa_count)),
+        "quiz_question_count": str(int(quiz_question_count)),
+        "quiz_option_count": str(int(quiz_option_count)),
+        "misconception_count": str(int(misconception_count)),
+    }
+    return requests.post(
+        f"{api_url}/api/course/upload_course_document_pdf_job",
+        headers=headers,
+        files=files,
+        data=data_payload,
+    )
+
+
+def fetch_pdf_course_upload_job(
+    api_url: Optional[str],
+    headers: dict[str, str],
+    job_id: str,
+):
+    if not api_url:
+        raise ValueError(translate("courseGenerator.errors.apiURLRequired"))
+    return requests.get(
+        f"{api_url}/api/course/upload_course_document_pdf_job/{job_id}",
+        headers=headers,
+    )
+
+
+def cancel_pdf_course_upload_job(
+    api_url: Optional[str],
+    headers: dict[str, str],
+    job_id: str,
+):
+    if not api_url:
+        raise ValueError(translate("courseGenerator.errors.apiURLRequired"))
+    return requests.post(
+        f"{api_url}/api/course/upload_course_document_pdf_job/{job_id}/cancel",
+        headers=headers,
+    )
+
+
+def handle_course_upload_payload(
+    data: dict[str, Any],
+    response_status: int = 200,
+    success_notice: Optional[str] = "Processing complete!",
+    display_feedback: bool = True,
+):
+    if response_status != 200:
+        if display_feedback:
+            st.error(data.get("detail", translate("courseGenerator.status.error", error=response_status)))
         return "error"
 
     message = data.get("message")
@@ -202,18 +307,38 @@ def handle_course_upload_response(response, success_notice: Optional[str] = "Pro
 
         st.session_state.generated_markdown = data.get("generated_markdown")
         st.session_state.generated_markdown_file_name = data.get("generated_markdown_file_name") or "generated-course.md"
-        if success_notice:
+        if success_notice and display_feedback:
             st.success(success_notice)
         reset_replace_prompt_state()
         return "success"
     
     if message == "file_exists":
-        st.warning(data.get("detail", translate("courseGenerator.upload.fileExists")))
+        if display_feedback:
+            st.warning(data.get("detail", translate("courseGenerator.upload.fileExists")))
         reset_replace_prompt_state()
         return "exists"
 
-    st.error(data.get("detail", translate("courseGenerator.errors.unknownServerResponse")))
+    if display_feedback:
+        st.error(data.get("detail", translate("courseGenerator.errors.unknownServerResponse")))
     return "error"
+
+
+def handle_course_upload_response(response, success_notice: Optional[str] = "Processing complete!"):
+    try:
+        data = response.json()
+    except Exception:
+        st.error(translate("courseGenerator.errors.invalidServerResponse"))
+        return "error"
+
+    return handle_course_upload_payload(
+        data,
+        response_status=response.status_code,
+        success_notice=success_notice,
+        display_feedback=True,
+    )
+
+
+render_upload_status_message()
 
 @st.dialog(translate("courseGenerator.replaceDialog.title"))
 def confirm_replace_dialog():
@@ -238,9 +363,19 @@ def confirm_replace_dialog():
             mime = st.session_state.last_upload_mime
             embed_model = st.session_state.last_upload_embedding
             llm_model = st.session_state.last_upload_llm
-            qa_count = st.session_state.get("last_upload_qa_count", 5)
-            quiz_question_count = st.session_state.get("last_upload_quiz_question_count", 3)
-            quiz_option_count = st.session_state.get("last_upload_quiz_option_count", 3)
+            qa_count = _session_int_or_default("last_upload_qa_count", qa_default_value)
+            quiz_question_count = _session_int_or_default(
+                "last_upload_quiz_question_count",
+                quiz_question_default_value,
+            )
+            quiz_option_count = _session_int_or_default(
+                "last_upload_quiz_option_count",
+                quiz_option_default_value,
+            )
+            misconception_count = _session_int_or_default(
+                "last_upload_misconception_count",
+                misconception_default_value,
+            )
 
             if not file_bytes or not file_name or not embed_model or not llm_model or not mime:
                 st.error(translate("courseGenerator.errors.fileDataMissing"))
@@ -259,6 +394,7 @@ def confirm_replace_dialog():
                         qa_count=qa_count,
                         quiz_question_count=quiz_question_count,
                         quiz_option_count=quiz_option_count,
+                        misconception_count=misconception_count,
                         replace_existing=True,
                     )
             except Exception as exc:
@@ -483,6 +619,142 @@ def render_generated_qa_table(
             st.rerun()
 
 
+@st.fragment(run_every="2s")
+def render_pdf_upload_job_progress():
+    job_id = st.session_state.get("pdf_upload_job_id")
+    if not job_id:
+        return
+
+    try:
+        response = fetch_pdf_course_upload_job(
+            BACKEND_API_URL,
+            auth_headers(token),
+            job_id,
+        )
+        data = response.json()
+    except Exception as exc:
+        set_upload_status_message(
+            "error",
+            f"Could not refresh PDF processing status: {exc}",
+        )
+        clear_pdf_upload_job_state()
+        st.rerun()
+        return
+
+    if response.status_code != 200:
+        set_upload_status_message(
+            "error",
+            data.get(
+                "detail",
+                translate("courseGenerator.status.error", error=response.status_code),
+            ),
+        )
+        clear_pdf_upload_job_state()
+        st.rerun()
+        return
+
+    st.session_state.pdf_upload_job_status = data.get("status")
+    st.session_state.pdf_upload_job_progress = float(data.get("progress") or 0.0)
+    st.session_state.pdf_upload_job_message = data.get("message")
+    st.session_state.pdf_upload_job_stage_key = data.get("stage_key")
+
+    current_status = st.session_state.pdf_upload_job_status
+    current_progress = st.session_state.pdf_upload_job_progress
+    current_message = st.session_state.pdf_upload_job_message or "Processing PDF..."
+    if current_status in {"queued", "processing", "cancelling"}:
+        st.info(current_message)
+        st.progress(
+            min(max(current_progress, 0.0), 1.0),
+            text=f"{int(min(max(current_progress, 0.0), 1.0) * 100)}% complete",
+        )
+
+        if current_status != "cancelling":
+            if st.button(
+                "Abort PDF processing",
+                type="primary",
+                key=f"abort_pdf_job_{job_id}",
+                help="Cancel the current PDF processing job and discard temporary results.",
+            ):
+                try:
+                    cancel_response = cancel_pdf_course_upload_job(
+                        BACKEND_API_URL,
+                        auth_headers(token),
+                        job_id,
+                    )
+                    try:
+                        cancel_data = cancel_response.json()
+                    except ValueError:
+                        cancel_data = None
+
+                    if cancel_response.status_code != 200:
+                        detail = (
+                            cancel_data.get("detail")
+                            if isinstance(cancel_data, dict)
+                            else None
+                        )
+                        raise RuntimeError(
+                            detail
+                            or translate(
+                                "courseGenerator.status.error",
+                                error=cancel_response.status_code,
+                            )
+                        )
+
+                    cancel_status = (
+                        cancel_data.get("status")
+                        if isinstance(cancel_data, dict)
+                        else None
+                    )
+                    if not isinstance(cancel_status, str) or not cancel_status:
+                        raise RuntimeError(
+                            translate("courseGenerator.errors.invalidServerResponse")
+                        )
+
+                    st.session_state.pdf_upload_job_status = cancel_status
+                    st.session_state.pdf_upload_job_message = cancel_data.get("message")
+                    st.session_state.pdf_upload_job_stage_key = cancel_data.get("stage_key")
+                    st.rerun()
+                except Exception as exc:
+                    st.error(f"Could not cancel the PDF processing job: {exc}")
+        else:
+            st.caption("Cancellation requested. The job will stop at the next safe checkpoint.")
+        return
+
+    if current_status == "completed":
+        result = data.get("result") or {}
+        job_message = result.get("message")
+        handle_course_upload_payload(
+            result,
+            response_status=200,
+            success_notice=None,
+            display_feedback=False,
+        )
+        clear_pdf_upload_job_state()
+        if job_message == "success":
+            set_upload_status_message("success", "Processing complete!")
+        elif job_message == "file_exists":
+            set_upload_status_message(
+                "warning",
+                result.get("detail", translate("courseGenerator.upload.fileExists")),
+            )
+        st.rerun()
+        return
+
+    clear_pdf_upload_job_state()
+    if current_status == "cancelled":
+        set_upload_status_message(
+            "warning",
+            "PDF processing was cancelled. Temporary processing results were discarded.",
+        )
+        clear_generated_course_preview_state()
+    else:
+        set_upload_status_message(
+            "error",
+            data.get("error") or "PDF processing failed.",
+        )
+    st.rerun()
+
+
 uploaded_file = st.file_uploader(
     translate("courseGenerator.upload.uploaderLabel"), 
     type=['pdf', 'md', 'markdown']
@@ -515,13 +787,24 @@ def _get_int_config(config: dict, key: str, fallback: int) -> int:
     except (TypeError, ValueError):
         return fallback
 
+
+def _session_int_or_default(key: str, default: int) -> int:
+    value = st.session_state.get(key)
+    if value is None:
+        return int(default)
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return int(default)
+
 # Get backend config for embedding model (same as chatbot)
 embedding_model_name = app_config_data.get('default_embedding_model')
 llm_model_name = app_config_data.get('default_llm_model')
 
-qa_min_value = 1
-quiz_question_min_value = 1
-quiz_option_min_value = 2
+qa_min_value = _get_int_config(app_config_data, "course_generator_qa_count_min", 1)
+quiz_question_min_value = _get_int_config(app_config_data, "course_generator_quiz_question_count_min", 1)
+quiz_option_min_value = _get_int_config(app_config_data, "course_generator_quiz_option_count_min", 2)
+misconception_min_value = _get_int_config(app_config_data, "course_generator_misconception_count_min", 1)
 
 qa_max_value = max(
     qa_min_value,
@@ -534,6 +817,10 @@ quiz_question_max_value = max(
 quiz_option_max_value = max(
     quiz_option_min_value,
     _get_int_config(app_config_data, "course_generator_quiz_option_count_max", 4),
+)
+misconception_max_value = max(
+    misconception_min_value,
+    _get_int_config(app_config_data, "course_generator_misconception_count_max", 4),
 )
 
 qa_default_value = _get_int_config(app_config_data, "course_generator_qa_count_default", 5)
@@ -559,20 +846,41 @@ quiz_option_default_value = min(
     quiz_option_max_value,
 )
 
+misconception_default_value = _get_int_config(
+    app_config_data,
+    "course_generator_misconception_count_default",
+    2,
+)
+misconception_default_value = min(
+    max(misconception_default_value, misconception_min_value),
+    misconception_max_value,
+)
+
 current_file_name = (uploaded_file.name if uploaded_file is not None else "")
 current_is_pdf = current_file_name.lower().endswith('.pdf')
 show_pdf_options = current_is_pdf or (uploaded_file is None and last_upload_is_pdf() and st.session_state.questions is not None)
 
-qa_count = int(st.session_state.get("last_upload_qa_count", qa_default_value))
-quiz_question_count = int(st.session_state.get("last_upload_quiz_question_count", quiz_question_default_value))
-quiz_option_count = int(st.session_state.get("last_upload_quiz_option_count", quiz_option_default_value))
+qa_count = _session_int_or_default("last_upload_qa_count", qa_default_value)
+quiz_question_count = _session_int_or_default(
+    "last_upload_quiz_question_count",
+    quiz_question_default_value,
+)
+quiz_option_count = _session_int_or_default(
+    "last_upload_quiz_option_count",
+    quiz_option_default_value,
+)
+misconception_count = _session_int_or_default(
+    "last_upload_misconception_count",
+    misconception_default_value,
+)
 
 qa_count = min(max(qa_count, qa_min_value), qa_max_value)
 quiz_question_count = min(max(quiz_question_count, quiz_question_min_value), quiz_question_max_value)
 quiz_option_count = min(max(quiz_option_count, quiz_option_min_value), quiz_option_max_value)
+misconception_count = min(max(misconception_count, misconception_min_value), misconception_max_value)
 
 if show_pdf_options:
-    conf_col_qa, conf_col_q, conf_col_o = st.columns(3)
+    conf_col_qa, conf_col_q, conf_col_o, conf_col_m = st.columns(4)
     qa_count = int(conf_col_qa.number_input(
         translate("courseGenerator.upload.pdfOptions.qaCountLabel"),
         min_value=qa_min_value,
@@ -597,17 +905,34 @@ if show_pdf_options:
         step=1,
         key="pdf_upload_quiz_option_count",
     ))
-    st.caption(translate("courseGenerator.upload.pdfOptions.caption"))
+    misconception_count = int(conf_col_m.number_input(
+        translate("courseGenerator.upload.pdfOptions.misconceptionCountLabel"),
+        min_value=misconception_min_value,
+        max_value=misconception_max_value,
+        value=misconception_count,
+        step=1,
+        key="pdf_upload_misconception_count",
+    ))
+    st.caption(
+        translate(
+            "courseGenerator.upload.pdfOptions.caption",
+            qa_max=qa_max_value,
+            quiz_question_max=quiz_question_max_value,
+            quiz_option_max=quiz_option_max_value,
+            misconception_max=misconception_max_value,
+        )
+    )
 
     st.session_state.last_upload_qa_count = qa_count
     st.session_state.last_upload_quiz_question_count = quiz_question_count
     st.session_state.last_upload_quiz_option_count = quiz_option_count
+    st.session_state.last_upload_misconception_count = misconception_count
 
 process_clicked = st.button(
     translate("courseGenerator.upload.processButton.label"),
     type="primary",
     help=translate("courseGenerator.upload.processButton.help"),
-    disabled=uploaded_file is None,
+    disabled=uploaded_file is None or pdf_upload_job_is_active(),
 )
 
 if process_clicked and uploaded_file is not None:
@@ -637,9 +962,11 @@ if process_clicked and uploaded_file is not None:
         st.session_state.last_upload_qa_count = int(qa_count)
         st.session_state.last_upload_quiz_question_count = int(quiz_question_count)
         st.session_state.last_upload_quiz_option_count = int(quiz_option_count)
+        st.session_state.last_upload_misconception_count = int(misconception_count)
 
-        with st.spinner(translate("courseGenerator.upload.spinners.processing")):
-            response = send_course_upload_request(
+        if name_lower.endswith('.pdf'):
+            clear_pdf_upload_job_state()
+            response = start_pdf_course_upload_job(
                 BACKEND_API_URL,
                 auth_headers(token),
                 uploaded_file.name,
@@ -650,15 +977,56 @@ if process_clicked and uploaded_file is not None:
                 qa_count=int(qa_count),
                 quiz_question_count=int(quiz_question_count),
                 quiz_option_count=int(quiz_option_count),
-                replace_existing=False,
+                misconception_count=int(misconception_count),
             )
+            try:
+                data = response.json()
+            except Exception:
+                data = {}
 
-        handle_course_upload_response(response)
-        st.session_state.save_course_clicked = False
-        st.session_state.course_saved_for_upload = False
-        st.session_state.course_saved_filename = uploaded_file.name
+            if response.status_code != 202:
+                st.error(
+                    data.get(
+                        "detail",
+                        translate("courseGenerator.status.error", error=response.status_code),
+                    )
+                )
+            else:
+                st.session_state.pdf_upload_job_id = data.get("job_id")
+                st.session_state.pdf_upload_job_status = data.get("status")
+                st.session_state.pdf_upload_job_progress = float(data.get("progress") or 0.0)
+                st.session_state.pdf_upload_job_message = data.get("message")
+                st.session_state.pdf_upload_job_stage_key = data.get("stage_key")
+                st.session_state.save_course_clicked = False
+                st.session_state.course_saved_for_upload = False
+                st.session_state.course_saved_filename = uploaded_file.name
+                st.rerun()
+        else:
+            with st.spinner(translate("courseGenerator.upload.spinners.processing")):
+                response = send_course_upload_request(
+                    BACKEND_API_URL,
+                    auth_headers(token),
+                    uploaded_file.name,
+                    file_bytes,
+                    mime,
+                    embedding_model,
+                    llm_model,
+                    qa_count=int(qa_count),
+                    quiz_question_count=int(quiz_question_count),
+                    quiz_option_count=int(quiz_option_count),
+                    misconception_count=int(misconception_count),
+                    replace_existing=False,
+                )
+
+            handle_course_upload_response(response)
+            st.session_state.save_course_clicked = False
+            st.session_state.course_saved_for_upload = False
+            st.session_state.course_saved_filename = uploaded_file.name
     except Exception as e:
         st.error(translate("courseGenerator.errors.processingError", error=str(e)))
+
+if st.session_state.get("pdf_upload_job_id"):
+    render_pdf_upload_job_progress()
 
 editor_validation_errors = []
 

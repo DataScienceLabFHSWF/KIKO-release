@@ -21,6 +21,20 @@ class AppConfigSchema(BaseModel):
     pdf_dpi: int = 150
     debug_mode: bool = False
     default_folder_to_process: str = "/backend/data/Test/"
+
+    # Course Generation Configuration
+    course_generator_qa_count_min: int = 1
+    course_generator_qa_count_default: int = 5
+    course_generator_qa_count_max: int = 10
+    course_generator_quiz_question_count_min: int = 1
+    course_generator_quiz_question_count_default: int = 3
+    course_generator_quiz_question_count_max: int = 4
+    course_generator_quiz_option_count_min: int = 2
+    course_generator_quiz_option_count_default: int = 3
+    course_generator_quiz_option_count_max: int = 4
+    course_generator_misconception_count_min: int = 1
+    course_generator_misconception_count_default: int = 2
+    course_generator_misconception_count_max: int = 4
     
     # State-of-the-Art VLM Configuration
     enable_vlm: bool = True

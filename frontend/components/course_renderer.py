@@ -650,7 +650,19 @@ def _render_quiz_preview(quiz: dict):
                 st.warning(translate("course_render.quiz_preview.warnings", qtype=qtype))
 
 def _render_misconceptions(module: dict):
-    misconceptions = _safe_list(module.get("misconceptions"))
+    misconceptions = []
+    for item in _safe_list(module.get("misconceptions")):
+        if not isinstance(item, dict):
+            continue
+        misconception = str(item.get("misconception") or "").strip()
+        correction = str(item.get("correction") or "").strip()
+        if misconception and correction:
+            misconceptions.append(
+                {
+                    "misconception": misconception,
+                    "correction": correction,
+                }
+            )
     if not misconceptions:
         st.info(translate("course_render.misconceptions.info.no_misconceptions"))
         return

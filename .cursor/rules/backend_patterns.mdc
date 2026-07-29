@@ -1,0 +1,29 @@
+---
+globs: backend/**/*.py
+alwaysApply: false
+---
+# Backend Development Patterns
+
+## FastAPI Architecture
+- **Layered Design**: Routes → Services → Models → Database
+- **Dependency Injection**: Use `Depends()` for authentication and common dependencies
+- **Pydantic Models**: Use for request/response validation and serialization
+- **Async/Await**: Use async functions for I/O operations and database queries
+
+## Database Patterns
+- **SQLAlchemy ORM**: Use ORM models in @backend/app/orm_models
+- **pgvector**: Use for embedding similarity search operations
+- **Connection Management**: Use dependency injection for database sessions
+- **Query Optimization**: Use indexes, eager loading, and pagination
+
+## Security Implementation
+- **JWT Authentication**: Token-based auth with role claims
+- **Role-based Access**: `Depends(require_role(["Learner", "Instructor", "Admin"]))`
+- **Input Validation**: Pydantic models for all API inputs
+- **Password Security**: Use bcrypt for password hashing
+
+## API Design
+- **RESTful Endpoints**: Follow REST conventions for resource operations
+- **Status Codes**: Use appropriate HTTP status codes
+- **Error Handling**: Use FastAPI's HTTPException for proper error responses
+- **Documentation**: Use docstrings and FastAPI's automatic docs

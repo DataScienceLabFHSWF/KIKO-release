@@ -1,0 +1,35 @@
+cff-version: 1.1.0
+message: "If you use KIKO in academic work, please cite it using this metadata."
+title: "KIKO: AI-Powered Knowledge Platform for Nuclear Decommissioning"
+type: software
+authors:
+  - family-names: "Gupta"
+    given-names: "Sanjay Chhataru"
+    orcid: "https://orcid.org/0000-0002-7715-0125"
+    affiliation: "FH Südwestfalen, Meschede"
+  - family-names: "Moghanjoughi"
+    given-names: "Amir Kazemzadeh"
+    orcid: "https://orcid.org/0009-0002-3704-8852"
+    affiliation: "FH Südwestfalen, Meschede"
+  - family-names: "Katzenberger"
+    given-names: "Ole"
+    orcid: "https://orcid.org/0009-0004-3201-6928"
+    affiliation: "FH Südwestfalen, Meschede"
+  - family-names: "Kopinski"
+    given-names: "Prof. Dr. Thomas"
+    orcid: "https://orcid.org/0009-0009-7440-6525"
+    affiliation: "FH Südwestfalen, Meschede"
+  - name: "DataScienceLabFHSWF"
+
+repository-code: "https://github.com/DataScienceLabFHSWF/KIKO-release"
+url: "https://datasciencelabfhswf.github.io/KIKO-release/"
+abstract: "KIKO is an AI-powered knowledge and learning platform for nuclear decommissioning. It supports document processing, retrieval-augmented generation, role-based learning workflows, and open-source language model integration."
+keywords:
+  - artificial intelligence
+  - retrieval-augmented generation
+  - nuclear decommissioning
+  - knowledge management
+  - learning platform
+license: MIT
+version: 0.1.0
+date-released: 2026-07-17

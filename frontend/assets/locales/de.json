@@ -935,7 +935,8 @@
                 "qaCountLabel": "Anzahl zu erzeugender Fragen/Antworten",
                 "quizQuestionCountLabel": "Anzahl zu erzeugender Quizfragen",
                 "quizOptionCountLabel": "Antwortoptionen pro Quizfrage",
-                "caption": "Nur bei PDF-Uploads werden Fragen/Antworten und Quiz per KI erzeugt. Maximalwerte: Fragen/Antworten 10, Quizfragen 4, Optionen pro Frage 4. Jede Quizfrage hat genau eine richtige Option."
+                "misconceptionCountLabel": "Anzahl zu erzeugender Missverständnisse",
+                "caption": "Nur bei PDF-Uploads werden Fragen/Antworten, Quiz und häufige Missverständnisse per KI erzeugt. Maximalwerte: Fragen/Antworten {qa_max}, Quizfragen {quiz_question_max}, Optionen pro Frage {quiz_option_max}, Missverständnisse {misconception_max}. Jede Quizfrage hat genau eine richtige Option."
             },
             "processButton": {
                 "label": "🚀 Dokument verarbeiten",

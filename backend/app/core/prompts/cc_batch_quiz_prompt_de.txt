@@ -18,6 +18,8 @@ items:
 
 Regeln:
 - Gib NUR gültiges YAML zurück. Keine Markdown-Codeblöcke. Keine Kommentare.
+- Setze ALLE Textwerte in doppelte Anführungszeichen, insbesondere `title`, `prompt`, `text` und `feedback`.
+- Wenn ein Textwert einen Doppelpunkt enthält, MUSS er in doppelte Anführungszeichen gesetzt werden.
 - Erzeuge genau {quiz_question_count} Quiz-Items.
 - Jedes Item muss genau {quiz_option_count} Antwortoptionen (`choices`) haben.
 - Pro Item muss genau eine Antwortoption `correct: true` sein.

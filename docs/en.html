@@ -1,0 +1,1611 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      KIKO — AI-powered knowledge &amp; competence platform for nuclear
+      decommissioning
+    </title>
+    <meta
+      name="description"
+      content="KIKO is an AI-powered learning and knowledge platform for the decommissioning of nuclear facilities. A joint project of FH Südwestfalen, actimondo eG and TU München within the BMFTR's FORKA funding concept."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0e1a26;
+        --ink-soft: #22323f;
+        --paper: #f3f6f9;
+        --surface: #ffffff;
+        --cherenkov: #0e8bd6;
+        --cherenkov-deep: #0a6fb0;
+        --cherenkov-glow: #3fc8f4;
+        --amber: #e2972b;
+        --amber-soft: #f3d9a6;
+        --slate: #5a6b7b;
+        --hairline: #d8e0e8;
+        --hairline-strong: #c3ceda;
+        --max: 1180px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "IBM Plex Sans", system-ui, sans-serif;
+        font-size: 17px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+        font-weight: 700;
+        line-height: 1.06;
+        letter-spacing: -0.01em;
+        margin: 0;
+      }
+      p {
+        margin: 0;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .wrap {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 0 28px;
+      }
+      .eyebrow {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--cherenkov-deep);
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 22px;
+        height: 1px;
+        background: var(--cherenkov);
+        display: inline-block;
+      }
+      .mono {
+        font-family: "IBM Plex Mono", monospace;
+      }
+
+      /* ---------- NAV ---------- */
+      header.nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(243, 246, 249, 0.82);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--hairline);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        height: 66px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-family: "IBM Plex Sans Condensed";
+        font-weight: 700;
+        font-size: 21px;
+        letter-spacing: 0.02em;
+      }
+      .brand .ki {
+        color: var(--cherenkov);
+      }
+      .brand svg {
+        display: block;
+        flex: none;
+      }
+      nav.links {
+        display: flex;
+        gap: 26px;
+        margin-left: auto;
+      }
+      nav.links a {
+        font-size: 14.5px;
+        color: var(--ink-soft);
+        font-weight: 500;
+        padding: 4px 0;
+        border-bottom: 2px solid transparent;
+        transition:
+          color 0.15s,
+          border-color 0.15s;
+      }
+      nav.links a:hover {
+        color: var(--cherenkov-deep);
+        border-color: var(--cherenkov);
+      }
+      .lang {
+        display: flex;
+        align-items: center;
+        font-family: "IBM Plex Mono";
+        font-size: 13px;
+        font-weight: 500;
+        border: 1px solid var(--hairline-strong);
+        border-radius: 7px;
+        overflow: hidden;
+      }
+      .lang a {
+        padding: 6px 11px;
+        color: var(--slate);
+      }
+      .lang a.on {
+        background: var(--ink);
+        color: #fff;
+      }
+      .lang a:not(.on):hover {
+        background: #e7edf3;
+        color: var(--ink);
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        font-size: 14.5px;
+        padding: 10px 18px;
+        border-radius: 9px;
+        background: var(--cherenkov);
+        color: #fff;
+        border: 1px solid var(--cherenkov);
+        transition:
+          background 0.15s,
+          transform 0.15s,
+          box-shadow 0.15s;
+        box-shadow: 0 1px 0 rgba(14, 138, 214, 0.25);
+      }
+      .btn:hover {
+        background: var(--cherenkov-deep);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px -8px rgba(10, 111, 176, 0.7);
+      }
+      .btn .arr {
+        transition: transform 0.15s;
+      }
+      .btn:hover .arr {
+        transform: translateX(3px);
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--ink);
+        border-color: var(--hairline-strong);
+        box-shadow: none;
+      }
+      .btn.ghost:hover {
+        background: #e9eff4;
+        border-color: var(--slate);
+      }
+      .btn.light {
+        background: #fff;
+        color: var(--ink);
+        border-color: #fff;
+      }
+      .btn.light:hover {
+        background: #eaf6fe;
+        color: var(--cherenkov-deep);
+      }
+      .nav-cta {
+        display: none;
+      }
+      @media (min-width: 1040px) {
+        .nav-cta {
+          display: inline-flex;
+        }
+      }
+
+      /* ---------- HERO ---------- */
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 74px 0 30px;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 1fr;
+        gap: 54px;
+        align-items: center;
+      }
+      .hero h1 {
+        font-size: clamp(38px, 5.4vw, 62px);
+        margin: 20px 0 0;
+      }
+      .hero h1 .accent {
+        color: var(--cherenkov-deep);
+      }
+      .hero .lede {
+        font-size: clamp(17px, 1.6vw, 20px);
+        color: var(--ink-soft);
+        margin-top: 22px;
+        max-width: 38ch;
+      }
+      .hero-cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 30px;
+      }
+      .hero-meta {
+        margin-top: 34px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 22px;
+        font-family: "IBM Plex Mono";
+        font-size: 12.5px;
+        color: var(--slate);
+        letter-spacing: 0.02em;
+      }
+      .hero-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .hero-meta span::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--cherenkov);
+      }
+      .hero-meta span.warm::before {
+        background: var(--amber);
+      }
+
+      .schematic-card {
+        background: var(--surface);
+        border: 1px solid var(--hairline);
+        border-radius: 18px;
+        padding: 22px 22px 16px;
+        box-shadow: 0 30px 60px -40px rgba(14, 26, 38, 0.45);
+        position: relative;
+      }
+      .schematic-card .cap {
+        font-family: "IBM Plex Mono";
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate);
+        margin-top: 10px;
+      }
+      svg.flow {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      /* ---------- SECTION SCAFFOLD ---------- */
+      section {
+        padding: 84px 0;
+      }
+      .sec-head {
+        max-width: 62ch;
+      }
+      .sec-head h2 {
+        font-size: clamp(28px, 3.4vw, 40px);
+        margin-top: 16px;
+      }
+      .sec-head p {
+        color: var(--ink-soft);
+        margin-top: 16px;
+        font-size: 18px;
+      }
+
+      /* about strip */
+      .pillars {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-top: 44px;
+      }
+      .pillar {
+        border-top: 2px solid var(--ink);
+        padding-top: 18px;
+      }
+      .pillar h3 {
+        font-size: 20px;
+      }
+      .pillar p {
+        color: var(--slate);
+        margin-top: 8px;
+        font-size: 15.5px;
+      }
+
+      /* ---------- PLATFORM (dark) ---------- */
+      .platform {
+        background: radial-gradient(
+          120% 130% at 78% 12%,
+          #143247 0%,
+          #0e1a26 55%,
+          #0a141d 100%
+        );
+        color: #e7eff5;
+        position: relative;
+        overflow: hidden;
+      }
+      .platform::after {
+        content: "";
+        position: absolute;
+        width: 520px;
+        height: 520px;
+        right: -120px;
+        top: -160px;
+        background: radial-gradient(
+          circle,
+          rgba(63, 200, 244, 0.32),
+          transparent 62%
+        );
+        pointer-events: none;
+      }
+      .platform .eyebrow {
+        color: var(--cherenkov-glow);
+      }
+      .platform .eyebrow::before {
+        background: var(--cherenkov-glow);
+      }
+      .plat-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.02fr;
+        gap: 54px;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+      }
+      .platform h2 {
+        font-size: clamp(28px, 3.6vw, 42px);
+        margin-top: 16px;
+        color: #fff;
+      }
+      .platform .lede {
+        color: #aec3d2;
+        margin-top: 18px;
+        font-size: 18px;
+        max-width: 46ch;
+      }
+      .feat {
+        list-style: none;
+        padding: 0;
+        margin: 26px 0 0;
+        display: grid;
+        gap: 14px;
+      }
+      .feat li {
+        display: flex;
+        gap: 13px;
+        align-items: flex-start;
+        font-size: 15.5px;
+        color: #d5e2ec;
+      }
+      .feat .tick {
+        flex: none;
+        margin-top: 2px;
+      }
+      .plat-cta {
+        margin-top: 32px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+      }
+      .plat-note {
+        font-family: "IBM Plex Mono";
+        font-size: 12px;
+        color: #7c95a7;
+        letter-spacing: 0.03em;
+      }
+
+      /* browser mock */
+      .mock {
+        background: #0b1620;
+        border: 1px solid #243a4c;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.7);
+      }
+      .mock-bar {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 11px 14px;
+        background: #0f2231;
+        border-bottom: 1px solid #20384a;
+      }
+      .mock-bar i {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #2c4759;
+        display: block;
+      }
+      .mock-bar .url {
+        margin-left: 10px;
+        font-family: "IBM Plex Mono";
+        font-size: 11px;
+        color: #6f8da1;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .mock-tabs {
+        display: flex;
+        gap: 6px;
+        padding: 13px 16px 0;
+      }
+      .mock-tab {
+        font-family: "IBM Plex Mono";
+        font-size: 11.5px;
+        letter-spacing: 0.04em;
+        padding: 7px 13px;
+        border-radius: 8px 8px 0 0;
+        color: #88a3b6;
+        background: #11212e;
+        border: 1px solid #20384a;
+        border-bottom: none;
+      }
+      .mock-tab.on {
+        background: #16344a;
+        color: #cfe7f6;
+        border-color: #26506b;
+      }
+      .mock-body {
+        padding: 16px;
+        background: #0e1f2c;
+        border-top: 1px solid #20384a;
+      }
+      .q {
+        font-family: "IBM Plex Sans";
+        font-size: 13.5px;
+        color: #dceaf3;
+        font-weight: 500;
+      }
+      .q .qlabel {
+        font-family: "IBM Plex Mono";
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        color: var(--cherenkov-glow);
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 6px;
+      }
+      .ans {
+        margin-top: 11px;
+        background: #0a1822;
+        border: 1px solid #21384a;
+        border-radius: 8px;
+        padding: 9px 12px;
+        font-size: 12.5px;
+        color: #9fb6c6;
+      }
+      .fb {
+        margin-top: 11px;
+        display: flex;
+        gap: 9px;
+        align-items: flex-start;
+        background: linear-gradient(
+          90deg,
+          rgba(226, 151, 43, 0.13),
+          rgba(226, 151, 43, 0.03)
+        );
+        border: 1px solid rgba(226, 151, 43, 0.32);
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      .fb .ai {
+        flex: none;
+        font-family: "IBM Plex Mono";
+        font-size: 9.5px;
+        letter-spacing: 0.1em;
+        color: #0e1a26;
+        background: var(--amber);
+        border-radius: 5px;
+        padding: 3px 6px;
+        margin-top: 1px;
+        font-weight: 600;
+      }
+      .fb p {
+        font-size: 12.5px;
+        color: #e8d6b6;
+        line-height: 1.5;
+      }
+      .score {
+        margin-top: 11px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: "IBM Plex Mono";
+        font-size: 11px;
+        color: #8fa8ba;
+      }
+      .bar {
+        flex: 1;
+        height: 6px;
+        border-radius: 3px;
+        background: #1b3243;
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        width: 80%;
+        background: linear-gradient(
+          90deg,
+          var(--cherenkov),
+          var(--cherenkov-glow)
+        );
+      }
+
+      /* ---------- GOALS ---------- */
+      .goals-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--hairline);
+        border: 1px solid var(--hairline);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-top: 46px;
+      }
+      .goal {
+        background: var(--surface);
+        padding: 26px 24px;
+        transition: background 0.18s;
+      }
+      .goal:hover {
+        background: #fafcfe;
+      }
+      .goal .gi {
+        width: 34px;
+        height: 34px;
+        color: var(--cherenkov-deep);
+      }
+      .goal h3 {
+        font-size: 19px;
+        margin-top: 16px;
+      }
+      .goal p {
+        color: var(--slate);
+        font-size: 15px;
+        margin-top: 9px;
+      }
+
+      /* ---------- PLATFORM (solo) ---------- */
+      .plat-solo {
+        max-width: 780px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ---------- SCREENSHOTS ---------- */
+      .shots {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+        margin-top: 44px;
+      }
+      .shot {
+        margin: 0;
+      }
+      .ph {
+        aspect-ratio: 16/10;
+        min-height: 220px;
+        border: 2px dashed var(--hairline-strong);
+        border-radius: 14px;
+        background:
+          repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 13px,
+            rgba(14, 138, 214, 0.045) 13px,
+            rgba(14, 138, 214, 0.045) 26px
+          ),
+          var(--surface);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        color: var(--slate);
+      }
+      .ph svg {
+        width: 42px;
+        height: 42px;
+        color: var(--hairline-strong);
+      }
+      .ph span {
+        font-family: "IBM Plex Mono";
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .shot figcaption {
+        margin-top: 14px;
+        font-family: "IBM Plex Sans Condensed";
+        font-weight: 600;
+        font-size: 18px;
+      }
+      .shot figcaption small {
+        display: block;
+        font-family: "IBM Plex Sans";
+        font-weight: 400;
+        font-size: 14px;
+        color: var(--slate);
+        margin-top: 2px;
+      }
+
+      /* ---------- LOGO PLACEHOLDERS ---------- */
+      .logo-img {
+        width: 100%;
+        height: 54px;
+        object-fit: contain;
+        object-position: left center;
+      }
+
+      /* ---------- CONSORTIUM ---------- */
+      .part-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+        margin-top: 44px;
+      }
+      .part {
+        border: 1px solid var(--hairline);
+        border-radius: 13px;
+        padding: 22px 18px;
+        background: var(--surface);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-height: 148px;
+      }
+      .part .mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "IBM Plex Sans Condensed";
+        font-weight: 700;
+        color: #fff;
+        font-size: 15px;
+      }
+      .part h3 {
+        font-size: 16.5px;
+        line-height: 1.2;
+        margin-top: auto;
+      }
+      .part .role {
+        font-family: "IBM Plex Mono";
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-top: 7px;
+      }
+      .role.fund {
+        color: var(--cherenkov-deep);
+      }
+      .role.assoc {
+        color: var(--amber);
+      }
+
+      /* ---------- FOOTER ---------- */
+      footer {
+        background: var(--ink);
+        color: #aec3d2;
+        padding: 64px 0 40px;
+      }
+      .foot-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr;
+        gap: 36px;
+      }
+      footer .brand {
+        color: #fff;
+        font-size: 24px;
+      }
+      footer h4 {
+        font-family: "IBM Plex Mono";
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #6f8da1;
+        font-weight: 500;
+        margin: 0 0 14px;
+      }
+      footer p {
+        font-size: 14.5px;
+        line-height: 1.65;
+      }
+      footer a.fl {
+        color: #cfe0ec;
+        border-bottom: 1px solid #34506340;
+      }
+      footer a.fl:hover {
+        color: #fff;
+        border-color: var(--cherenkov-glow);
+      }
+      .fund {
+        margin-top: 30px;
+        padding-top: 24px;
+        border-top: 1px solid #233646;
+        font-size: 13px;
+        color: #7e98aa;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 26px;
+        justify-content: space-between;
+      }
+      .foot-lang {
+        display: flex;
+        gap: 6px;
+        font-family: "IBM Plex Mono";
+        font-size: 12px;
+      }
+      .foot-lang a {
+        color: #7e98aa;
+        padding: 2px 8px;
+        border: 1px solid #2b4253;
+        border-radius: 6px;
+      }
+      .foot-lang a.on {
+        background: #fff;
+        color: var(--ink);
+        border-color: #fff;
+      }
+
+      /* ---------- RESPONSIVE ---------- */
+      @media (max-width: 920px) {
+        .hero-grid,
+        .plat-grid {
+          grid-template-columns: 1fr;
+          gap: 38px;
+        }
+        .hero {
+          padding-top: 54px;
+        }
+        .pillars {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+        .pillar {
+          border-top: 1px solid var(--hairline);
+          padding: 18px 0;
+        }
+        .pillar:first-child {
+          border-color: var(--ink);
+        }
+        .goals-grid {
+          grid-template-columns: 1fr;
+        }
+        .shots {
+          grid-template-columns: 1fr;
+        }
+        .part-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .foot-grid {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+        nav.links {
+          display: none;
+        }
+      }
+      @media (max-width: 560px) {
+        .part-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+      a:focus-visible,
+      .btn:focus-visible {
+        outline: 2px solid var(--amber);
+        outline-offset: 3px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="#top" aria-label="KIKO home">
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 30 30"
+            fill="none"
+            aria-hidden="true"
+          >
+            <ellipse
+              cx="15"
+              cy="15"
+              rx="13"
+              ry="5.4"
+              stroke="#0E8BD6"
+              stroke-width="1.5"
+              transform="rotate(28 15 15)"
+            />
+            <ellipse
+              cx="15"
+              cy="15"
+              rx="13"
+              ry="5.4"
+              stroke="#0A6FB0"
+              stroke-width="1.5"
+              transform="rotate(-28 15 15)"
+            />
+            <circle cx="15" cy="15" r="3.4" fill="#0E8BD6" />
+            <circle cx="27" cy="11.5" r="1.7" fill="#E2972B" />
+          </svg>
+          <span><span class="ki">KI</span>KO</span>
+        </a>
+        <nav class="links" aria-label="Main navigation">
+          <a href="#plattform">Platform</a>
+          <a href="#ziele">Goals</a>
+          <a href="#einblick">A look inside</a>
+          <a href="#konsortium">Consortium</a>
+        </nav>
+        <div class="lang" role="group" aria-label="Language">
+          <a href="de.html">DE</a>
+          <a class="on" href="en.html" aria-current="true">EN</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div>
+            <span class="eyebrow"
+              >AI-powered knowledge &amp; competence platform</span
+            >
+            <h1>
+              The knowledge nuclear decommissioning needs —
+              <span class="accent">preserved, taught, passed on.</span>
+            </h1>
+            <p class="lede">
+              KIKO is an AI-powered learning and knowledge platform for the
+              decommissioning of nuclear facilities. It preserves expert
+              knowledge, makes it accessible through natural language, and
+              teaches it — adapted to each person's level.
+            </p>
+            <div class="hero-cta">
+              <a
+                class="btn"
+                href="https://github.com/DataScienceLabFHSWF/KIKO-release/tree/main"
+                target="_blank"
+                rel="noopener"
+                style="
+                  flex-direction: column;
+                  align-items: flex-start;
+                  gap: 1px;
+                "
+                ><span>Download <span class="arr">↓</span></span
+                ><span
+                  style="
+                    font-family: &quot;IBM Plex Mono&quot;, monospace;
+                    font-size: 10px;
+                    font-weight: 400;
+                    opacity: 0.75;
+                    letter-spacing: 0.08em;
+                  "
+                  >MIT License</span
+                ></a
+              >
+              <a class="btn ghost" href="#plattform">Learn more</a>
+            </div>
+          </div>
+
+          <div class="schematic-card">
+            <svg
+              class="flow"
+              viewBox="0 0 480 300"
+              role="img"
+              aria-label="Diagram: expert knowledge flows through the KIKO pipeline to the AI and is taught individually to learners."
+            >
+              <defs>
+                <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#0E8BD6" />
+                  <stop offset="0.55" stop-color="#3FC8F4" />
+                  <stop offset="1" stop-color="#E2972B" />
+                </linearGradient>
+                <radialGradient id="core" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0" stop-color="#3FC8F4" />
+                  <stop offset="1" stop-color="#0A6FB0" />
+                </radialGradient>
+              </defs>
+
+              <path
+                id="path"
+                d="M70 150 C 150 150, 150 150, 240 150 S 330 150, 410 150"
+                fill="none"
+                stroke="url(#line)"
+                stroke-width="2.4"
+              />
+              <circle r="4" fill="#3FC8F4">
+                <animateMotion
+                  dur="3.2s"
+                  repeatCount="indefinite"
+                  path="M70 150 C 150 150, 150 150, 240 150 S 330 150, 410 150"
+                />
+              </circle>
+
+              <!-- SOURCES -->
+              <g transform="translate(36,96)">
+                <rect
+                  x="0"
+                  y="0"
+                  width="64"
+                  height="108"
+                  rx="11"
+                  fill="#F3F6F9"
+                  stroke="#D8E0E8"
+                />
+                <circle
+                  cx="20"
+                  cy="22"
+                  r="6"
+                  fill="none"
+                  stroke="#0A6FB0"
+                  stroke-width="1.6"
+                />
+                <path
+                  d="M11 38 a9 9 0 0 1 18 0"
+                  fill="none"
+                  stroke="#0A6FB0"
+                  stroke-width="1.6"
+                />
+                <rect
+                  x="26"
+                  y="48"
+                  width="22"
+                  height="16"
+                  rx="2"
+                  fill="none"
+                  stroke="#0A6FB0"
+                  stroke-width="1.5"
+                />
+                <line
+                  x1="30"
+                  y1="53"
+                  x2="44"
+                  y2="53"
+                  stroke="#0A6FB0"
+                  stroke-width="1.2"
+                />
+                <line
+                  x1="30"
+                  y1="58"
+                  x2="40"
+                  y2="58"
+                  stroke="#0A6FB0"
+                  stroke-width="1.2"
+                />
+                <polyline
+                  points="12,84 18,76 24,90 30,72 36,88 42,80 50,84"
+                  fill="none"
+                  stroke="#0E8BD6"
+                  stroke-width="1.6"
+                />
+              </g>
+
+              <!-- CORE -->
+              <g transform="translate(240,150)">
+                <ellipse
+                  rx="40"
+                  ry="16"
+                  fill="none"
+                  stroke="#9FD8F2"
+                  stroke-width="1.4"
+                  transform="rotate(30)"
+                />
+                <ellipse
+                  rx="40"
+                  ry="16"
+                  fill="none"
+                  stroke="#9FD8F2"
+                  stroke-width="1.4"
+                  transform="rotate(-30)"
+                />
+                <circle r="20" fill="url(#core)" />
+                <circle
+                  r="3.2"
+                  fill="#fff"
+                  cx="35"
+                  cy="-9"
+                  transform="rotate(30)"
+                />
+                <circle
+                  r="3.2"
+                  fill="#fff"
+                  cx="-35"
+                  cy="9"
+                  transform="rotate(30)"
+                />
+                <text
+                  y="46"
+                  text-anchor="middle"
+                  font-family="'IBM Plex Mono',monospace"
+                  font-size="11"
+                  fill="#0A6FB0"
+                  font-weight="600"
+                >
+                  KIKO
+                </text>
+              </g>
+
+              <!-- LEARNER -->
+              <g transform="translate(380,96)">
+                <rect
+                  x="0"
+                  y="0"
+                  width="64"
+                  height="108"
+                  rx="11"
+                  fill="#FBF3E4"
+                  stroke="#F0DDB6"
+                />
+                <circle
+                  cx="32"
+                  cy="34"
+                  r="10"
+                  fill="none"
+                  stroke="#C9821F"
+                  stroke-width="1.8"
+                />
+                <path
+                  d="M14 70 a18 18 0 0 1 36 0"
+                  fill="none"
+                  stroke="#C9821F"
+                  stroke-width="1.8"
+                />
+                <rect
+                  x="16"
+                  y="80"
+                  width="32"
+                  height="16"
+                  rx="4"
+                  fill="#fff"
+                  stroke="#E2972B"
+                  stroke-width="1.4"
+                />
+                <circle cx="24" cy="88" r="1.6" fill="#E2972B" />
+                <circle cx="32" cy="88" r="1.6" fill="#E2972B" />
+                <circle cx="40" cy="88" r="1.6" fill="#E2972B" />
+              </g>
+            </svg>
+            <div style="display: flex; justify-content: space-between">
+              <span class="cap">Sources</span
+              ><span class="cap">Pipeline · LLMs · Agents</span
+              ><span class="cap">Learners</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT / PILLARS -->
+      <section id="ueber" style="padding-top: 40px">
+        <div class="wrap">
+          <div class="sec-head">
+            <span class="eyebrow">What it's about</span>
+            <h2>
+              Decommissioning spans decades. The knowledge it requires must not
+              be lost.
+            </h2>
+            <p>
+              Decommissioning nuclear facilities demands trained staff and
+              permanently available expertise — at a time of skills shortage.
+              KIKO gathers decommissioning knowledge, keeps it current, and
+              passes it on through modern language models to everyone who needs
+              it.
+            </p>
+          </div>
+          <div class="pillars">
+            <div class="pillar">
+              <h3>Knowledge preservation</h3>
+              <p>
+                Experts' know-how is preserved in AI models and stays available
+                long-term — even after knowledge-holders leave the field.
+              </p>
+            </div>
+            <div class="pillar">
+              <h3>Early-career support</h3>
+              <p>
+                Students, doctoral researchers and career changers get up to
+                speed faster — guided by AI assistants that act like mentors.
+              </p>
+            </div>
+            <div class="pillar">
+              <h3>Internationalisation</h3>
+              <p>
+                Knowledge can be translated into other languages and used in
+                multilateral projects — a basis for international cooperation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PLATFORM (dark) -->
+      <section id="plattform" class="platform">
+        <div class="wrap plat-solo">
+          <div>
+            <span class="eyebrow">First version — available now</span>
+            <h2>Try the platform</h2>
+            <p class="lede">
+              KIKO's first version is a learning platform with courses in two
+              views: one for instructors and one for learners. You can ask
+              questions about the learning material, common misconceptions are
+              surfaced, and practice and test questions are answered with AI
+              feedback.
+            </p>
+            <ul class="feat">
+              <li>
+                <svg
+                  class="tick"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                >
+                  <path
+                    d="M4 10.5l4 4 8-9"
+                    stroke="#3FC8F4"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  /></svg
+                ><span
+                  ><b style="color: #fff; font-weight: 600">Two views</b> — an
+                  instructor view and a learner view of the same course.</span
+                >
+              </li>
+              <li>
+                <svg
+                  class="tick"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                >
+                  <path
+                    d="M4 10.5l4 4 8-9"
+                    stroke="#3FC8F4"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  /></svg
+                ><span
+                  ><b style="color: #fff; font-weight: 600"
+                    >Courses with learning material</b
+                  >
+                  — structured content you can ask questions about
+                  directly.</span
+                >
+              </li>
+              <li>
+                <svg
+                  class="tick"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                >
+                  <path
+                    d="M4 10.5l4 4 8-9"
+                    stroke="#3FC8F4"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  /></svg
+                ><span
+                  ><b style="color: #fff; font-weight: 600"
+                    >Common misconceptions</b
+                  >
+                  — frequent misunderstandings are named and resolved.</span
+                >
+              </li>
+              <li>
+                <svg
+                  class="tick"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                >
+                  <path
+                    d="M4 10.5l4 4 8-9"
+                    stroke="#3FC8F4"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  /></svg
+                ><span
+                  ><b style="color: #fff; font-weight: 600"
+                    >Practice &amp; test questions</b
+                  >
+                  — with individual AI feedback on your answer.</span
+                >
+              </li>
+            </ul>
+            <div class="plat-cta">
+              <a
+                class="btn light"
+                href="https://github.com/DataScienceLabFHSWF/KIKO-release/tree/main"
+                target="_blank"
+                rel="noopener"
+                style="
+                  flex-direction: column;
+                  align-items: flex-start;
+                  gap: 1px;
+                "
+                ><span>Download <span class="arr">↓</span></span
+                ><span
+                  style="
+                    font-family: &quot;IBM Plex Mono&quot;, monospace;
+                    font-size: 10px;
+                    font-weight: 400;
+                    opacity: 0.75;
+                    letter-spacing: 0.08em;
+                  "
+                  >MIT License</span
+                ></a
+              >
+              <span class="plat-note">Early version · feedback welcome</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GOALS -->
+      <section id="ziele">
+        <div class="wrap">
+          <div class="sec-head">
+            <span class="eyebrow">What KIKO delivers</span>
+            <h2>A learning system that adapts to the person</h2>
+            <p>
+              Information isn't simply presented — it's aligned to each person's
+              needs, for knowledge gains with maximum learning effect.
+            </p>
+          </div>
+          <div class="goals-grid">
+            <div class="goal">
+              <svg class="gi" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M3 20V8m6 12V4m6 16v-8m6 8V10"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <h3>Level-adapted learning</h3>
+              <p>
+                The AI guides users along their level of knowledge and offers
+                help across all relevant topics.
+              </p>
+            </div>
+            <div class="goal">
+              <svg class="gi" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M21 12a8 8 0 1 1-3-6.2M21 5v4h-4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <h3>Individual AI feedback</h3>
+              <p>
+                Topic-specific feedback closes knowledge gaps precisely —
+                building an optimal learning curve.
+              </p>
+            </div>
+            <div class="goal">
+              <svg class="gi" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M4 7c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M4 7v10c0 1.7 3.6 3 8 3s8-1.3 8-3V7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+              </svg>
+              <h3>Knowledge vault</h3>
+              <p>
+                Existing sources are enriched with the knowledge of key experts
+                — a living, growing knowledge base.
+              </p>
+            </div>
+            <div class="goal">
+              <svg class="gi" viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="8"
+                  r="3.5"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M5 20a7 7 0 0 1 14 0"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <circle cx="19" cy="6" r="1.6" fill="currentColor" />
+              </svg>
+              <h3>Active learning agents</h3>
+              <p>
+                Autonomous AI agents carry the expertise of individuals and step
+                in as digital lecturers during learning.
+              </p>
+            </div>
+            <div class="goal">
+              <svg class="gi" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M6 4h9l3 3v13H6z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 12h6M9 16h4M9 8h3"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <h3>Source fidelity</h3>
+              <p>
+                Every output can be questioned: the original passages and the
+                sources used are shown for verification.
+              </p>
+            </div>
+            <div class="goal">
+              <svg class="gi" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 18c-4 1.5-5-2-7-2m7 2v-3.3c0-.8.3-1.3.6-1.6-2.7-.3-5.6-1.4-5.6-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3 0 0 1-.3 3.3 1.2a11 11 0 0 1 6 0C16.6 1.9 17.6 2.2 17.6 2.2c.6 1.5.2 2.7.1 3 .8.8 1.2 1.9 1.2 3.2 0 4.6-2.9 5.6-5.6 6 .4.4.8 1.1.8 2.2V18"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <div
+                style="
+                  display: flex;
+                  align-items: baseline;
+                  justify-content: space-between;
+                  gap: 8px;
+                "
+              >
+                <h3>Open source</h3>
+                <span
+                  style="
+                    flex: none;
+                    font-family: &quot;IBM Plex Mono&quot;, monospace;
+                    font-size: 11px;
+                    letter-spacing: 0.1em;
+                    font-weight: 500;
+                    color: var(--cherenkov-deep);
+                    background: rgba(14, 139, 214, 0.08);
+                    border: 1px solid rgba(14, 139, 214, 0.25);
+                    border-radius: 6px;
+                    padding: 3px 9px;
+                  "
+                  >MIT License</span
+                >
+              </div>
+              <p>
+                KIKO builds on open-source language models — adaptable to
+                decommissioning, transparent, and ready for international use.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREENSHOTS / A LOOK INSIDE -->
+      <section id="einblick">
+        <div class="wrap">
+          <div class="sec-head">
+            <span class="eyebrow">A look inside</span>
+            <h2>How the platform looks</h2>
+            <p>
+              Two views of the same course — one for learners, one for
+              instructors. Screenshots will be added here.
+            </p>
+          </div>
+          <div class="shots">
+            <figure class="shot">
+              <img
+                src="screenshots/learner_en.png"
+                alt="Learner view"
+                style="width: 100%; border-radius: 14px; display: block"
+              />
+              <figcaption>
+                Learner view<small
+                  >Course, questions on the material and AI feedback</small
+                >
+              </figcaption>
+            </figure>
+            <figure class="shot">
+              <img
+                src="screenshots/instructor_en.png"
+                alt="Instructor view"
+                style="width: 100%; border-radius: 14px; display: block"
+              />
+              <figcaption>
+                Instructor view<small
+                  >Manage courses and learning material</small
+                >
+              </figcaption>
+            </figure>
+          </div>
+          <figure
+            class="shot"
+            style="
+              margin-top: 28px;
+              max-width: 75%;
+              margin-left: auto;
+              margin-right: auto;
+            "
+          >
+            <img
+              src="screenshots/Course_de.png"
+              alt="Course overview"
+              style="width: 100%; border-radius: 14px; display: block"
+            />
+            <figcaption>
+              Course overview<small>Example of a course in practice</small>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- CONSORTIUM -->
+      <section id="konsortium">
+        <div class="wrap">
+          <div class="sec-head">
+            <span class="eyebrow">Consortium</span>
+            <h2>A partnership of research and practice</h2>
+            <p>
+              KIKO is a joint project of three funded partners, closely
+              supported by two associated partners from research and industry.
+            </p>
+          </div>
+          <div class="part-grid">
+            <div class="part">
+              <img
+                src="logos/FH-SWF_Logo-RGB_jpeg.jpg"
+                alt="FH Südwestfalen"
+                class="logo-img"
+              />
+              <h3>FH Südwestfalen</h3>
+              <span class="role fund">Lead · funded</span>
+            </div>
+            <div class="part">
+              <img
+                src="logos/actimondo.png"
+                alt="actimondo eG"
+                class="logo-img"
+              />
+              <h3>actimondo eG</h3>
+              <span class="role fund">funded</span>
+            </div>
+            <div class="part">
+              <img src="logos/tum.png" alt="TU München" class="logo-img" />
+              <h3>TU München · RCM</h3>
+              <span class="role fund">funded</span>
+            </div>
+            <div class="part">
+              <img
+                src="logos/csm__c__GRS__csm_grs_logo_kp_1200.jpg"
+                alt="GRS gGmbH"
+                class="logo-img"
+              />
+              <h3>GRS gGmbH</h3>
+              <span class="role assoc">associated</span>
+            </div>
+            <div class="part">
+              <img
+                src="logos/framatome_logo.png"
+                alt="Framatome GmbH"
+                class="logo-img"
+              />
+              <h3>Framatome GmbH</h3>
+              <span class="role assoc">associated</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="wrap">
+        <div class="foot-grid">
+          <div>
+            <span class="brand"
+              ><span class="ki" style="color: var(--cherenkov-glow)">KI</span
+              >KO</span
+            >
+            <p style="margin-top: 14px; max-width: 42ch; color: #9fb6c6">
+              AI-supported competence and talent development for the
+              decommissioning of nuclear facilities.
+            </p>
+          </div>
+          <div>
+            <h4>Contact</h4>
+            <p>
+              Prof. Dr. Thomas Kopinski<br />Data Science Lab<br />FH
+              Südwestfalen<br />Lindenstraße 53<br />59872 Meschede, Germany
+            </p>
+          </div>
+          <div>
+            <h4>Funding</h4>
+            <p>
+              A joint project within the
+              <a
+                class="fl"
+                href="https://www.grs.de/de/projekttraeger/rueckbau"
+                target="_blank"
+                rel="noopener"
+                >FORKA</a
+              >
+              funding concept — “Research for the Dismantling of Nuclear
+              Facilities” — of the German Federal Ministry of Research,
+              Technology and Space (BMFTR).
+            </p>
+          </div>
+        </div>
+        <div class="fund">
+          <span>© 2025 KIKO · FH Südwestfalen · actimondo eG · TU München</span>
+          <span class="foot-lang"
+            ><a href="de.html">DE</a><a class="on" href="en.html">EN</a></span
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+---
+globs: frontend/**/*.py
+alwaysApply: false
+---
+# Frontend Development Patterns (Streamlit)
+
+## Application Structure
+- **Main App**: @frontend/main.py - Entry point and navigation
+- **Pages**: @frontend/pages - Role-specific pages
+- **Utils**: @frontend/utils - Shared utilities and components
+- **Session State**: Use `st.session_state` for user data persistence
+
+## UI/UX Patterns
+- **Role-based Interface**: Different UI for Learner, Instructor, and Admin
+- **Page Navigation**: Implement role-based page routing
+- **Loading States**: Show loading indicators for async operations
+- **Error Handling**: Display user-friendly error messages
+- **Responsive Design**: Ensure interface works on different screen sizes
+
+## Data Handling
+- **API Integration**: Use requests library for backend communication
+- **Data Validation**: Validate user inputs before sending to backend
+- **Caching**: Implement caching for frequently accessed data
+- **File Uploads**: Handle file uploads with proper validation
+
+## Security & Performance
+- **Authentication**: Implement proper login/logout flow
+- **Role Verification**: Check user roles before displaying sensitive content
+- **Lazy Loading**: Load data only when needed
+- **Efficient Rendering**: Minimize unnecessary re-renders

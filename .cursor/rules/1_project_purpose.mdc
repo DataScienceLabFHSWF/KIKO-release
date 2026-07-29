@@ -1,0 +1,17 @@
+---
+alwaysApply: true
+---
+
+# KIKO Platform - Nuclear Decommissioning AI Training
+
+- **Mission:** Build a source-grounded, AI-assisted learning and knowledge platform for nuclear decommissioning.  
+- **Approach:** Combine collective intelligence (humans + AI) to capture, validate, and preserve expert knowledge in Digital Twins/agents that act as virtual mentors for onboarding and continuous training.  
+- **Capabilities:** Context-aware, cited answers and intelligent tutoring via LLM + RAG; robust data pipelines; safeguards to ensure autonomous features remain human-aligned.  
+- **Evaluation:** Verify effectiveness and safety with human-performance metrics and EEG-based studies.  
+- **Outcomes:** Expertise retention, faster and safer decommissioning workflows, and scalable use across organizations and countries.
+
+
+## User Roles
+- **Learner**: View courses, ask questions, track progress
+- **Instructor**: Upload docs, create courses, monitor learners
+- **Admin**: System management, performance monitoring

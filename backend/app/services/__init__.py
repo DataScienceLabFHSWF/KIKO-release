@@ -23,6 +23,10 @@ from .embedding_service import (
 )
 from .vector_store_service import similarity_search
 from .chatbot_service import run_query, save_chat_turn, fetch_chat_history, clear_chat_history
+from .course_generation_config import (
+    get_course_generation_count_defaults,
+    validate_course_generation_counts,
+)
 from .course_creator_manager import (
     AsyncBatchProcessor,
     create_course_with_summary_and_qas_for_instructor,
@@ -31,6 +35,7 @@ from .course_creator_manager import (
     update_course_for_instructor,
     delete_course_for_instructor,
 )
+from .course_upload_job_service import course_upload_job_manager
 from .answer_grading_service import grade_user_answer
 from .assessment_service import (
     get_assessment_quiz_for_user, submit_assessment_quiz_for_user, list_all_questions,
@@ -46,6 +51,18 @@ from .course_image_service import (
 )
 from .course_template_manager import create_template_courses_for_instructor
 from .course_markdown_parser_service import parse_course_markdown, CourseMarkdownStructureError
+from .course_generation_evaluation_service import (
+    CourseGenerationEvaluator,
+    evaluate_generated_course_json,
+    evaluate_generated_course_markdown,
+    flatten_course_generation_report,
+    load_course_artifacts_from_json_path,
+    load_course_artifacts_from_markdown_path,
+    load_pdf_text,
+    run_pdf_course_generation_benchmark,
+    save_report_json,
+    write_flat_report_csv,
+)
 from .learner_course_progress_service import (
     submit_module_quiz_attempt_for_learner, update_progress_snapshot, submit_final_quiz_attempt_for_learner
 )
@@ -66,6 +83,9 @@ __all__ = [
     "similarity_search",
     "run_query",
     "AsyncBatchProcessor",
+    "course_upload_job_manager",
+    "get_course_generation_count_defaults",
+    "validate_course_generation_counts",
     "create_course_with_summary_and_qas_for_instructor",
     "list_courses_for_instructor",
     "get_course_detail_for_instructor",
@@ -116,6 +136,16 @@ __all__ = [
     "upload_course_docs",
     "parse_course_markdown",
     "CourseMarkdownStructureError",
+    "CourseGenerationEvaluator",
+    "load_pdf_text",
+    "load_course_artifacts_from_json_path",
+    "load_course_artifacts_from_markdown_path",
+    "evaluate_generated_course_json",
+    "evaluate_generated_course_markdown",
+    "run_pdf_course_generation_benchmark",
+    "flatten_course_generation_report",
+    "write_flat_report_csv",
+    "save_report_json",
     "submit_module_quiz_attempt_for_learner",
     "update_progress_snapshot",
     "submit_final_quiz_attempt_for_learner",
