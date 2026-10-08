@@ -1,4 +1,6 @@
-import json, re
+# backend/app/services/recommendation_service.py
+
+import json, re, logging
 from typing import List, Dict, Any, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
@@ -8,6 +10,8 @@ from app.models import CourseModel, RecommendedCourseModel
 from app.core import PromptManager
 from app.utils import lang_display
 from .answer_grading_service import (get_ollama_client_and_model, generate_response, format_prompt)
+
+logger = logging.getLogger(__name__)
 
 RECOMMENDATION_COURSES_PROMPT_NAME = "recommendation_courses_prompt"
 
@@ -48,7 +52,7 @@ async def extract_topics_from_assessment(
         language=lang_display(response_language)
     )
     
-    print(f"ℹ️ recommendation_courses_prompt:\n {recommendation_courses_prompt}")
+    logger.info(f"ℹ️ recommendation_courses_prompt:\n {recommendation_courses_prompt}")
     
     text, tokens = generate_response(
         recommendation_courses_prompt, 
@@ -56,7 +60,7 @@ async def extract_topics_from_assessment(
         model_tag=model_tag,
         no_max_tokens=no_max_tokens)
     
-    print(f"✅ Generated recommendation_courses_response:\n {text} and tokens used: {tokens}")
+    logger.info(f"✅ Generated recommendation_courses_response:\n {text} and tokens used: {tokens}")
     
     # try strict JSON parse
     try:
@@ -94,7 +98,7 @@ def _score_course_against_topics(
     score = len(overlap) / max(1, len(set(ttoks)))
     reason = f"Matched topics: {', '.join(overlap[:6])}" if overlap else "General fit based on course text."
     
-    print(f"✅ Course '{course.title}' scored {score} with reason: {reason}")
+    logger.info(f"✅ Course '{course.title}' scored {score} with reason: {reason}")
     
     return score, reason
 
@@ -134,14 +138,14 @@ async def refresh_recommendations_for_user(
             await db.commit()
             return []
         
-        print(f"✅ Extracted topics for user {user_id}: {topics}")
+        logger.info(f"✅ Extracted topics for user {user_id}: {topics}")
 
         # 2) fetch all courses (optionally exclude already enrolled in your query)
         res = await db.execute(select(CourseModel))
         
         courses = res.scalars().all()
         
-        print(f"✅ Fetched {len(courses)} courses for recommendation scoring.")
+        logger.info(f"✅ Fetched {len(courses)} courses for recommendation scoring.")
 
         # 3) score and pick top-k
         scored: List[Tuple[CourseModel, float, str]] = []
@@ -154,7 +158,7 @@ async def refresh_recommendations_for_user(
         scored.sort(key=lambda x: x[1], reverse=True)
         top = scored[:top_k]
 
-        print(f"✅ Top {len(top)} courses selected for user {user_id}.")
+        logger.info(f"✅ Top {len(top)} courses selected for user {user_id}.")
 
         # 4) persist recommendations (upsert-ish)
         # clear previous recs for user first (simple)
@@ -181,7 +185,7 @@ async def refresh_recommendations_for_user(
             for c, sc, r in top
         ]
 
-        print(f"✅ Persisted top {len(response)} recommendations for user {user_id}.")
+        logger.info(f"✅ Persisted top {len(response)} recommendations for user {user_id}.")
         
         return response
     except SQLAlchemyError as e:

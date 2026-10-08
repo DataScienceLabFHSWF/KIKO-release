@@ -1,3 +1,5 @@
+# backend/app/services/course_upload_job_service.py
+
 import asyncio
 import json
 import os
@@ -424,7 +426,7 @@ class CourseUploadJobManager:
                     job.updated_at = datetime.now(timezone.utc)
                     return
 
-                configs = await get_app_config_and_libary_available()
+                configs = await get_app_config_and_libary_available(db=db)
                 if not configs:
                     raise HTTPException(
                         status_code=status.HTTP_404_NOT_FOUND,

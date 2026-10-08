@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <body
+    style="font-family: Arial, sans-serif; color: #0f172a; line-height: 1.6"
+  >
+    <h2>Verify your email address</h2>
+
+    <p>Hello {{ user_name }},</p>
+
+    <p>
+      Welcome to {{ app_name }}. Please verify your email address before logging
+      in.
+    </p>
+
+    <p>
+      <a
+        href="{{ verification_link }}"
+        style="
+          display: inline-block;
+          background: #0f75bc;
+          color: #ffffff;
+          padding: 12px 18px;
+          text-decoration: none;
+          font-weight: bold;
+        "
+      >
+        Verify email
+      </a>
+    </p>
+
+    <p>This link expires in {{ expires_minutes }} minutes.</p>
+
+    <p>
+      If the button does not work, copy and paste this link into your browser:
+    </p>
+
+    <p style="word-break: break-all">{{ verification_link }}</p>
+
+    {% if original_recipient_email %}
+    <hr />
+    <p style="color: #64748b; font-size: 12px">
+      Stage note: this email was originally intended for {{
+      original_recipient_name or original_recipient_email }} &lt;{{
+      original_recipient_email }}&gt;.
+    </p>
+    {% endif %}
+
+    <p>
+      Regards,<br />
+      {{ from_name }}
+    </p>
+  </body>
+</html>

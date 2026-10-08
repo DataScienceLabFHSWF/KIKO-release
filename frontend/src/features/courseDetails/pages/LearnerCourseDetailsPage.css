@@ -1,0 +1,131 @@
+/* frontend/src/features/courseDetails/pages/LearnerCourseDetailsPage.css */
+
+.course-details-page {
+  width: 100%;
+  display: grid;
+  gap: 24px;
+}
+
+.course-details-page__topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.course-details-page__topbar-action {
+  width: fit-content;
+}
+
+.course-details-page__layout {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 36px;
+  align-items: start;
+}
+
+.course-details-page__content {
+  min-width: 0;
+  display: grid;
+  gap: 24px;
+}
+
+.course-details-page__section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.course-details-page__section-title svg {
+  width: 44px;
+  height: 44px;
+  padding: 9px;
+  background: var(--color-surface-blue);
+  color: var(--color-primary-dark);
+  clip-path: polygon(0 0, 90% 0, 100% 22%, 100% 100%, 0 100%);
+}
+
+.course-details-page__section-title h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.course-details-page__markdown {
+  white-space: pre-wrap;
+  line-height: 1.75;
+  color: var(--color-text);
+}
+
+.course-details-page__muted {
+  color: rgba(16, 35, 71, 0.62);
+  font-weight: 700;
+}
+
+.course-details-page__info {
+  padding: 14px;
+  background: #eaf6ff;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.course-details-page__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.course-details-page__chips span {
+  padding: 6px 10px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.course-details-page__resources {
+  display: grid;
+  gap: 14px;
+}
+
+.course-details-page__resources article {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  background: #ffffff;
+  box-shadow: 8px 8px 0 var(--color-surface-blue);
+}
+
+.course-details-page__resources span {
+  color: rgba(16, 35, 71, 0.62);
+  font-weight: 800;
+}
+
+.course-details-page__resources a {
+  color: var(--color-primary-dark);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1040px) {
+  .course-details-page__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .course-curriculum {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .course-details-page__topbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .course-details-page__topbar-action {
+    width: 100%;
+  }
+}

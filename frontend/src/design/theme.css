@@ -1,0 +1,63 @@
+/* frontend/src/design/theme.css */
+
+:root {
+  --color-bg: #f7fcfe;
+  --color-bg-white: #ffffff;
+
+  --color-surface: #ffffff;
+  --color-surface-blue: #d5f2fb;
+  --color-surface-blue-strong: #abe4f8;
+
+  --color-primary: #6dcff6;
+  --color-primary-dark: #0099d8;
+  --color-primary-soft: #d9f4fc;
+
+  --color-text: #102347;
+  --color-text-muted: #0099d8;
+  --color-border: #77d7ff;
+
+  --color-danger: #d94c4c;
+  --color-success: #1d9a6c;
+  --color-warning: #d89b22;
+
+  --sidebar-expanded-width: 228px;
+  --sidebar-collapsed-width: 68px;
+  --topbar-height: 72px;
+
+  --font-main: "Rajdhani", "Inter", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background: var(--color-bg);
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-main);
+  background: linear-gradient(180deg, #ffffff 0%, var(--color-bg) 100%);
+  color: var(--color-text);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

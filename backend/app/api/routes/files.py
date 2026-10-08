@@ -1,5 +1,7 @@
+# backend/app/api/routes/files.py
+
 import os, fitz, logging
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status, Path, Query
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
@@ -10,60 +12,105 @@ from app.services import (
 from typing import Optional
 from PIL import Image
 from io import BytesIO
+from app.schemas import (
+    COMMON_ERROR_RESPONSES, MarkdownPreviewResponse, ApiErrorResponse
+)
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(responses=COMMON_ERROR_RESPONSES)
 
+SHA256_PATTERN = r"^[a-fA-F0-9]{64}$"
 
-@router.get("/{content_hash}/download")
-async def download_pdf(
+async def _get_owned_document(
     content_hash: str,
+    user: dict,
+    db: AsyncSession,
+):
+    """
+    Helper function to retrieve a document by content hash that belongs to the current user.
+    This function checks if the document with the given content hash exists and is owned by the current user.
+    If the document does not exist or is not owned by the user, it raises a HTTP_404_NOT_FOUND error. 
+    This ensures that users can only access their own documents.
+    """
+    user_profile = await get_user_profile_by_email(user["email"], db)
+
+    if not user_profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found.",
+        )
+
+    doc = await get_doc_by_hash_name(
+        content_hash,
+        user_profile.user_id,
+        db,
+    )
+
+    if not doc or not doc.storage_path or not os.path.exists(doc.storage_path):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="File not found.",
+        )
+
+    return doc
+
+@router.get(
+    "/{content_hash}/download",
+    response_class=FileResponse,
+    operation_id="download_file",
+    responses={
+        200: {
+            "description": "Document file download",
+            "content": {
+                "application/octet-stream": {},
+                "application/pdf": {},
+                "text/markdown": {},
+            },
+        }
+    },
+)
+async def download_file(
+    content_hash: str = Path(..., pattern=SHA256_PATTERN),
     user=Depends(require_role(["Learner", "Instructor", "Admin"])), 
     db: AsyncSession = Depends(get_db)
 ):
     """
-    Download a PDF document by its ID.
-    This endpoint retrieves a PDF document by its ID and returns it as a file response.
-    If the document does not exist or the file path is invalid, it raises a HTTP_404_NOT_FOUND error.
+    Download a file by its content hash.
+    This endpoint retrieves a file by its content hash and returns it as a file response.
+    If the file does not exist or the file path is invalid, it raises a HTTP_404_NOT_FOUND error.
     """
-    print(f"ℹ️ Downloading PDF document with content_hash: {content_hash}")
-    if not content_hash:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ content_hash is required.")
+    logger.info(f"ℹ️ Downloading file with content_hash: {content_hash}")
     
-    if not isinstance(content_hash, str):
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ content_hash must be an String.")
-    
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
-    
-    # Fetch the document from the database 
-    doc = await get_doc_by_hash_name(content_hash, user_profile.user_id, db)
-
-    if not doc or not doc.storage_path or not os.path.exists(doc.storage_path):
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ file not found")
-    
-    print(f"✅ Found document: {doc.file_name} at {doc.storage_path}")
+    doc = await _get_owned_document(content_hash, user, db)
     
     response = FileResponse(
-        doc.storage_path, 
-        media_type="application/octet-stream", 
-        filename=doc.file_name
+        path=doc.storage_path,
+        media_type="application/octet-stream",
+        filename=doc.file_name,
     )
     
-    print(f"✅ Returning file response for document: {response}")
+    logger.info(f"✅ Returning file response for document: {response}")
     
     return response
 
-@router.get("/{content_hash}/page/{page}.png")
+@router.get(
+    "/{content_hash}/page/{page}.png",
+    response_class=Response,
+    operation_id="render_file_page_png",
+    responses={
+        200: {
+            "description": "Rendered PDF page as PNG",
+            "content": {"image/png": {}},
+        }
+    },
+)
 async def render_page_png(
-    content_hash: str, 
-    page: int,
+    content_hash: str = Path(..., pattern=SHA256_PATTERN), 
+    page: int = Path(..., gt=0),
     user=Depends(require_role(["Learner", "Instructor", "Admin"])), 
     db: AsyncSession = Depends(get_db)
-):
+) -> Response:
     """
     Render a specific page of a PDF document as a PNG image.
     This endpoint retrieves a specific page of a PDF document by its ID and page number,
@@ -71,99 +118,105 @@ async def render_page_png(
     If the document does not exist, the file path is invalid, or the page number is out of range,
     it raises a HTTP_404_NOT_FOUND error.
     """
-    print(f"ℹ️ Rendering page {page} of document with ID: {content_hash}")
-    if not content_hash or not page:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ content_hash and page number are required")
+    logger.info(f"ℹ️ Rendering page {page} of document with ID: {content_hash}")
     
-    if not isinstance(content_hash, str) or not isinstance(page, int):
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ content_hash should be String and page number must be integer.")
+    doc = await _get_owned_document(content_hash, user, db)
     
-    if page < 1:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ Page number must be greater than 0")
+    if not doc.storage_path.lower().endswith(".pdf"):
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Page rendering is only supported for PDF files.",
+        )
     
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
-    
-    # Fetch the document by content hash and user ID
-    doc = await get_doc_by_hash_name(content_hash, user_profile.user_id, db)
-    
-    if not doc or not doc.storage_path or not os.path.exists(doc.storage_path):
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ file not found")
-    
-    print(f"✅ Found document: {doc.file_name} at {doc.storage_path}")
+    try:
+        pdf = fitz.open(doc.storage_path)
+        try:
+            if page > len(pdf):
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Page out of range.",
+                )
 
-    # Open the PDF and render the specified page as a PNG image
-    print(f"ℹ️ Opening PDF document: {doc.storage_path} to render page {page}")
-    
-    pdf = fitz.open(doc.storage_path)
-    
-    if page < 1 or page > len(pdf):
-        pdf.close()
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ page out of range")
+            pix = pdf[page - 1].get_pixmap(matrix=fitz.Matrix(2, 2))
 
-    pix = pdf[page-1].get_pixmap(matrix=fitz.Matrix(2, 2))  # retina-ish preview
-    pdf.close()
+            logger.info(f"✅ Successfully rendered page {page} of document {content_hash} as PNG")
+            
+            return Response(
+                content=pix.tobytes("png"),
+                media_type="image/png",
+                headers={"Cache-Control": "public, max-age=86400"},
+            )
+        finally:
+            pdf.close()
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.exception("❌ Failed to render PDF page")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="❌ Failed to render PDF page.",
+        ) from exc
 
-    if not pix:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ Failed to render page as image")
-    
-    response = Response(pix.tobytes("png"), media_type="image/png")
-
-    print(f"✅ Rendered page {page} of document {content_hash} as PNG image {response}.")
-
-    return response
-
-@router.get("/{content_hash}/preview.png")
+@router.get(
+    "/{content_hash}/preview.png",
+    response_class=Response,
+    operation_id="render_file_preview_png",
+    responses={
+        200: {
+            "description": "Rendered multi-page PDF preview as PNG",
+            "content": {"image/png": {}},
+        },
+        413: {
+            "model": ApiErrorResponse,
+            "description": "Preview too large",
+        },
+    },
+)
 async def render_full_preview_png(
-    content_hash: str,
+    content_hash: str = Path(..., pattern=SHA256_PATTERN),
     # Optional controls
-    page_from: int = 1,
-    page_to: Optional[int] = None,      # None => all pages
-    scale: float = 2.0,                  # 1.0 ~ 72 dpi; 2.0 ~ ~144 dpi
-    gap_px: int = 8,                     # spacing between pages
-    max_pixels: int = 50_000_000,        # guardrail (~50MP)
+    page_from: int = Query(1, ge=1),
+    page_to: Optional[int] = Query(None, ge=1),      # None => all pages
+    scale: float = Query(2.0, gt=0, le=4.0),                  # 1.0 ~ 72 dpi; 2.0 ~ ~144 dpi
+    gap_px: int = Query(8, ge=0, le=100),                     # spacing between pages
+    max_pixels: int = Query(50_000_000, gt=0),        # guardrail (~50MP)
     user=Depends(require_role(["Learner", "Instructor", "Admin"])),
     db: AsyncSession = Depends(get_db),
-):
+) -> Response:
     """
-    Stitch pages (PDF only) into ONE tall PNG for quick full-document preview.
-    Use query params to limit range/scale. Raises 413 if image would be too large.
+    Render a multi-page PDF document as a single PNG image for preview.
+    This endpoint retrieves a PDF document by its content hash and renders a specified page range as a single PNG image.
+    Optional query parameters allow control over the page range, rendering scale, spacing between pages, and maximum allowed image size.
+    If the document does not exist, the file path is invalid, the page range is out of bounds, or the resulting image exceeds size limits,
+    it raises an appropriate HTTP error.
     """
-    if scale <= 0:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ scale must be > 0")
-    if page_from < 1:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ page_from must be >= 1")
+    logger.info(f"ℹ️ Rendering full PDF preview for document with ID: {content_hash}, page_from: {page_from}, page_to: {page_to}, scale: {scale}, gap_px: {gap_px}, max_pixels: {max_pixels}")
+    
+    doc = await _get_owned_document(content_hash, user, db)
 
-    user_profile = await get_user_profile_by_email(user["email"], db)
+    if not doc.storage_path.lower().endswith(".pdf"):
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Preview PNG is only supported for PDF files.",
+        )
 
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
-
-    doc = await get_doc_by_hash_name(content_hash, user_profile.user_id, db)
-
-    if not doc or not doc.storage_path or not os.path.exists(doc.storage_path):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ file not found")
-
-    lower_path = doc.storage_path.lower()
-
-    if lower_path.endswith(".pdf"):
+    try:
         pdf = fitz.open(doc.storage_path)
-
         try:
             total_pages = len(pdf)
             last = page_to if page_to is not None else total_pages
 
-            if last < page_from or page_from > total_pages:
-                raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ page range out of bounds")
+            if page_from > total_pages or last < page_from:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Page range out of bounds.",
+                )
 
             last = min(last, total_pages)
 
             matrix = fitz.Matrix(scale, scale)
             pil_pages: list[Image.Image] = []
 
-            # Render each page -> PIL image
             for i in range(page_from - 1, last):
                 pix = pdf[i].get_pixmap(matrix=matrix)
                 mode = "RGBA" if pix.alpha else "RGB"
@@ -171,62 +224,82 @@ async def render_full_preview_png(
 
                 if img.mode != "RGB":
                     img = img.convert("RGB")
+
                 pil_pages.append(img)
 
             if not pil_pages:
-                raise HTTPException(status.HTTP_404_NOT_FOUND, "❌ no pages rendered")
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="No pages rendered.",
+                )
 
-            # Compute stitched canvas size (vertical)
-            width = max(p.width for p in pil_pages)
-            height = sum(p.height for p in pil_pages) + gap_px * (len(pil_pages) - 1)
+            width = max(page.width for page in pil_pages)
+            height = sum(page.height for page in pil_pages) + gap_px * (len(pil_pages) - 1)
 
-            # Guardrail for extremely long outputs
             if width * height > max_pixels:
-                raise HTTPException(status_code=413, detail="❌ Preview too large to render as a single PNG")
+                raise HTTPException(
+                    status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                    detail="Preview too large to render as a single PNG.",
+                )
 
-            canvas = Image.new("RGB", (width, height), (255, 255, 255))  # type: ignore[arg-type]
+            canvas = Image.new("RGB", (width, height), (255, 255, 255))
+
             y = 0
-            for p in pil_pages:
-                # center page horizontally
-                x = (width - p.width) // 2
-                canvas.paste(p, (x, y))
-                y += p.height + gap_px
+            for page_img in pil_pages:
+                x = (width - page_img.width) // 2
+                canvas.paste(page_img, (x, y))
+                y += page_img.height + gap_px
 
-            buf = BytesIO()
-            canvas.save(buf, format="PNG", optimize=True)
-            buf.seek(0)
-            return Response(buf.getvalue(), media_type="image/png")
+            buffer = BytesIO()
+            canvas.save(buffer, format="PNG", optimize=True)
+            buffer.seek(0)
+
+            logger.info(f"✅ Successfully rendered full PDF preview for document {content_hash} as PNG with dimensions {canvas.width}x{canvas.height} and size {buffer.getbuffer().nbytes} bytes")
+            
+            return Response(
+                content=buffer.getvalue(),
+                media_type="image/png",
+                headers={"Cache-Control": "public, max-age=86400"},
+            )
+
         finally:
             pdf.close()
 
-    raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="❌ Preview PNG only supported for PDF files")
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.exception("❌ Failed to render full PDF preview")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="❌ Failed to render PDF preview.",
+        ) from exc
 
-
-@router.get("/{content_hash}/markdown")
+@router.get(
+    "/{content_hash}/markdown",
+    response_model=MarkdownPreviewResponse,
+    operation_id="get_markdown_preview"
+)
 async def render_markdown_content(
-    content_hash: str,
+    content_hash: str = Path(..., pattern=SHA256_PATTERN),
     user=Depends(require_role(["Learner", "Instructor", "Admin"])),
     db: AsyncSession = Depends(get_db),
-):
-    """Return markdown document content and metadata for preview."""
-
-    if not content_hash:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "content_hash is required.")
-
-    user_profile = await get_user_profile_by_email(user["email"], db)
-
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
-
-    doc = await get_doc_by_hash_name(content_hash, user_profile.user_id, db)
-
-    if not doc or not doc.storage_path or not os.path.exists(doc.storage_path):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ file not found")
+) -> MarkdownPreviewResponse:
+    """
+    Render markdown content for preview.
+    This endpoint retrieves a markdown document by its content hash, parses it to extract structured content,
+    summary, quiz information, and questions, and returns this information in a structured response.
+    If the document does not exist, the file path is invalid, or the content cannot be parsed, it raises an appropriate HTTP error.
+    """
+    logger.info(f"ℹ️ Rendering markdown preview for document with ID: {content_hash}")
+    
+    doc = await _get_owned_document(content_hash, user, db)
 
     if not doc.storage_path.lower().endswith((".md", ".markdown")):
-        raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="❌ Markdown preview only available for markdown files")
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Markdown preview is only available for markdown files.",
+        )
 
-    # Prefer stored combined content; fall back to raw file on disk.
     stored_content = doc.doc_content or ""
     raw_markdown = stored_content
 
@@ -236,19 +309,20 @@ async def render_markdown_content(
                 raw_markdown = handle.read()
                 stored_content = raw_markdown
         except Exception as exc:
-            logger.warning("Failed to read markdown file %s: %s", doc.storage_path, exc)
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="❌ Unable to load markdown content") from exc
+            logger.exception("❌ Unable to load markdown content")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="❌ Unable to load markdown content.",
+            ) from exc
     else:
-        # We still want the raw markdown for quiz/Q&A parsing if doc_content stripped sections.
         try:
             with open(doc.storage_path, "r", encoding="utf-8") as handle:
                 raw_markdown = handle.read()
-        except Exception as exc:
-            logger.info("Could not read original markdown for %s; continuing with stored content. Error: %s", doc.storage_path, exc)
+        except Exception:
             raw_markdown = stored_content
 
     quiz_dict = None
-    questions = []
+    questions: list[dict] = []
     quiz_yaml = None
     summary = None
     parsed_metadata = None
@@ -256,11 +330,14 @@ async def render_markdown_content(
     try:
         parsed = parse_structured_markdown(raw_markdown)
     except (MarkdownStructureError, ValueError) as exc:
-        logger.info("Markdown preview parse skipped for %s: %s", doc.file_name, exc)
+        logger.info("ℹ️ Markdown preview parse skipped for %s: %s", doc.file_name, exc)
         parsed = None
     except Exception as exc:
-        logger.warning("Unexpected error parsing markdown preview for %s: %s", doc.file_name, exc)
-        raise
+        logger.exception("❌ Unexpected error parsing markdown preview")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="❌ Failed to parse markdown preview.",
+        ) from exc
 
     if parsed:
         parsed_metadata = parsed.get("metadata")
@@ -268,22 +345,28 @@ async def render_markdown_content(
         quiz_dict = parsed.get("quiz_dict")
         quiz_yaml = parsed.get("quiz_yaml_str")
         questions = parsed.get("questions_dict", {}).get("qa_list", []) or []
-        # Prefer structured content as display body when available.
+
         structured_content = parsed.get("content")
         if structured_content:
             stored_content = structured_content
 
     response_metadata = doc.doc_metadata or {}
-    if parsed_metadata:
-        response_metadata = {**parsed_metadata, **response_metadata}
 
-    return {
-        "file_name": doc.file_name,
-        "content": stored_content,
-        "metadata": response_metadata,
-        "summary": summary,
-        "quiz": quiz_dict,
-        "quiz_yaml": quiz_yaml,
-        "questions": questions,
-        "raw_markdown": raw_markdown,
-    }
+    if parsed_metadata:
+        response_metadata = {
+            **parsed_metadata,
+            **response_metadata,
+        }
+    
+    logger.info(f"✅ Successfully rendered markdown preview for document {content_hash} with summary: {summary}, quiz: {quiz_dict}, questions count: {len(questions)}, and metadata: {response_metadata}")
+    
+    return MarkdownPreviewResponse(
+        file_name=doc.file_name,
+        content=stored_content,
+        metadata=response_metadata,
+        summary=summary,
+        quiz=quiz_dict,
+        quiz_yaml=quiz_yaml,
+        questions=questions,
+        raw_markdown=raw_markdown,
+    )

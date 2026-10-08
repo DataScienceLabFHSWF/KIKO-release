@@ -1,4 +1,5 @@
 # backend/app/core/qa_chain_manager.py
+
 import asyncio
 import os, logging, torch
 from typing import List
@@ -16,6 +17,11 @@ load_dotenv()
 DOCKER_OLLAMA_URL = os.getenv("DOCKER_OLLAMA_URL")
 HUGGINGFACE_HUB_TOKEN = os.getenv("HUGGINGFACE_HUB_TOKEN")
 CHAT_QUESTION_PROMPT_NAME = "chat_question_prompt"
+HF_MODEL_REPOS = {
+    "apertus-8b-instruct-2509": "swiss-ai/Apertus-8B-Instruct-2509",
+    "apertus-70b-instruct-2509": "swiss-ai/Apertus-70B-Instruct-2509",
+    "soofi-s-instruct-preview": "Soofi-Project/Soofi-S-Instruct-Preview",
+}
 
 class QAChainManager:
     """Manager for QA chains with different LLMs and prompts."""
@@ -26,7 +32,7 @@ class QAChainManager:
         response_language: str
     ):
         """Initialize QAChainManager with prompt manager and language."""
-        print("ℹ️ Initializing QAChainManager with config and prompt manager")        
+        logger.info("ℹ️ Initializing QAChainManager with config and prompt manager")        
         self.prompt_manager = prompt_manager
         self.response_language = response_language
 
@@ -48,16 +54,23 @@ class QAChainManager:
         )
 
     @staticmethod
-    @lru_cache(maxsize=4)
+    @lru_cache(maxsize=3)
     def _get_hf_llm(
         model_name: str, 
         quant: str | None = None
     ) -> HuggingFacePipeline:
+        
+        key = (model_name or "").strip().lower()
+        
+        repo_id = HF_MODEL_REPOS.get(key)
+        
+        if not repo_id:
+            raise ValueError(f"❌ Unsupported Hugging Face model: {model_name}")
+        
         if not HUGGINGFACE_HUB_TOKEN:
             raise ValueError("❌ Hugging Face Hub token is required for this model.")
-
-        repo_id = f"swiss-ai/{model_name}"
-
+        
+        
         tokenizer = AutoTokenizer.from_pretrained(
             repo_id,
             trust_remote_code=True,
@@ -122,13 +135,12 @@ class QAChainManager:
 
         if not name:
             raise ValueError("❌ LLM model name is required.")
-
-        if name.lower() in {
-            "apertus-8b-instruct-2509",
-            "apertus-70b-instruct-2509",
-        }:
+        
+        key = name.lower()
+        
+        if key in HF_MODEL_REPOS:
             return self._get_hf_llm(name, quant)
-
+        
         return self._get_ollama_llm(name)
     
     def _build_question_prompt(self) -> PromptTemplate:
@@ -149,28 +161,28 @@ class QAChainManager:
     @staticmethod
     def _extract_text(response) -> str:
         if response is None:
-            print("⚠️ LLM response is None.")
+            logger.warning("⚠️ LLM response is None.")
             return ""
 
         if isinstance(response, str):
-            print(f"ℹ️ LLM response is a string: {response}")
+            logger.info(f"ℹ️ LLM response is a string: {response}")
             return response.strip()
 
         content = getattr(response, "content", None)
 
         if isinstance(content, str):
-            print(f"ℹ️ LLM response has 'content' attribute: {content}")
+            logger.info(f"ℹ️ LLM response has 'content' attribute: {content}")
             return content.strip()
 
         if isinstance(response, dict):
             for key in ("output_text", "text", "output", "result", "answer"):
                 value = response.get(key)
                 if isinstance(value, str) and value.strip():
-                    print(f"ℹ️ LLM response dict has '{key}' key: {value}")
+                    logger.info(f"ℹ️ LLM response dict has '{key}' key: {value}")
                     return value.strip()
         
         response = str(response).strip()
-        print(f"⚠️ Unable to extract text from LLM response, returning raw string: {response}")
+        logger.warning(f"⚠️ Unable to extract text from LLM response, returning raw string: {response}")
         return response 
 
     async def _invoke_llm(
@@ -183,7 +195,7 @@ class QAChainManager:
         except Exception:
             response = await asyncio.to_thread(llm.invoke, prompt_text)
         
-        print(f"ℹ️ Raw LLM response: {response}")
+        logger.info(f"ℹ️ Raw LLM response: {response}")
 
         return self._extract_text(response)
     
@@ -202,7 +214,7 @@ class QAChainManager:
         :return: Answer as string
         """
         try:
-            print(f"ℹ️ Running QA for question: {user_question} with model: {llm_model} and context: {context_docs}")
+            logger.info(f"ℹ️ Running QA for question: {user_question} with model: {llm_model} and context: {context_docs}")
             
             llm = self.get_llm(llm_model=llm_model, quant=quant)
             
@@ -222,11 +234,11 @@ class QAChainManager:
             answer = await self._invoke_llm(llm, prompt_text)
 
             if not answer:
-                print("⚠️ LLM returned an empty response.")
+                logger.warning("⚠️ LLM returned an empty response.")
                 return "I'm sorry, I couldn't generate a response based on the provided information." if self.response_language == "en" else "Es tut mir leid, ich konnte anhand der bereitgestellten Informationen keine Antwort erstellen."
             
-            print(f"✅ Extracted answer text: {answer}")
+            logger.info(f"✅ Extracted answer text: {answer}")
             return answer
         except Exception as e:
-            print(f"❌ Error running QA chain: {str(e)}")
+            logger.exception(f"❌ Error running QA chain: {str(e)}")
             raise RuntimeError(f"❌ LLM failed to generate response: {str(e)}")

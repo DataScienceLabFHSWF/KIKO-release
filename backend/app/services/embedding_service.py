@@ -1,4 +1,5 @@
 # backend/app/services/embedding_service.py
+
 import os, logging, asyncio
 from functools import lru_cache
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,16 +25,16 @@ def get_embedding_model(model_name: str) -> OllamaEmbeddings:
         if not DOCKER_OLLAMA_URL:
             raise ValueError("❌ DOCKER_OLLAMA_URL is not configured.")
         
-        print(f"ℹ️ Getting Embeddings instance for model: {model_name} and {DOCKER_OLLAMA_URL}")
+        logger.info(f"ℹ️ Getting Embeddings instance for model: {model_name} and {DOCKER_OLLAMA_URL}")
         
         emb = OllamaEmbeddings(
             model=model_name,
             base_url=DOCKER_OLLAMA_URL
         )
-        print(f"✅ Initialized new Embeddings instance for model: {emb}")
+        logger.info(f"✅ Initialized new Embeddings instance for model: {emb}")
         return emb
     except Exception as e:
-        print(f"❌ Failed to init Ollama Embeddings '{model_name}': {e}")
+        logger.exception(f"❌ Failed to init Ollama Embeddings '{model_name}': {e}")
         return None
 
 def _validate_embedding_vector(
@@ -123,7 +124,7 @@ async def store_embeddings_to_db(
                 )
             )
         
-        print(f"ℹ️ Storing the embeddings. {len(embeddings)} embeddings to the database.")
+        logger.info(f"ℹ️ Storing the embeddings. {len(embeddings)} embeddings to the database.")
         
         records = []
             
@@ -148,7 +149,7 @@ async def store_embeddings_to_db(
         
         await db.execute(stmt)
         await db.commit()
-        print(f"✅ Successfully stored the Embeddings to DB.")
+        logger.info(f"✅ Successfully stored the Embeddings to DB.")
     except SQLAlchemyError as e:
         await db.rollback()
         raise HTTPException(
@@ -174,7 +175,7 @@ async def get_embeddings_from_db(
     If the database operation fails, it raises an HTTPException."""
         
     try:
-        print(f"ℹ️ Getting the Embedding by file hash: {content_hash} and {embedding_model}.")
+        logger.info(f"ℹ️ Getting the Embedding by file hash: {content_hash} and {embedding_model}.")
 
         result = await db.execute(
             select(EmbeddingModel)
@@ -195,7 +196,7 @@ async def get_embeddings_from_db(
         if embeddings is None:
             return None
             
-        print(f"✅ Successfully got the Embeddings from DB.")
+        logger.info(f"✅ Successfully got the Embeddings from DB.")
         return embeddings
     except SQLAlchemyError as e:
         await db.rollback()

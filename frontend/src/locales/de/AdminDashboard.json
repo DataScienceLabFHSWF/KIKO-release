@@ -1,0 +1,49 @@
+{
+  "metaTitle": "Dashboard",
+  "title": "Dashboard",
+  "subtitle": "Eine klare Übersicht über Nutzer, Dokumente, Kurse und Plattformstatus.",
+  "sections": {
+    "systemOverview": "Systemübersicht",
+    "systemOverviewDescription": "Diese Zahlen helfen dir, Plattformaktivität und Betriebsstatus schnell zu prüfen.",
+    "adminActions": "Admin-Aktionen",
+    "adminActionsDescription": "Öffne die wichtigsten administrativen Bereiche."
+  },
+  "metrics": {
+    "usersRegistered": "Registrierte Nutzer",
+    "learnersRegistered": "Lernende",
+    "instructorsRegistered": "Dozentinnen/Dozenten",
+    "adminsRegistered": "Admins",
+    "documentsUploaded": "Hochgeladene Dokumente",
+    "coursesCreated": "Erstellte Kurse",
+    "chatQuestions": "Chat-Fragen",
+    "pipelineStatus": "Pipeline-Status",
+    "lastActivity": "Letzte Aktivität"
+  },
+  "actionsGrid": {
+    "adminConsole": {
+      "title": "Admin-Konsole",
+      "description": "Eingeschränkte Plattformverwaltung öffnen."
+    },
+    "knowledgeCheck": {
+      "title": "Wissenscheck-Konfiguration",
+      "description": "Bewertungseinstellungen prüfen und anpassen."
+    },
+    "documents": {
+      "title": "Dokumente verwalten",
+      "description": "Hochgeladene Dateien und Verarbeitungsergebnisse prüfen."
+    },
+    "evaluation": {
+      "title": "Evaluationsergebnisse",
+      "description": "Modellqualität, Geschwindigkeit und Bewertung ansehen."
+    }
+  },
+  "messages": {
+    "loading": "Dashboard wird geladen...",
+    "loadFailed": "Das Dashboard konnte nicht geladen werden.",
+    "unavailableTitle": "Dashboard nicht verfügbar",
+    "unavailableDescription": "Das Dashboard konnte gerade nicht geladen werden."
+  },
+  "actions": {
+    "retry": "Erneut versuchen"
+  }
+}

@@ -148,8 +148,16 @@ cython_debug/
 backend/data/courses/*/images/
 #backend/data/uploaded_docs/
 
-# Environment files
+# Local and deployment secrets
 .env
-.env.*
-!.env.example
-!env.example
+.env.stage
+.env.production
+
+# Keep the safe development environment file
+!.env.dev
+
+# Server-only Docker Compose files
+docker-compose.stage.yml
+docker-compose.production.yml
+
+frontend/node_modules

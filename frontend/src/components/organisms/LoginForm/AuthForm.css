@@ -1,0 +1,17 @@
+/* frontend/src/components/organisms/LoginForm/AuthForm.css */
+
+.auth-form {
+  display: grid;
+  gap: 18px;
+}
+
+.auth-form__error {
+  margin: 0;
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+.auth-form .ui-button {
+  margin-top: 6px;
+  width: 100%;
+}

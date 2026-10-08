@@ -1,0 +1,124 @@
+{
+  "metaTitle": "Evaluation Results",
+  "title": "Evaluation Results - Why do models vary in speed and quality?",
+  "subtitle": "View model comparison results in a simple, readable format.",
+
+  "tabs": {
+    "dataset": "Dataset",
+    "apertus": "Chat: Apertus-8B",
+    "llama": "Chat: Llama 3.3 70B",
+    "kimi": "Chat: Kimi K2",
+    "grading": "Grading: DeepSeek-R1"
+  },
+
+  "sections": {
+    "keyNumbers": "Key numbers",
+    "resultsTable": "Results table",
+    "quickAggregates": "Quick aggregates",
+    "visualization": "Visualization"
+  },
+
+  "stats": {
+    "rows": "Rows",
+    "columns": "Columns",
+    "missingValues": "Missing values",
+    "avgCharsPerRow": "Avg. characters per row",
+    "rouge": "ROUGE-L average",
+    "bleu": "BLEU average",
+    "bertScore": "BERTScore F1 average",
+    "citationRate": "Citation rate",
+    "items": "Grading items",
+    "accuracy": "Exact accuracy",
+    "mae": "MAE",
+    "kappa": "Weighted kappa"
+  },
+
+  "dataset": {
+    "heading": "Evaluation dataset",
+    "description": "This is the sample corpus used to test model answers and grading behavior.",
+    "explanation": {
+      "title": "What is this dataset and how was it used?",
+      "bullets": [
+        "Each row represents one test case.",
+        "The dataset contains real questions, reference answers, and user answers.",
+        "For chat models, model answers are compared with reference answers.",
+        "For grading models, predicted grades are compared with human grades.",
+        "The dataset is a sample and should not be treated as complete coverage."
+      ]
+    }
+  },
+
+  "apertus": {
+    "heading": "Chat quality - Apertus-8B-Instruct",
+    "description": "This tab summarizes how Apertus answered the evaluation questions.",
+    "chartAlt": "Distribution of BERTScore F1 for Apertus chat answers",
+    "explanation": {
+      "title": "How to read these results",
+      "bullets": [
+        "The table shows one row per test question.",
+        "Higher BERTScore, ROUGE, and BLEU usually indicate closer similarity to the reference answer.",
+        "Citation rate shows whether answers include source-backed information.",
+        "Small models can be faster but may struggle with complex or long-context questions."
+      ]
+    }
+  },
+
+  "llama": {
+    "heading": "Chat quality - Llama 3.3 70B",
+    "description": "This tab summarizes quality and behavior for the larger Llama model.",
+    "explanation": {
+      "title": "How to read these results",
+      "bullets": [
+        "Larger models may produce more detailed answers.",
+        "They can be slower depending on GPU load and context size.",
+        "Use quality metrics together with human review."
+      ]
+    }
+  },
+
+  "kimi": {
+    "heading": "Chat quality - Kimi K2",
+    "description": "This tab summarizes results for the cloud-backed Kimi model.",
+    "explanation": {
+      "title": "How to read these results",
+      "bullets": [
+        "Cloud-backed models may vary in latency depending on network and provider conditions.",
+        "Compare response quality and speed before selecting the model for a workflow.",
+        "Use this tab to understand where Kimi performs well or weakly."
+      ]
+    }
+  },
+
+  "grading": {
+    "heading": "Grading - DeepSeek-R1",
+    "description": "This tab shows how close automatic grades were to human grades.",
+    "chartAlt": "Confusion matrix comparing human grades and predicted grades",
+    "explanation": {
+      "title": "How to read the grading results",
+      "bullets": [
+        "Exact accuracy shows how often the predicted grade exactly matches the human grade.",
+        "MAE shows the average grading distance; lower is better.",
+        "Weighted kappa measures agreement beyond chance; closer to 1 is better.",
+        "The model grade should be treated as a decision-support signal, not as the final human grade."
+      ]
+    }
+  },
+  "empty": {
+    "noRows": "No rows available for this section yet."
+  },
+  "table": {
+    "searchPlaceholder": "Search table...",
+    "downloadCsv": "Download CSV",
+    "rowsPerPage": "Rows per page",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "showing": "Showing",
+    "rows": "rows"
+  },
+  "states": {
+    "loading": "Loading evaluation data...",
+    "errorTitle": "Could not load evaluation data"
+  }
+}

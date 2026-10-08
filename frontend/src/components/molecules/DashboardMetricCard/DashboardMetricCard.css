@@ -1,0 +1,46 @@
+/* frontend/src/components/molecules/DashboardMetricCard/DashboardMetricCard.css */
+
+.dashboard-metric-card {
+  min-height: 126px;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  box-shadow: 8px 8px 0 var(--color-surface-blue);
+}
+
+.dashboard-metric-card__icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: var(--color-surface-blue);
+  color: var(--color-primary-dark);
+  clip-path: polygon(0 0, 90% 0, 100% 22%, 100% 100%, 0 100%);
+}
+
+.dashboard-metric-card__label {
+  margin: 0;
+  color: var(--color-primary-dark);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.dashboard-metric-card__value {
+  display: block;
+  margin-top: 8px;
+  color: var(--color-text);
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.dashboard-metric-card__helper {
+  margin: 8px 0 0;
+  color: var(--color-primary-dark);
+  font-size: 12px;
+  font-weight: 700;
+}

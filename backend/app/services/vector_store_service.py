@@ -1,8 +1,13 @@
+# backend/app/services/vector_store_service.py
+
+import logging
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi import HTTPException, status
 from sqlalchemy import select
 from app.models import EmbeddingModel, UserModel
+
+logger = logging.getLogger(__name__)
 
 async def similarity_search(
     query_vec: list[float],
@@ -21,7 +26,7 @@ async def similarity_search(
     """
         
     try:
-        print(f"ℹ️ Searching for top-{top_k} similar embeddings for user_id={user_id} , role={user_role} and model={embedding_model}")
+        logger.info(f"ℹ️ Searching for top-{top_k} similar embeddings for user_id={user_id} , role={user_role} and model={embedding_model}")
 
         if user_role in ["Instructor", "Admin"]:
             # For Instructors and Admins, search only for their own embeddings generated for documents uploaded by themselves.

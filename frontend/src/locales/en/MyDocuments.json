@@ -1,0 +1,51 @@
+{
+  "title": "My Documents",
+  "subtitle": "View and manage your uploaded documents.",
+
+  "toolbar": {
+    "refresh": "Refresh",
+    "deleteAll": "Delete all"
+  },
+
+  "fields": {
+    "uploaded": "Uploaded",
+    "status": "Status"
+  },
+
+  "actions": {
+    "preview": "Preview",
+    "download": "Download",
+    "delete": "Delete",
+    "closePreview": "Close preview"
+  },
+
+  "status": {
+    "loading": "Loading your documents...",
+    "unknown": "unknown"
+  },
+
+  "empty": {
+    "title": "No documents yet",
+    "description": "Uploaded PDFs and generated markdown files will appear here after processing."
+  },
+
+  "messages": {
+    "loadFailed": "Could not load your documents.",
+    "downloadFailed": "Download failed.",
+    "previewFailed": "Preview failed.",
+    "deleteFailed": "Delete failed.",
+    "deleteAllFailed": "Delete all failed."
+  },
+
+  "confirm": {
+    "singleTitle": "Confirm deletion",
+    "singleDescription": "Are you sure you want to delete \"{{fileName}}\"? This action cannot be undone.",
+    "allTitle": "Delete ALL documents?",
+    "allDescription": "This will permanently remove all of your uploaded documents and their embeddings.",
+    "allAcknowledgement": "I understand that all my uploaded documents will be removed.",
+    "yesDelete": "Yes, delete",
+    "yesDeleteAll": "Yes, delete all",
+    "cancel": "No, keep it",
+    "working": "Working..."
+  }
+}

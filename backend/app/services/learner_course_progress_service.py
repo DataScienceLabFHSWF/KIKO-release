@@ -953,23 +953,39 @@ async def submit_module_quiz_attempt_for_learner(
     await db.refresh(progress)
 
     snapshot = build_progress_snapshot(progress)
+    attempt_summaries = build_attempt_summaries(snapshot)
+    
+    quiz_result = {
+        "assessment_type": "module_quiz",
+        "assessment_id": assessment_id,
+        "module_id": module_id,
+        "score": graded_result["score"],
+        "total_points": graded_result["total_points"],
+        "percent": graded_result["percent"],
+        "passed": graded_result["passed"],
+        "pass_percent": graded_result["pass_percent"],
+        "german_grade": graded_result["german_grade"],
+        "feedback": graded_result["feedback"],
+    }
     
     return {
         "message": "submitted",
-        "result": {
-            "assessment_type": "module_quiz",
-            "assessment_id": assessment_id,
-            "module_id": module_id,
-            "score": graded_result["score"],
-            "total_points": graded_result["total_points"],
-            "percent": graded_result["percent"],
-            "passed": graded_result["passed"],
-            "pass_percent": graded_result["pass_percent"],
-            "german_grade": graded_result["german_grade"],
-            "feedback": graded_result["feedback"],
-        },
+        # Flat response fields
+        "course_id": course_id,
+        "assessment_id": assessment_id,
+        "module_id": module_id,
+        "score": graded_result["score"],
+        "max_score": graded_result["total_points"],
+        "percent": graded_result["percent"],
+        "passed": graded_result["passed"],
+        "pass_percent": graded_result["pass_percent"],
+        "german_grade": graded_result["german_grade"],
+        "graded_answers": graded_result["feedback"],
+
+        # Rich response fields
+        "result": quiz_result,
         "progress_snapshot": snapshot,
-        "attempt_summaries": build_attempt_summaries(snapshot),
+        "attempt_summaries": attempt_summaries,
     }
 
 async def submit_final_quiz_attempt_for_learner(
@@ -1053,21 +1069,39 @@ async def submit_final_quiz_attempt_for_learner(
     await db.refresh(progress)
 
     snapshot = build_progress_snapshot(progress)
-
+    
+    attempt_summaries = build_attempt_summaries(snapshot)
+    
+    quiz_result = {
+        "assessment_type": "final_quiz",
+        "assessment_id": assessment_id,
+        "module_id": None,
+        "score": graded_result["score"],
+        "total_points": graded_result["total_points"],
+        "percent": graded_result["percent"],
+        "passed": graded_result["passed"],
+        "pass_percent": graded_result["pass_percent"],
+        "german_grade": graded_result["german_grade"],
+        "feedback": graded_result["feedback"],
+    }
+    
     return {
         "message": "submitted",
-        "result": {
-            "assessment_type": "final_quiz",
-            "assessment_id": assessment_id,
-            "module_id": None,
-            "score": graded_result["score"],
-            "total_points": graded_result["total_points"],
-            "percent": graded_result["percent"],
-            "passed": graded_result["passed"],
-            "pass_percent": graded_result["pass_percent"],
-            "german_grade": graded_result["german_grade"],
-            "feedback": graded_result["feedback"],
-        },
+
+        # Flat fields expected by LearnerQuizSubmitResponse
+        "course_id": course_id,
+        "assessment_id": assessment_id,
+        "module_id": None,
+        "score": graded_result["score"],
+        "max_score": graded_result["total_points"],
+        "percent": graded_result["percent"],
+        "passed": graded_result["passed"],
+        "pass_percent": graded_result["pass_percent"],
+        "german_grade": graded_result["german_grade"],
+        "graded_answers": graded_result["feedback"],
+
+        # Rich fields
+        "result": quiz_result,
         "progress_snapshot": snapshot,
-        "attempt_summaries": build_attempt_summaries(snapshot),
+        "attempt_summaries": attempt_summaries,
     }

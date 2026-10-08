@@ -1,0 +1,22 @@
+/* frontend/src/features/courseDetails/components/FinalAssessmentSection.css */
+
+.final-assessment-section {
+  display: grid;
+  gap: 18px;
+}
+
+.final-assessment-section__locked {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 12px;
+  padding: 16px;
+  background: #fff9dc;
+  color: #8a6200;
+  font-weight: 800;
+  border-left: 4px solid var(--color-warning);
+}
+
+.final-assessment-section__locked p {
+  margin: 4px 0 0;
+  font-weight: 700;
+}

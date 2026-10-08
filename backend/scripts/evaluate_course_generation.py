@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
-from __future__ import annotations
+# backend/scripts/evaluate_course_generation.py
 
+from __future__ import annotations
 import argparse
 import asyncio
 import json
-import sys
+import sys, logging
 from pathlib import Path
 
+logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BACKEND_ROOT = REPO_ROOT / "backend"
@@ -20,7 +21,6 @@ from app.services import (  # noqa: E402
     save_report_json,
     write_flat_report_csv,
 )
-
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -125,14 +125,14 @@ async def main() -> int:
         write_flat_report_csv(report, args.output_csv)
 
     if not args.output_json:
-        print(json.dumps(report, indent=2, ensure_ascii=False))
+        logger.info(json.dumps(report, indent=2, ensure_ascii=False))
 
     overall = (report.get("overall") or {}).get("score")
     summary_score = (report.get("summary") or {}).get("score")
     qa_score = (report.get("qa") or {}).get("score")
     quiz_score = (report.get("quiz") or {}).get("score")
     misconception_score = (report.get("misconceptions") or {}).get("score")
-    print(
+    logger.info(
         f"overall_score={overall} summary_score={summary_score} "
         f"qa_score={qa_score} quiz_score={quiz_score} "
         f"misconceptions_score={misconception_score}",

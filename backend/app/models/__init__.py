@@ -6,7 +6,7 @@ from .exam_model import (
 )
 from .quiz_model import QuizModel
 from .question_model import QuestionModel
-from .user_model import UserModel, RoleModel, UserRoleModel
+from .user_model import UserModel, RoleModel, UserRoleModel, EmailVerificationTokenModel
 from .chat_history_model import ChatHistoryModel
 from .embeddings_model import EmbeddingModel
 from .knowledge_assessment_model import (
@@ -14,6 +14,8 @@ from .knowledge_assessment_model import (
     KnowledgeAssessmentConfigModel
 )
 from .learner_progress_model import LearnerCourseProgressModel, LearnerQuizAttemptModel
+from .app_configurations_model import AppConfigurationModel
+from .password_reset_token_model import PasswordResetTokenModel
 
 __all__ = [
     "CourseModel",
@@ -37,4 +39,7 @@ __all__ = [
     "KnowledgeAssessmentConfigModel",
     "LearnerCourseProgressModel",
     "LearnerQuizAttemptModel",
+    "AppConfigurationModel",
+    "PasswordResetTokenModel",
+    "EmailVerificationTokenModel",
 ]

@@ -10,7 +10,7 @@ class MultilingualProcessor:
     """Process multilingual documents using open-source tools."""
     
     def __init__(self, config):
-        print("ℹ️ Initializing MultilingualProcessor with Open-Source tools...")
+        logger.info("ℹ️ Initializing MultilingualProcessor with Open-Source tools...")
         self.config = config
         self.language_detector = None
         self.translation_models = {}
@@ -22,11 +22,11 @@ class MultilingualProcessor:
         """Recognize the language of text with open source tools."""
 
         if not self.config.get("app_config").language_detection:
-            print("⚠️ Speech recognition is disabled. Use default language.")
+            logger.warning("⚠️ Speech recognition is disabled. Use default language.")
             return self.config.get("app_config").default_language
             
         if not text or len(text.strip()) < 10:
-            print("⚠️ Text is too short for language detection. Use default language.")
+            logger.warning("⚠️ Text is too short for language detection. Use default language.")
             return self.config.get("app_config").default_language
             
         try:
@@ -54,7 +54,7 @@ class MultilingualProcessor:
                         # from langdetect import detect
                         self.language_detector = detect
                     except ImportError:
-                        print("⚠️ No speech recognition library available. Use default language.")                        
+                        logger.warning("⚠️ No speech recognition library available. Use default language.")                        
                         return self.config.get("app_config").default_language
             
             # Erkenne Sprache
@@ -82,10 +82,10 @@ class MultilingualProcessor:
                 # "ko": "kor",
                 # "ar": "ara"
             }
-            print(f"ℹ️ Recognized language: {lang_code} -> {lang_mapping.get(lang_code[:2], self.config.get('app_config').default_language)}")            
+            logger.info(f"ℹ️ Recognized language: {lang_code} -> {lang_mapping.get(lang_code[:2], self.config.get('app_config').default_language)}")            
             return lang_mapping.get(lang_code[:2], self.config.get("app_config").default_language)
         except Exception as e:
-            print(f"❌ Speech recognition error: {str(e)}")
+            logger.exception(f"❌ Speech recognition error: {str(e)}")
             return self.config.get("app_config").default_language
     
     async def translate_text(
@@ -97,7 +97,7 @@ class MultilingualProcessor:
         """Translate text from source_lang to target_lang using open source tools."""
         
         if not text or source_lang == target_lang:
-            print("⚠️ No translation needed (same source and target language).")
+            logger.warning("⚠️ No translation needed (same source and target language).")
             return text
             
         try:
@@ -136,10 +136,10 @@ class MultilingualProcessor:
                         self.translation_models[model_key] = (tokenizer, model)
                     else:
                         # Kein Modell für dieses Sprachpaar verfügbar
-                        print(f"⚠️ No translation model available for {source_lang} to {target_lang}.")
+                        logger.warning(f"⚠️ No translation model available for {source_lang} to {target_lang}.")
                         return text
                 except Exception as e:
-                    print(f"❌ Error loading translation model: {str(e)}")              
+                    logger.exception(f"❌ Error loading translation model: {str(e)}")              
                     return text
             
             # Übersetze den Text
@@ -165,8 +165,8 @@ class MultilingualProcessor:
                     translated_chunks.append(translated_text)
             
             # Kombiniere die übersetzten Chunks
-            print(f"ℹ️ Translated {len(chunks)} chunks from {source_lang} to {target_lang}.")
+            logger.info(f"ℹ️ Translated {len(chunks)} chunks from {source_lang} to {target_lang}.")
             return " ".join(translated_chunks)
         except Exception as e:
-            print(f"❌ Translation error: {str(e)}")
+            logger.exception(f"❌ Translation error: {str(e)}")
             return text

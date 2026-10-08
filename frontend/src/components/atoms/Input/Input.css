@@ -1,0 +1,21 @@
+/* frontend/src/components/atoms/Input/Input.css */
+
+.ui-input {
+  display: grid;
+  gap: 6px;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.ui-input input {
+  min-height: 42px;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface-blue);
+  padding: 0 14px;
+  color: var(--color-text);
+  outline: none;
+}
+
+.ui-input input:focus {
+  border-color: var(--color-primary-dark);
+}

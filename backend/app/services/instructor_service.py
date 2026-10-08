@@ -3,7 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from fastapi import HTTPException, status
 from datetime import datetime, timezone
-from app.models import CourseModel, LearnerCourseProgressModel, QuestionModel
+from app.models import (
+    CourseModel, LearnerCourseProgressModel, QuestionModel,
+    DocumentModel
+)
 from .user_service import get_user_profile_by_email
 
 logger = logging.getLogger(__name__)
@@ -53,12 +56,19 @@ async def get_instructor_statistics(
                                   .where(QuestionModel.created_by != instructor_id)
                                 )
         learner_questions = result.scalar_one()
+
+        documents_q = await db.execute(
+            select(func.count())
+            .select_from(DocumentModel)
+            .where(DocumentModel.uploaded_by == instructor_id)
+        )
         
         return {
             "students": students,
             "courses_created": courses_created,
             "questions_asked": questions_asked,
             "learner_questions": learner_questions,
+            "documents_uploaded": documents_q.scalar() or 0,
             "last_activity": user.last_login.isoformat() if user.last_login else datetime.now(timezone.utc).isoformat()
         }
     except Exception as e:

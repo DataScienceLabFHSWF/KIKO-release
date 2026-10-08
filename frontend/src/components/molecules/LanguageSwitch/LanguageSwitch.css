@@ -1,0 +1,11 @@
+/* frontend/src/components/molecules/LanguageSwitch/LanguageSwitch.css */
+
+.language-switch {
+  color: var(--color-primary-dark);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.language-switch:hover {
+  color: var(--color-text);
+}

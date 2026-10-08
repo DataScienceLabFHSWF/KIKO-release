@@ -1,3 +1,5 @@
+# backend/app/models/user_model.py
+
 from sqlalchemy import Column, Integer, String, DateTime, Date, ForeignKey, Boolean 
 from datetime import datetime, timezone
 from app.database import Base
@@ -50,6 +52,10 @@ class UserModel(Base):
     last_login = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=True)
     knowledge_assessment_last_shown_at = Column(DateTime(timezone=True), nullable=True)
     template_courses_initialized = Column(Boolean, default=False, nullable=False)
+    password_changed_at = Column(DateTime(timezone=True), nullable=True)
+    email_verified = Column(Boolean, default=False, nullable=False)
+    email_verified_at = Column(DateTime(timezone=True), nullable=True)
+    welcome_email_sent_at = Column(DateTime(timezone=True), nullable=True)
 
     user_roles = relationship("UserRoleModel", back_populates="user")
     course_progress = relationship("LearnerCourseProgressModel", back_populates="user", cascade="all, delete-orphan")
@@ -59,3 +65,19 @@ class UserModel(Base):
     chat_histories = relationship("ChatHistoryModel", back_populates="user")
     knowledge_assessment = relationship("KnowledgeAssessmentModel", back_populates="creator")
     recc_course = relationship("RecommendedCourseModel", back_populates="enroll_user")
+    password_reset_tokens = relationship("PasswordResetTokenModel", back_populates="user", cascade="all, delete-orphan",)
+    email_verification_tokens = relationship("EmailVerificationTokenModel", back_populates="user", cascade="all, delete-orphan",)
+
+class EmailVerificationTokenModel(Base):
+    __tablename__ = "email_verification_tokens"
+
+    token_id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False, index=True)
+    token_hash = Column(String, nullable=False, unique=True, index=True)
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    used_at = Column(DateTime(timezone=True), nullable=True)
+    requested_ip = Column(String, nullable=True)
+    user_agent = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False,)
+
+    user = relationship("UserModel", back_populates="email_verification_tokens")

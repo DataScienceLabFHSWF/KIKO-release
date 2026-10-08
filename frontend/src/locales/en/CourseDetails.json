@@ -1,0 +1,152 @@
+{
+  "meta": {
+    "defaultTitle": "Course details"
+  },
+
+  "actions": {
+    "backToCourses": "Back to My Courses",
+    "enroll": "Enroll in course",
+    "enrolling": "Enrolling...",
+    "unenroll": "Unenroll",
+    "retry": "Retry",
+    "submit": "Submit",
+    "submitting": "Submitting..."
+  },
+
+  "messages": {
+    "loading": "Loading course...",
+    "invalidCourseTitle": "Invalid course",
+    "invalidCourseDescription": "The course ID is missing or invalid.",
+    "loadErrorTitle": "Could not load course",
+    "loadErrorDescription": "The course details could not be loaded right now.",
+    "noContent": "No content available yet.",
+    "noResources": "No resources are available for this course yet.",
+    "noFormalPrerequisites": "No formal prerequisites.",
+    "progressSaved": "Progress saved.",
+    "progressSaveFailed": "Progress could not be saved.",
+    "noPracticeQuestions": "No practice questions are available for this module yet.",
+    "noModuleQuiz": "No quiz is available for this module yet.",
+    "noFurtherReading": "No further reading is available for this module yet.",
+    "noMisconceptions": "No misconceptions are listed for this module yet."
+  },
+
+  "hero": {
+    "modules": "{{count}} modules",
+    "resources": "{{count}} resources",
+    "progress": "{{progress}}% progress",
+    "meta": "{{level}} · {{language}} · {{duration}}"
+  },
+
+  "infoGrid": {
+    "difficulty": "Difficulty",
+    "duration": "Duration",
+    "modules": "Modules",
+    "courseProgress": "Course progress"
+  },
+
+  "locked": {
+    "title": "Enroll to start learning",
+    "description": "You can preview the course overview, but modules, practice tasks, quizzes, grades, and the final assessment are available only after enrollment."
+  },
+
+  "curriculum": {
+    "title": "Curriculum",
+    "overview": "Overview",
+    "courseInfo": "Course information",
+    "module": "Module {{index}}: {{title}}",
+    "finalQuiz": "Final assessment",
+    "grades": "Grades",
+    "resources": "Resources"
+  },
+
+  "sections": {
+    "overview": "Course overview",
+    "courseInfo": "Course information",
+    "skillsAndTags": "Skills and tags",
+    "prerequisites": "Prerequisites",
+    "instructors": "Instructors",
+    "practice": "Practice",
+    "moduleQuiz": "Module quiz",
+    "furtherReading": "Further reading",
+    "finalAssessment": "Final assessment",
+    "grades": "Grades",
+    "resources": "Resources"
+  },
+
+  "quiz": {
+    "passThreshold": "Pass threshold: {{threshold}}%",
+    "questionLabel": "Q{{index}}. {{question}}",
+    "answeredProgress": "{{answered}} of {{total}} answered",
+    "answerRequired": "Please select an answer.",
+    "completeAllQuestions": "Please answer all questions before submitting.",
+    "resultPassed": "Passed",
+    "resultNotPassed": "Not passed",
+    "scoreSummary": "Score: {{score}} / {{maxScore}} ({{percent}}%)",
+    "germanGrade": "German grade: {{grade}}",
+    "detailedFeedback": "Detailed feedback",
+    "feedbackItem": "Item {{index}}. {{question}}",
+    "awarded": "Awarded: {{awarded}} / {{max}} · Type: {{type}}"
+  },
+
+  "grades": {
+    "currentProgress": "Your current course progress is {{progress}}%.",
+    "description": "Detailed grades are updated after module quizzes and the final assessment.",
+    "requirementNotMet": "Grade requirement not met (< {{threshold}}%).",
+    "requirementMet": "Grade requirement met."
+  },
+
+  "confirm": {
+    "unenrollTitle": "Unenroll from this course?",
+    "unenrollDescription": "You will leave \"{{title}}\". Your course access and visible progress may change.",
+    "yesUnenroll": "Yes, unenroll",
+    "cancel": "No, keep it",
+    "working": "Unenrolling..."
+  },
+  "gradingPolicy": "Grading policy",
+  "misconceptions": "Common misconceptions",
+  "tabs": {
+    "content": "Content",
+    "practice": "Practice",
+    "quiz": "Quiz",
+    "furtherReading": "Further reading",
+    "misconceptions": "Misconceptions"
+  },
+  "practice": {
+    "yourAnswer": "Your answer",
+    "answerPlaceholder": "Write your answer here...",
+    "showAnswer": "Show answer",
+    "hideAnswer": "Hide answer",
+    "clear": "Clear",
+    "evaluateAnswer": "Evaluate answer",
+    "evaluating": "Evaluating...",
+    "evaluation": "Evaluation",
+    "suggestedAnswer": "Suggested answer",
+    "noSuggestedAnswer": "No suggested answer is available.",
+    "evaluationCompleted": "Evaluation completed · {{grade}}",
+    "validation": {
+      "required": "Please write an answer before evaluating."
+    },
+    "saveFailed": "Could not save this answer. Please try again.",
+    "evaluationFailed": "Could not evaluate this answer. Please try again.",
+    "misconceptionsConsidered": "Misconceptions considered"
+  },
+  "finalAssessment": {
+    "lockedTitle": "Final assessment is locked",
+    "lockedDescription": "Complete and pass the required modules first: {{modules}}.",
+    "requiredModulesFallback": "the required modules"
+  },
+  "gradesSummary": {
+    "Failed": "Failed",
+    "Passed": "Passed",
+    "Not graded": "Not graded",
+    "Not attempted": "Not attempted",
+    "Not passed": "Not passed",
+    "Not started": "Not started",
+    "In progress": "In progress",
+    "Completed": "Completed",
+    "Not eligible": "Not eligible",
+    "Eligible": "Eligible",
+    "Eligible for final quiz": "Eligible for final quiz",
+    "Not eligible for final quiz": "Not eligible for final quiz"
+  }
+}

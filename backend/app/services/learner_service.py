@@ -5,11 +5,11 @@ from sqlalchemy import select, func, insert, delete
 from fastapi import HTTPException, status
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import joinedload
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 from typing import List, Dict, Optional, Any
 from app.models import (
     LearnerCourseProgressModel, ExamSubmissionModel, CourseModel,
-    RecommendedCourseModel, ChatHistoryModel
+    RecommendedCourseModel, ChatHistoryModel, DocumentModel, LearnerQuizAttemptModel
 )
 from .user_service import get_user_profile_by_email, get_system_user_id
 from .learner_course_progress_service import (build_attempt_summaries, build_progress_snapshot)
@@ -79,6 +79,30 @@ def _initial_progress_json() -> dict:
             "german_grade": None,
         },
     }
+
+def _to_iso_datetime(value: Any) -> str | None:
+    if value is None:
+        return None
+
+    if isinstance(value, (datetime, date)):
+        return value.isoformat()
+
+    if hasattr(value, "isoformat"):
+        try:
+            return value.isoformat()
+        except Exception:
+            return str(value)
+
+    return str(value)
+
+def _get_first_existing_datetime_attr(obj: Any, names: tuple[str, ...]) -> Any:
+    for name in names:
+        if hasattr(obj, name):
+            value = getattr(obj, name)
+            if value is not None:
+                return value
+
+    return None
 
 async def get_learner_statistics(
     email: str, 
@@ -152,11 +176,17 @@ async def get_learner_statistics(
         total_enrolled = total_enrolled_q.scalar() or 0
         total_completed = total_completed_q.scalar() or 0
         in_progress = max(total_enrolled - total_completed, 0)
-        progress_percent = int((in_progress / total_enrolled) * 100) if total_enrolled else 0
+        progress_percent = int((total_completed / total_enrolled) * 100) if total_enrolled else 0
 
         latest_progress_at = latest_progress_q.scalar()
         last_activity = latest_progress_at or user.last_login or datetime.now(timezone.utc)
-
+        
+        documents_q = await db.execute(
+            select(func.count())
+            .select_from(DocumentModel)
+            .where(DocumentModel.uploaded_by == user_id)
+        )
+        
         return {
             "courses_enroll": total_enrolled,
             "courses_completed": total_completed,
@@ -166,6 +196,7 @@ async def get_learner_statistics(
             "exams_failed": failed_q.scalar() or 0,
             "exams_inprogress": inprogress_q.scalar() or 0,
             "questions_asked": questions_q.scalar() or 0,
+            "documents_uploaded": documents_q.scalar() or 0,
             "last_activity": last_activity.isoformat(),
         }
     except HTTPException:
@@ -338,6 +369,14 @@ async def unenroll_user_from_course(
 ) -> None:
     try:
         await db.execute(
+            delete(LearnerQuizAttemptModel)
+            .where(
+                LearnerQuizAttemptModel.learner_user_id == user_id,
+                LearnerQuizAttemptModel.course_id == course_id,
+            )
+        )
+
+        await db.execute(
             delete(LearnerCourseProgressModel)
             .where(
                 LearnerCourseProgressModel.learner_user_id == user_id,
@@ -438,6 +477,66 @@ async def get_course_progress(
             detail=f"❌ Database error: {str(e)}",
         ) from e
 
+async def get_latest_quiz_attempts_for_course(
+    learner_user_id: int,
+    course_id: int,
+    db: AsyncSession,
+) -> dict:
+
+    if hasattr(LearnerQuizAttemptModel, "submitted_at"):
+        order_column = LearnerQuizAttemptModel.submitted_at
+    elif hasattr(LearnerQuizAttemptModel, "created_at"):
+        order_column = LearnerQuizAttemptModel.created_at
+    else:
+        order_column = LearnerQuizAttemptModel.attempt_id
+
+    result = await db.execute(
+        select(LearnerQuizAttemptModel)
+        .where(
+            LearnerQuizAttemptModel.learner_user_id == learner_user_id,
+            LearnerQuizAttemptModel.course_id == course_id,
+        )
+        .order_by(order_column.desc())
+    )
+
+    attempts = result.scalars().all()
+
+    latest_module_attempts: dict[str, dict] = {}
+    latest_final_attempt: dict | None = None
+
+    for attempt in attempts:
+        timestamp = _get_first_existing_datetime_attr(
+            attempt,
+            ("submitted_at", "created_at", "updated_at"),
+        )
+
+        attempt_payload = {
+            "attempt_id": attempt.attempt_id,
+            "assessment_type": attempt.assessment_type,
+            "assessment_id": attempt.assessment_id,
+            "module_id": attempt.module_id,
+            "submitted_answers": attempt.submitted_answers_json or [],
+            "score": attempt.score,
+            "max_score": attempt.total_points,
+            "percent": attempt.percent,
+            "passed": attempt.passed,
+            "german_grade": attempt.german_grade,
+            "graded_answers": attempt.feedback_json or [],
+            "submitted_at": _to_iso_datetime(timestamp),
+        }
+
+        if attempt.assessment_type == "module_quiz" and attempt.module_id:
+            if attempt.module_id not in latest_module_attempts:
+                latest_module_attempts[attempt.module_id] = attempt_payload
+
+        if attempt.assessment_type == "final_quiz" and latest_final_attempt is None:
+            latest_final_attempt = attempt_payload
+
+    return {
+        "module_quizzes": latest_module_attempts,
+        "final_quiz": latest_final_attempt,
+    }
+
 async def get_user_enrollment(
     user_id: int, 
     course_id: int, 
@@ -529,13 +628,19 @@ async def fetch_course_details(
             "final_quiz": {},
             "course_completion": _default_course_completion(),
         }
+        
+        latest_attempts = await get_latest_quiz_attempts_for_course(
+            learner_user_id=user_id,
+            course_id=course_id,
+            db=db,
+        )
 
         return {
             "course": {
                 "course_id": course.course_id,
                 "title": course.title,
                 "summary": course.summary,
-                "created_at": course.created_at.isoformat() if course.created_at else None,
+                "created_at": _to_iso_datetime(getattr(course, "created_at", None)),
             },
             "enrollment": {
                 "is_enrolled": progress is not None,
@@ -548,6 +653,7 @@ async def fetch_course_details(
             "template_markdown": course.template_markdown or "",
             "progress_snapshot": snapshot,
             "attempt_summaries": attempt_summaries,
+            "latest_attempts": latest_attempts,
         }
     except HTTPException:
         raise
@@ -573,13 +679,13 @@ async def list_all_courses_excluding_enrolled(
             LearnerCourseProgressModel.learner_user_id == user_id
         )
 
-        if not system_user_id:
-            stmt = (
-                select(CourseModel)
-                .where(CourseModel.course_id.notin_(enrolled_subquery))
-                .order_by(CourseModel.created_at.desc())
-            )
-        else:
+        #if not system_user_id:
+        stmt = (
+            select(CourseModel)
+            .where(CourseModel.course_id.notin_(enrolled_subquery))
+            .order_by(CourseModel.created_at.desc())
+        )
+        """ else:
             stmt = (
                 select(CourseModel)
                 .where(
@@ -591,7 +697,7 @@ async def list_all_courses_excluding_enrolled(
                     ),
                 )
                 .order_by(CourseModel.created_at.desc())
-            )
+            ) """
 
         result = await db.execute(stmt)
         courses = result.scalars().all()

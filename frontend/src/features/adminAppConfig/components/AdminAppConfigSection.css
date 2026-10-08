@@ -1,0 +1,45 @@
+/* frontend/src/features/adminAppConfig/components/AdminAppConfigSection.css */
+
+.admin-app-config-section {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  box-shadow: 10px 10px 0 var(--color-surface-blue);
+}
+
+.admin-app-config-section__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.admin-app-config-section__icon {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+  flex: 0 0 auto;
+}
+
+.admin-app-config-section__header h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.admin-app-config-section__header p {
+  margin: 4px 0 0;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.admin-app-config-section__body {
+  display: grid;
+  gap: 18px;
+}

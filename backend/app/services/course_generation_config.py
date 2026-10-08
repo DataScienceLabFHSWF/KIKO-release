@@ -1,3 +1,5 @@
+# backend/app/services/course_generation_config.py
+
 """Configuration defaults and validation for course generation counts."""
 
 from dataclasses import dataclass

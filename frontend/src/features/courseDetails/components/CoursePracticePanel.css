@@ -1,0 +1,150 @@
+/* frontend/src/features/courseDetails/components/CoursePracticePanel.css */
+
+.course-practice-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.course-practice-panel__empty {
+  color: rgba(16, 35, 71, 0.65);
+  font-weight: 800;
+}
+
+.course-practice-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  box-shadow: 8px 8px 0 var(--color-surface-blue);
+}
+
+.course-practice-card__question {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.course-practice-card__answer {
+  display: grid;
+  gap: 8px;
+  color: var(--color-text);
+  font-weight: 800;
+}
+
+.course-practice-card__answer textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid rgba(16, 35, 71, 0.24);
+  padding: 12px;
+  background: #f3f7fb;
+  color: var(--color-text);
+  font: inherit;
+  resize: vertical;
+}
+
+.course-practice-card__answer textarea:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  background: #ffffff;
+}
+
+.course-practice-card__error {
+  margin: 0;
+  color: var(--color-danger);
+  font-weight: 800;
+}
+
+.course-practice-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.course-practice-card__actions button {
+  min-height: 40px;
+  border: 0;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--color-primary);
+  color: var(--color-text);
+  font-weight: 900;
+  cursor: pointer;
+  clip-path: polygon(12px 0, 100% 0, 100% 72%, 96% 100%, 0 100%, 0 12px);
+}
+
+.course-practice-card__actions button:hover:not(:disabled) {
+  background: var(--color-surface-blue-strong);
+}
+
+.course-practice-card__actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.course-practice-card__result {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-left: 4px solid var(--color-primary);
+  background: var(--color-surface-blue);
+}
+
+.course-practice-card__result--success {
+  border-left-color: var(--color-success);
+  background: #e8fff7;
+}
+
+.course-practice-card__result--warning {
+  border-left-color: var(--color-warning);
+  background: #fff8df;
+}
+
+.course-practice-card__result--error {
+  border-left-color: var(--color-danger);
+  background: #ffe7e7;
+}
+
+.course-practice-card__result-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+}
+
+.course-practice-card__result p {
+  margin: 0;
+}
+
+.course-practice-card__details {
+  border: 1px solid rgba(16, 35, 71, 0.14);
+  background: #ffffff;
+}
+
+.course-practice-card__details summary {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  cursor: pointer;
+  font-weight: 900;
+  border-bottom: 1px solid rgba(16, 35, 71, 0.1);
+}
+
+.course-practice-card__details .markdown-view {
+  padding: 12px;
+}
+
+@media (max-width: 720px) {
+  .course-practice-card__actions {
+    display: grid;
+  }
+
+  .course-practice-card__actions button {
+    width: 100%;
+  }
+}

@@ -1,4 +1,8 @@
-import os
+# backend/app/core/prompt_manager.py
+
+import os, logging
+
+logger = logging.getLogger(__name__)
 
 class PromptManager:
     """Manages loading of enhanced prompt templates based on language."""
@@ -21,10 +25,10 @@ class PromptManager:
         template_path = os.path.join(self.prompt_dir, template_name)
 
         if not os.path.isfile(template_path):
-            print(f"❌ Prompt template '{template_name}' not found at: {template_path}")
+            logger.error(f"❌ Prompt template '{template_name}' not found at: {template_path}")
             raise FileNotFoundError(f"Prompt template '{template_name}' not found at: {template_path}")
         
-        print(f"✅ Successfully loaded prompt template: {template_name} from {template_path}")
+        logger.info(f"✅ Successfully loaded prompt template: {template_name} from {template_path}")
         
         # Read the template file
         with open(template_path, "r", encoding="utf-8") as f:

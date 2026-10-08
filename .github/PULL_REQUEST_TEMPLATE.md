@@ -28,7 +28,7 @@ Closes #
 ## Checklist
 
 - [ ] The change is focused and easy to review
-- [ ] No `.env` file or secrets are committed
+- [ ] No `.env.dev` file or secrets are committed
 - [ ] No private data, logs, uploads, or model caches are committed
 - [ ] Documentation is updated if behavior changed
 - [ ] Tests are added or updated where appropriate

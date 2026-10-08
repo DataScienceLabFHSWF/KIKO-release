@@ -1,0 +1,51 @@
+/* frontend/src/features/instructor/pages/InstructorDashboardPage.css */
+
+.instructor-dashboard-page {
+  width: 100%;
+  display: grid;
+  gap: 30px;
+}
+
+.instructor-dashboard-page__section {
+  display: grid;
+  gap: 20px;
+}
+
+.instructor-dashboard-page__section + .instructor-dashboard-page__section {
+  padding-top: 26px;
+  border-top: 1px solid rgba(16, 35, 71, 0.16);
+}
+
+.instructor-dashboard-page h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.instructor-dashboard-page p {
+  margin: 6px 0 0;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.instructor-dashboard-page__metrics,
+.instructor-dashboard-page__actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+@media (max-width: 1040px) {
+  .instructor-dashboard-page__metrics,
+  .instructor-dashboard-page__actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .instructor-dashboard-page__metrics,
+  .instructor-dashboard-page__actions {
+    grid-template-columns: 1fr;
+  }
+}

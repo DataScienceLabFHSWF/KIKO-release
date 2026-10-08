@@ -1,0 +1,152 @@
+{
+  "meta": {
+    "defaultTitle": "Kursdetails"
+  },
+
+  "actions": {
+    "backToCourses": "Zurück zu Meine Kurse",
+    "enroll": "In Kurs einschreiben",
+    "enrolling": "Wird eingeschrieben...",
+    "unenroll": "Abmelden",
+    "retry": "Erneut versuchen",
+    "submit": "Absenden",
+    "submitting": "Wird gesendet..."
+  },
+
+  "messages": {
+    "loading": "Kurs wird geladen...",
+    "invalidCourseTitle": "Ungültiger Kurs",
+    "invalidCourseDescription": "Die Kurs-ID fehlt oder ist ungültig.",
+    "loadErrorTitle": "Kurs konnte nicht geladen werden",
+    "loadErrorDescription": "Die Kursdetails konnten gerade nicht geladen werden.",
+    "noContent": "Noch keine Inhalte verfügbar.",
+    "noResources": "Für diesen Kurs sind noch keine Ressourcen verfügbar.",
+    "noFormalPrerequisites": "Keine formalen Voraussetzungen.",
+    "progressSaved": "Fortschritt gespeichert.",
+    "progressSaveFailed": "Der Fortschritt konnte nicht gespeichert werden.",
+    "noPracticeQuestions": "Für dieses Modul sind noch keine Übungsfragen verfügbar.",
+    "noModuleQuiz": "Für dieses Modul ist noch kein Quiz verfügbar.",
+    "noFurtherReading": "Für dieses Modul ist noch keine weiterführende Literatur verfügbar.",
+    "noMisconceptions": "Für dieses Modul sind noch keine Missverständnisse hinterlegt."
+  },
+
+  "hero": {
+    "modules": "{{count}} Module",
+    "resources": "{{count}} Ressourcen",
+    "progress": "{{progress}}% Fortschritt",
+    "meta": "{{level}} · {{language}} · {{duration}}"
+  },
+
+  "infoGrid": {
+    "difficulty": "Schwierigkeit",
+    "duration": "Dauer",
+    "modules": "Module",
+    "courseProgress": "Kursfortschritt"
+  },
+
+  "locked": {
+    "title": "Einschreiben, um zu starten",
+    "description": "Du kannst die Kursübersicht ansehen. Module, Übungen, Quizze, Noten und die Abschlussprüfung sind erst nach der Einschreibung verfügbar."
+  },
+
+  "curriculum": {
+    "title": "Curriculum",
+    "overview": "Übersicht",
+    "courseInfo": "Kursinformationen",
+    "module": "Modul {{index}}: {{title}}",
+    "finalQuiz": "Abschlussprüfung",
+    "grades": "Noten",
+    "resources": "Ressourcen"
+  },
+
+  "sections": {
+    "overview": "Kursübersicht",
+    "courseInfo": "Kursinformationen",
+    "skillsAndTags": "Fähigkeiten und Tags",
+    "prerequisites": "Voraussetzungen",
+    "instructors": "Dozierende",
+    "practice": "Übung",
+    "moduleQuiz": "Modulquiz",
+    "furtherReading": "Weiterführende Literatur",
+    "finalAssessment": "Abschlussprüfung",
+    "grades": "Noten",
+    "resources": "Ressourcen"
+  },
+
+  "quiz": {
+    "passThreshold": "Bestehensgrenze: {{threshold}}%",
+    "questionLabel": "F{{index}}. {{question}}",
+    "answeredProgress": "{{answered}} von {{total}} beantwortet",
+    "answerRequired": "Bitte wähle eine Antwort aus.",
+    "completeAllQuestions": "Bitte beantworte alle Fragen, bevor du absendest.",
+    "resultPassed": "Bestanden",
+    "resultNotPassed": "Nicht bestanden",
+    "scoreSummary": "Punktzahl: {{score}} / {{maxScore}} ({{percent}}%)",
+    "germanGrade": "Deutsche Note: {{grade}}",
+    "detailedFeedback": "Detailliertes Feedback",
+    "feedbackItem": "Aufgabe {{index}}. {{question}}",
+    "awarded": "Erreicht: {{awarded}} / {{max}} · Typ: {{type}}"
+  },
+
+  "grades": {
+    "currentProgress": "Dein aktueller Kursfortschritt beträgt {{progress}}%.",
+    "description": "Detaillierte Noten werden nach den Modulquizzen und der Abschlussprüfung aktualisiert.",
+    "requirementNotMet": "Notenanforderung nicht erfüllt (< {{threshold}}%).",
+    "requirementMet": "Notenanforderung erfüllt."
+  },
+
+  "confirm": {
+    "unenrollTitle": "Von diesem Kurs abmelden?",
+    "unenrollDescription": "Du verlässt \"{{title}}\". Dein Kurszugang und sichtbarer Fortschritt können sich ändern.",
+    "yesUnenroll": "Ja, abmelden",
+    "cancel": "Nein, behalten",
+    "working": "Wird abgemeldet..."
+  },
+  "gradingPolicy": "Bewertungsregeln",
+  "misconceptions": "Häufige Missverständnisse",
+  "tabs": {
+    "content": "Inhalt",
+    "practice": "Übung",
+    "quiz": "Quiz",
+    "furtherReading": "Weiterführende Literatur",
+    "misconceptions": "Missverständnisse"
+  },
+  "practice": {
+    "yourAnswer": "Deine Antwort",
+    "answerPlaceholder": "Schreibe deine Antwort hier...",
+    "showAnswer": "Antwort anzeigen",
+    "hideAnswer": "Antwort ausblenden",
+    "clear": "Leeren",
+    "evaluateAnswer": "Antwort bewerten",
+    "evaluating": "Bewertung läuft...",
+    "evaluation": "Bewertung",
+    "suggestedAnswer": "Musterantwort",
+    "noSuggestedAnswer": "Es ist keine Musterantwort verfügbar.",
+    "evaluationCompleted": "Bewertung abgeschlossen · {{grade}}",
+    "validation": {
+      "required": "Bitte schreibe eine Antwort, bevor du sie bewertest."
+    },
+    "saveFailed": "Diese Antwort konnte nicht gespeichert werden. Bitte versuche es erneut.",
+    "evaluationFailed": "Diese Antwort konnte nicht bewertet werden. Bitte versuche es erneut.",
+    "misconceptionsConsidered": "Berücksichtigte Fehlvorstellungen"
+  },
+  "finalAssessment": {
+    "lockedTitle": "Abschlussprüfung ist gesperrt",
+    "lockedDescription": "Schließe zuerst die erforderlichen Module erfolgreich ab: {{modules}}.",
+    "requiredModulesFallback": "die erforderlichen Module"
+  },
+  "gradesSummary": {
+    "Failed": "Nicht bestanden",
+    "Passed": "Bestanden",
+    "Not graded": "Nicht bewertet",
+    "Not attempted": "Nicht versucht",
+    "Not passed": "Nicht bestanden",
+    "Not started": "Nicht begonnen",
+    "In progress": "In progress",
+    "Completed": "Abgeschlossen",
+    "Not eligible": "Nicht berechtigt",
+    "Eligible": "Berechtigt",
+    "Eligible for final quiz": "Berechtigt für Abschlussquiz",
+    "Not eligible for final quiz": "Nicht berechtigt für Abschlussquiz"
+  }
+}

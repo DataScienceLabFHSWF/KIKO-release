@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <body
+    style="font-family: Arial, sans-serif; color: #0f172a; line-height: 1.6"
+  >
+    <h2>Bestätigen Sie Ihre E-Mail-Adresse</h2>
+
+    <p>Hallo {{ user_name }},</p>
+
+    <p>
+      Willkommen bei {{ app_name }}. Bitte bestätigen Sie Ihre E-Mail-Adresse,
+      bevor Sie sich anmelden.
+    </p>
+
+    <p>
+      <a
+        href="{{ verification_link }}"
+        style="
+          display: inline-block;
+          background: #0f75bc;
+          color: #ffffff;
+          padding: 12px 18px;
+          text-decoration: none;
+          font-weight: bold;
+        "
+      >
+        E-Mail bestätigen
+      </a>
+    </p>
+
+    <p>Dieser Link läuft in {{ expires_minutes }} Minuten ab.</p>
+
+    <p>
+      Falls der Button nicht funktioniert, kopieren Sie diesen Link und fügen
+      Sie ihn in Ihren Browser ein:
+    </p>
+
+    <p style="word-break: break-all">{{ verification_link }}</p>
+
+    {% if original_recipient_email %}
+    <hr />
+    <p style="color: #64748b; font-size: 12px">
+      Hinweis: Diese E-Mail war ursprünglich für {{ original_recipient_name or
+      original_recipient_email }} &lt;{{ original_recipient_email }}&gt;
+      bestimmt.
+    </p>
+    {% endif %}
+
+    <p>
+      Viele Grüße<br />
+      {{ from_name }}
+    </p>
+  </body>
+</html>

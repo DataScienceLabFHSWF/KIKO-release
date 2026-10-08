@@ -1,0 +1,25 @@
+Hallo {{ user_name }},
+
+Ihre E-Mail-Adresse wurde erfolgreich bestätigt. Willkommen bei {{ app_name }}.
+
+KIKO ist eine KI-gestützte Wissens- und Lernplattform für den nuklearen Rückbau. Die Plattform unterstützt die Arbeit mit Dokumenten, die Suche nach relevanten Informationen, nachvollziehbare Fragen und rollenbasierte Lernabläufe.
+
+Ihre Rolle: {{ role_title }}
+
+{{ role_intro }}
+
+Was Sie als Nächstes tun können:
+
+{% for action in primary_actions %}
+- {{ action }}
+{% endfor %}
+
+KIKO-Dashboard öffnen:
+{{ dashboard_link }}
+
+{% if original_recipient_email %}
+Stage-Hinweis: Diese E-Mail war ursprünglich für {{ original_recipient_name or original_recipient_email }} <{{ original_recipient_email }}> bestimmt.
+{% endif %}
+
+Viele Grüße
+{{ from_name }}

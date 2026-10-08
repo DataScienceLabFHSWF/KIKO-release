@@ -1,0 +1,77 @@
+/* frontend/src/features/courseDetails/components/CourseModuleSection.css */
+
+.course-module-section {
+  min-width: 0;
+}
+
+.course-module-section__empty {
+  color: rgba(16, 35, 71, 0.62);
+  font-weight: 800;
+}
+
+.course-module-section__practice-list {
+  display: grid;
+  gap: 18px;
+}
+
+.course-module-section__practice-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  background: #ffffff;
+  box-shadow: 8px 8px 0 var(--color-surface-blue);
+}
+
+.course-module-section__practice-card label {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.course-module-section__practice-card textarea {
+  width: 100%;
+  border: 1px solid rgba(16, 35, 71, 0.24);
+  background: #f3f7fb;
+  color: var(--color-text);
+  padding: 12px;
+  resize: vertical;
+}
+
+.course-module-section__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.course-module-section__actions button {
+  min-height: 40px;
+  border: 0;
+  padding: 0 18px;
+  background: var(--color-primary);
+  color: var(--color-text);
+  font-weight: 900;
+  cursor: pointer;
+  clip-path: polygon(12px 0, 100% 0, 100% 72%, 96% 100%, 0 100%, 0 12px);
+}
+
+.course-module-section__actions button:hover {
+  background: var(--color-surface-blue-strong);
+}
+
+.course-module-section__misconceptions {
+  display: grid;
+  gap: 14px;
+}
+
+.course-module-section__misconceptions article {
+  padding: 18px;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  background: #ffffff;
+  box-shadow: 8px 8px 0 var(--color-surface-blue);
+}
+
+.course-module-section__misconceptions p {
+  margin: 0;
+  line-height: 1.7;
+}

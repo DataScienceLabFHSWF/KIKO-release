@@ -1,9 +1,9 @@
+# backend/app/utils/markdown_image_rewriter.py
 import re
 import logging
 from typing import List, Tuple
 
 logger = logging.getLogger(__name__)
-
 
 def extract_markdown_images(markdown_content: str) -> List[Tuple[str, str]]:
     """
@@ -61,7 +61,7 @@ def rewrite_markdown_image_urls(markdown_content: str, course_id: int) -> Tuple[
     for full_match, image_url, alt_text in images:
         # Skip external URLs
         if is_external_url(image_url):
-            logger.info(f"Skipping external URL: {image_url}")
+            logger.info(f"ℹ️ Skipping external URL: {image_url}")
             continue
         
         # Extract just the filename from the path
@@ -82,7 +82,7 @@ def rewrite_markdown_image_urls(markdown_content: str, course_id: int) -> Tuple[
         if filename not in referenced_files:
             referenced_files.append(filename)
         
-        logger.info(f"Rewrote image reference: {image_url} -> {new_url}")
+        logger.info(f"ℹ️ Rewrote image reference: {image_url} -> {new_url}")
     
     return rewritten_content, referenced_files
 
@@ -111,7 +111,7 @@ def validate_image_references(
             missing_images.append(filename)
     
     if missing_images:
-        logger.warning(f"Missing images for course {course_id}: {missing_images}")
+        logger.warning(f"⚠️ Missing images for course {course_id}: {missing_images}")
     
     return missing_images
 

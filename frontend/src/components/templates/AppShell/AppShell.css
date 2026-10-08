@@ -1,0 +1,40 @@
+/* frontend/src/components/templates/AppShell/AppShell.css */
+
+.app-shell {
+  --sidebar-current-width: var(--sidebar-expanded-width);
+  height: 100dvh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: var(--sidebar-current-width) minmax(0, 1fr);
+  overflow: hidden;
+  background: linear-gradient(180deg, #ffffff 0%, var(--color-bg) 100%);
+  transition: grid-template-columns 180ms ease;
+}
+
+.app-shell--sidebar-collapsed {
+  --sidebar-current-width: var(--sidebar-collapsed-width);
+}
+
+.app-shell__main {
+  min-width: 0;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: transparent;
+}
+
+.app-shell__content {
+  width: 100%;
+  min-height: calc(100dvh - var(--topbar-height));
+  padding: 32px 48px;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell__content {
+    padding: 24px;
+  }
+}

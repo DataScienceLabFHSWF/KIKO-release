@@ -1,0 +1,67 @@
+{
+  "title": "Wissenscheck — Konfiguration",
+  "subtitle": "Lege fest, welche Fragen erscheinen können und wie viele Fragen Lernende pro Bewertung erhalten.",
+
+  "settings": {
+    "title": "Einstellungen",
+    "enabled": "Wissenscheck aktivieren",
+    "questionsPerAssessment": "Fragen pro Bewertung",
+    "selectedCount": "{{selected}} von {{total}} Fragen ausgewählt"
+  },
+
+  "filters": {
+    "title": "Filter",
+    "topic": "Thema",
+    "type": "Typ",
+    "search": "Suchtext",
+    "allTopics": "Alle Themen",
+    "allTypes": "Alle Typen",
+    "searchPlaceholder": "In Fragetext suchen..."
+  },
+
+  "questions": {
+    "title": "Fragenpool",
+    "visibleCount": "{{visible}} von {{total}} Fragen werden angezeigt",
+    "include": "Einbeziehen",
+    "noTopic": "Kein Thema",
+    "noType": "Kein Typ"
+  },
+
+  "actions": {
+    "save": "Konfiguration speichern",
+    "retry": "Erneut versuchen",
+    "selectFiltered": "Angezeigte Fragen auswählen",
+    "clearFiltered": "Angezeigte Fragen entfernen",
+    "clearFilters": "Filter zurücksetzen",
+    "delete": "Löschen",
+    "cancel": "Abbrechen"
+  },
+
+  "status": {
+    "loading": "Wissenscheck-Konfiguration wird geladen...",
+    "saved": "Konfiguration erfolgreich gespeichert."
+  },
+
+  "validation": {
+    "selectOne": "Wähle mindestens eine Frage aus oder deaktiviere den Wissenscheck.",
+    "sizeMinimum": "Die Anzahl der Fragen pro Bewertung muss mindestens 1 sein.",
+    "sizeTooLarge": "Die Fragenanzahl pro Bewertung ({{size}}) darf nicht größer sein als die ausgewählten Fragen ({{selected}})."
+  },
+
+  "errors": {
+    "loadTitle": "Wissenscheck-Konfiguration konnte nicht geladen werden",
+    "loadDescription": "Beim Laden der Konfiguration ist ein unerwarteter Fehler aufgetreten.",
+    "saveDescription": "Die Konfiguration konnte nicht gespeichert werden."
+  },
+
+  "empty": {
+    "title": "Keine Fragen gefunden",
+    "description": "Es sind noch keine Fragen für den Wissenscheck verfügbar."
+  },
+
+  "delete": {
+    "title": "Frage löschen?",
+    "description": "Frage #{{id}} wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirm": "Frage löschen"
+  }
+}

@@ -1,13 +1,15 @@
-import os, fitz,logging
+# backend/app/core/pdf_metadata_extractor.py
+
+import os, fitz, logging
 from .multilingual_processor import MultilingualProcessor
 
-logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 class PDFMetadataExtractor:
     """Extract and utilize metadata from PDF documents."""
     
     def __init__(self, config):
-        print("ℹ️ Initializing PDFMetadataExtractor with configuration.")
+        logger.info("ℹ️ Initializing PDFMetadataExtractor with configuration.")
         self.config = config
     
     async def extract_metadata(self, pdf_path):
@@ -15,10 +17,10 @@ class PDFMetadataExtractor:
         try:
             doc = fitz.open(pdf_path)
         except Exception as e:
-            print(f"❌ Failed to open PDF: {pdf_path} — {e}")
+            logger.exception(f"❌ Failed to open PDF: {pdf_path} — {e}")
             return {}
         
-        print(f"ℹ️ extract_metadata: PDF opened successfully: {doc}")
+        logger.info(f"ℹ️ extract_metadata: PDF opened successfully: {doc}")
         
         # Basic metadata
         metadata = {}
@@ -44,16 +46,16 @@ class PDFMetadataExtractor:
             except Exception:
                 metadata["is_form"] = False
             
-            print(f"ℹ️ extract_metadata: Basic metadata extracted: {metadata}")
+            logger.info(f"ℹ️ extract_metadata: Basic metadata extracted: {metadata}")
 
             # Extract document structure
             try:
                 toc = doc.get_toc()
                 if toc:
                     metadata["table_of_contents"] = toc
-                    print(f"ℹ️ extract_metadata: Table of contents extracted: {toc} and {metadata}")
+                    logger.info(f"ℹ️ extract_metadata: Table of contents extracted: {toc} and {metadata}")
             except Exception as e:
-                print(f"⚠️ TOC extraction failed: {e}")
+                logger.exception(f"⚠️ TOC extraction failed: {e}")
                 metadata["table_of_contents"] = None
             
             # Document properties - Annotations and links
@@ -67,7 +69,7 @@ class PDFMetadataExtractor:
                     if form_fields:
                         metadata["form_fields"] = form_fields
                 except Exception as e:
-                    print(f"⚠️ Error extracting form fields: {e}")
+                    logger.exception(f"⚠️ Error extracting form fields: {e}")
                     metadata["form_fields"] = None
             
             # Language detection from content
@@ -82,17 +84,17 @@ class PDFMetadataExtractor:
                         detected_language = await multilingual_processor.detect_language(sample_text)
                         metadata["detected_language"] = detected_language
                 except Exception as e:
-                    print(f"⚠️ Error detecting language: {e}")
+                    logger.exception(f"⚠️ Error detecting language: {e}")
                     metadata["detected_language"] = None
             
-            print(f"✅ Metadata extracted successfully from {pdf_path}")
+            logger.info(f"✅ Metadata extracted successfully from {pdf_path}")
             return metadata               
         except Exception as e:
-            print(f"❌ Error extracting metadata from {pdf_path}: {str(e)}")
+            logger.exception(f"❌ Error extracting metadata from {pdf_path}: {str(e)}")
             return {}
         finally:
             if 'doc' in locals():
-                print(f"ℹ️ Closing document {pdf_path}.")
+                logger.info(f"ℹ️ Closing document {pdf_path}.")
                 doc.close()
 
     def _extract_form_fields(self, doc):
@@ -113,17 +115,17 @@ class PDFMetadataExtractor:
                         }
                         form_fields.append(field_info)
             
-            print(f"✅ Extracted {len(form_fields)} form fields from PDF.")
+            logger.info(f"✅ Extracted {len(form_fields)} form fields from PDF.")
             return form_fields
         except Exception as e:
-            print(f"❌ Error extracting form fields: {str(e)}")
+            logger.exception(f"❌ Error extracting form fields: {str(e)}")
             return []
     
     async def enhance_document_processing(self, metadata, text_blocks):
         """Use metadata to enhance document processing."""
         if not metadata:
-            print("⚠️ No metadata available to enhance document processing.")
-            print("ℹ️ Returning original text blocks without enhancements.")
+            logger.warning("⚠️ No metadata available to enhance document processing.")
+            logger.info("ℹ️ Returning original text blocks without enhancements.")
             return text_blocks
             
         try:
@@ -172,8 +174,8 @@ class PDFMetadataExtractor:
                     }
                 })
             
-            print("✅ Document processing enhanced with metadata.")
+            logger.info("✅ Document processing enhanced with metadata.")
             return enhanced_blocks
         except Exception as e:
-            print(f"❌ Error enhancing document processing with metadata: {str(e)}")
+            logger.exception(f"❌ Error enhancing document processing with metadata: {str(e)}")
             return text_blocks

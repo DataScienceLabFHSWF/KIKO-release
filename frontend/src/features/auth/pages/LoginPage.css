@@ -1,0 +1,13 @@
+/* frontend/src/features/auth/pages/LoginPage.css */
+
+.auth-footer-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.auth-footer-stack span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}

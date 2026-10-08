@@ -51,7 +51,6 @@ ollama pull ${DEEPSEEK_LLM_GRADING_INFERENCE_MODEL_NAME}
 # https://ollama.com/library/nemotron-3-super
 ollama pull ${NEMOTRON_LLM_GRADING_INFERENCE_MODEL_NAME}
 
-
 echo "✅ Models pulled successfully. Ollama is ready 🚀"
 
 # Keep the script running to keep the container alive

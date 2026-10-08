@@ -1,0 +1,35 @@
+{
+  "metaTitle": "Dashboard",
+  "title": "Dashboard",
+  "subtitle": "Willkommen auf deinem persönlichen Lern-Dashboard.",
+
+  "sections": {
+    "learningStatistics": "Lernstatistiken",
+    "learningStatisticsDescription": "Verfolge deinen Lernfortschritt, deine Aktivität und deine hochgeladenen Materialien.",
+    "courseProgress": "Kursfortschritt",
+    "courseProgressDescription": "Dies zeigt, wie viel deiner eingeschriebenen Kursarbeit abgeschlossen wurde."
+  },
+
+  "metrics": {
+    "coursesEnrolled": "Eingeschriebene Kurse",
+    "coursesInProgress": "Kurse in Bearbeitung",
+    "coursesCompleted": "Abgeschlossene Kurse",
+    "examsPassed": "Bestandene Prüfungen",
+    "examsFailed": "Nicht bestandene Prüfungen",
+    "examsInProgress": "Prüfungen in Bearbeitung",
+    "questionsAsked": "Fragen an den Chat-Assistenten",
+    "documentsUploaded": "Hochgeladene Dokumente",
+    "lastActivity": "Letzte Aktivität"
+  },
+
+  "messages": {
+    "loading": "Dein Dashboard wird geladen...",
+    "loadFailed": "Das Dashboard konnte nicht geladen werden.",
+    "unavailableTitle": "Dashboard nicht verfügbar",
+    "unavailableDescription": "Dein Dashboard konnte gerade nicht geladen werden."
+  },
+
+  "actions": {
+    "retry": "Erneut versuchen"
+  }
+}

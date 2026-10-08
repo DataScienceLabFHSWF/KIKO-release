@@ -1,0 +1,33 @@
+/* frontend/src/features/faq/components/FaqSection.css */
+
+.faq-section {
+  display: grid;
+  gap: 20px;
+  padding-top: 28px;
+}
+
+.faq-section + .faq-section {
+  margin-top: 18px;
+  padding-top: 34px;
+  border-top: 1px solid rgba(16, 35, 71, 0.18);
+}
+
+.faq-section h2 {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--color-text);
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.faq-section__icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: var(--color-surface-blue);
+  color: var(--color-primary-dark);
+  clip-path: polygon(0 0, 90% 0, 100% 22%, 100% 100%, 0 100%);
+}

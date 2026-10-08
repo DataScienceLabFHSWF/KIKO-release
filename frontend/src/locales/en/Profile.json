@@ -1,0 +1,36 @@
+{
+  "title": "Profile",
+  "subtitle": "Manage your personal information. Locked fields are controlled by the system.",
+  "fields": {
+    "fullName": "Full name",
+    "avatar": "Avatar URL",
+    "email": "Email",
+    "role": "Role",
+    "joined": "Joined",
+    "lastLogin": "Last login"
+  },
+  "placeholders": {
+    "fullName": "Enter your full name",
+    "avatar": "Paste an avatar image URL"
+  },
+  "helpers": {
+    "emailLocked": "Email cannot be changed.",
+    "roleLocked": "Role changes must be handled by an administrator."
+  },
+  "hints": {
+    "noChanges": "No changes to save."
+  },
+  "actions": {
+    "save": "Save changes",
+    "reset": "Reset",
+    "retry": "Retry"
+  },
+  "messages": {
+    "loading": "Loading your profile...",
+    "saved": "Profile updated successfully.",
+    "saveFailed": "Could not update your profile.",
+    "unavailableTitle": "Profile unavailable",
+    "unavailableDescription": "We could not load your profile. Please try again."
+  },
+  "notAvailable": "Not available"
+}

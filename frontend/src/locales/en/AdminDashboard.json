@@ -1,0 +1,49 @@
+{
+  "metaTitle": "Dashboard",
+  "title": "Dashboard",
+  "subtitle": "A clear overview of users, documents, courses, and platform status.",
+  "sections": {
+    "systemOverview": "System Overview",
+    "systemOverviewDescription": "Use these numbers to quickly check platform activity and operational status.",
+    "adminActions": "Admin Actions",
+    "adminActionsDescription": "Open the most important administrative areas."
+  },
+  "metrics": {
+    "usersRegistered": "Users registered",
+    "learnersRegistered": "Learners",
+    "instructorsRegistered": "Instructors",
+    "adminsRegistered": "Admins",
+    "documentsUploaded": "Documents uploaded",
+    "coursesCreated": "Courses created",
+    "chatQuestions": "Chat questions",
+    "pipelineStatus": "Pipeline status",
+    "lastActivity": "Last activity"
+  },
+  "actionsGrid": {
+    "adminConsole": {
+      "title": "Admin console",
+      "description": "Open restricted platform administration tools."
+    },
+    "knowledgeCheck": {
+      "title": "Knowledge check config",
+      "description": "Review and adjust assessment settings."
+    },
+    "documents": {
+      "title": "Manage documents",
+      "description": "Inspect uploaded files and document processing results."
+    },
+    "evaluation": {
+      "title": "Evaluation results",
+      "description": "Review model quality, speed, and grading results."
+    }
+  },
+  "messages": {
+    "loading": "Loading dashboard...",
+    "loadFailed": "Could not load dashboard.",
+    "unavailableTitle": "Dashboard unavailable",
+    "unavailableDescription": "The dashboard could not be loaded right now."
+  },
+  "actions": {
+    "retry": "Retry"
+  }
+}

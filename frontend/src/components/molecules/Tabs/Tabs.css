@@ -1,0 +1,28 @@
+/* frontend/src/components/molecules/Tabs/Tabs.css */
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(16, 35, 71, 0.18);
+}
+
+.tabs__item {
+  min-height: 42px;
+  border: 0;
+  padding: 0 14px;
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tabs__item:hover {
+  color: var(--color-primary-dark);
+}
+
+.tabs__item--active {
+  color: var(--color-primary-dark);
+  border-bottom: 3px solid var(--color-primary-dark);
+}

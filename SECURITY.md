@@ -2,43 +2,42 @@
 
 ## 🧩 Supported versions
 
-Security fixes are applied to the current `main` branch.
+Security fixes are normally applied to the latest supported release and the
+current `main` branch.
 
-| Version / branch | Supported |
-| ---------------- | --------- |
-| `main`           | Yes       |
-| Feature branches | No        |
+| Version              | Supported                   |
+| -------------------- | --------------------------- |
+| Latest `1.x` release | ✅                          |
+| `main`               | ✅ Development              |
+| Older releases       | ❌ unless explicitly stated |
 
 ## 🔐 Reporting a vulnerability
 
 Please do not report security vulnerabilities through public GitHub issues.
 
-Instead, contact the maintainers privately through the project maintainers listed in the repository README.
+Use GitHub's **Private Vulnerability Reporting** feature for this repository
+whenever possible.
 
-When reporting a vulnerability, include:
+Include:
 
-- a short description of the issue
-- affected component, if known
-- steps to reproduce, if possible
-- potential impact
-- suggested fix, if available
+- a clear description of the vulnerability;
+- the affected component or version;
+- steps to reproduce;
+- potential impact;
+- proof-of-concept information where appropriate;
+- suggested remediation, if known.
 
-We will acknowledge valid reports as soon as possible and coordinate a fix before public disclosure.
+Maintainers will review the report and coordinate remediation and disclosure.
 
 ## 🔑 Secrets and credentials
 
-Never commit:
-
-- `.env` files
-- Hugging Face tokens
-- ngrok tokens
-- database passwords
-- JWT secrets
-- private documents
-- uploaded user files
-- logs containing user data
-
-Use `.env.example` for safe placeholders only.
+- Never commit passwords, tokens, API keys, private documents, or production configuration.
+- Keep `.env.stage`, and `.env.production` outside version control.
+- Use different secrets for development, staging, and production.
+- Do not expose PostgreSQL or Ollama directly to the public internet.
+- Use HTTPS for public deployments.
+- Do not enable destructive database initialization in staging or production.
+- Report vulnerabilities according to [`SECURITY.md`](SECURITY.md).
 
 ## ⚠️ Deployment warning
 

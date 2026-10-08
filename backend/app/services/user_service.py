@@ -1,9 +1,13 @@
+# backend/app/services/user_service.py
+
 import logging
 from sqlalchemy import select
 from fastapi import HTTPException, status
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import UserModel, RoleModel, UserRoleModel
+from app.schemas import UserProfileUpdateRequest
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -16,26 +20,27 @@ async def get_user_profile_by_email(
     Raises HTTPException if user not found.
     """
 
-    try:    
+    try:
+        normalized_email = email.lower().strip()
+        
         result = await db.execute(
-            select(UserModel).where(UserModel.email == email)
+            select(UserModel)
+            .where(UserModel.email == normalized_email)
         )
         
         user = result.scalar_one_or_none()
         
         if not user:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
         
         return user
+    except HTTPException:
+        raise
     except SQLAlchemyError as e:
+        logger.error(f"❌ Database error while fetching user profile: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Database error: {str(e)}"
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Unexpected error: {str(e)}"
+            detail=f"❌ Database error: {str(e)}"
         )
 
 async def update_user_profile_by_email(
@@ -51,16 +56,16 @@ async def update_user_profile_by_email(
         db_user = await get_user_profile_by_email(user.email, db)
         
         # Update fields
-        db_user.email = user.email
-        db_user.full_name = user.full_name
+        # db_user.email = user.email
+        # db_user.full_name = user.full_name
         # db_user.username = user.username
         # db_user.date_of_birth = user.date_of_birth
-        db_user.avatar = user.avatar
+        # db_user.avatar = user.avatar
         # db_user.bio = user.bio
-        db_user.role = user.role
-        db_user.password = user.password
-        db_user.joined = user.joined
-        db_user.last_login = user.last_login
+        # db_user.role = user.role
+        # db_user.password = user.password
+        # db_user.joined = user.joined
+        db_user.last_login = datetime.now(timezone.utc)
         
         await db.commit()
         
@@ -97,16 +102,16 @@ async def check_for_duplicates(
         user = result.scalar_one_or_none()
         return user
     except SQLAlchemyError as e:
-        logger.error(f"Database error during duplicate check: {str(e)}")
+        logger.error(f"❌ Database error during duplicate check: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Database error during duplicate check: {str(e)}"
+            detail=f"❌ Database error during duplicate check: {str(e)}"
         )
     except Exception as e:
-        logger.error(f"Unexpected error during duplicate check: {str(e)}")
+        logger.error(f"❌ Unexpected error during duplicate check: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Unexpected error during duplicate check: {str(e)}"
+            detail=f"❌ Unexpected error during duplicate check: {str(e)}"
         )
 
 async def create_user(
@@ -118,7 +123,8 @@ async def create_user(
     full_name: str, 
     avatar: str, 
     # bio: str, 
-    db: AsyncSession
+    db: AsyncSession,
+    email_verified: bool = False,
 ) -> UserModel:
     """
     Create a new user in the database.
@@ -126,7 +132,7 @@ async def create_user(
     """
     
     try:
-        print(f"ℹ️ Creating user service: {email}")
+        logger.info(f"ℹ️ Creating user service: {email}")
         
         # Validate role exists
         role_row = (await db.execute(select(RoleModel).where(RoleModel.name == role))).scalar_one_or_none()
@@ -142,7 +148,9 @@ async def create_user(
             role=role,
             full_name=full_name,
             avatar=avatar,
-            # bio=bio
+            # bio=bio,
+            email_verified=email_verified,
+            email_verified_at=datetime.now(timezone.utc) if email_verified else None,
         )
 
         db.add(new_user)
@@ -154,7 +162,7 @@ async def create_user(
         await db.commit()
         await db.refresh(new_user)  # refresh to get DB-generated fields like user_id
         
-        print(f"✅ User created with ID: {new_user.user_id}")
+        logger.info(f"✅ User created with ID: {new_user.user_id}")
         return new_user
     except SQLAlchemyError as e:
         await db.rollback()
@@ -169,7 +177,6 @@ async def create_user(
             detail=f"Unexpected error during user creation: {str(e)}"
         )
 
-
 async def get_system_user_id(db: AsyncSession) -> int | None:
     """
     Retrieve the system user ID.
@@ -181,8 +188,80 @@ async def get_system_user_id(db: AsyncSession) -> int | None:
         )
         return result.scalar_one_or_none()
     except SQLAlchemyError as e:
-        logger.error(f"Database error fetching system user: {e}")
+        logger.error(f"❌ Database error fetching system user: {e}")
         return None
     except Exception as e:
-        logger.error(f"Unexpected error fetching system user: {e}")
+        logger.error(f"❌ Unexpected error fetching system user: {e}")
         return None
+
+async def update_current_user_profile(
+    email: str,
+    payload: UserProfileUpdateRequest,
+    db: AsyncSession,
+) -> UserModel:
+    try:
+        normalized_email = email.lower().strip()
+
+        result = await db.execute(
+            select(UserModel)
+            .where(UserModel.email == normalized_email)
+        )
+
+        user = result.scalar_one_or_none()
+
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="❌ User not found.",
+            )
+
+        update_data = payload.model_dump(exclude_unset=True)
+
+        if "full_name" in update_data and update_data["full_name"] is not None:
+            user.full_name = update_data["full_name"].strip()
+
+        if "avatar" in update_data:
+            user.avatar = update_data["avatar"]
+
+        await db.commit()
+        await db.refresh(user)
+
+        return user
+
+    except HTTPException:
+        raise
+
+    except SQLAlchemyError as exc:
+        await db.rollback()
+        logger.exception("❌ Database error while updating user profile")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="❌ Database error while updating user profile.",
+        ) from exc
+
+async def find_user_by_email_or_none(
+    email: str,
+    db: AsyncSession,
+) -> UserModel | None:
+    """
+    Safe lookup for flows like forgot-password.
+
+    Do not raise 404 if the user does not exist, because that can reveal
+    whether an email address is registered.
+    """
+
+    try:
+        normalized_email = email.lower().strip()
+
+        result = await db.execute(
+            select(UserModel).where(UserModel.email == normalized_email)
+        )
+
+        return result.scalar_one_or_none()
+
+    except SQLAlchemyError as exc:
+        logger.exception("❌ Database error during safe user lookup")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="❌ Database error during user lookup.",
+        ) from exc

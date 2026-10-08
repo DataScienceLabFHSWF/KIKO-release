@@ -1,4 +1,8 @@
-import torch
+# backend/app/utils/helpers_util.py
+
+import torch, logging
+
+logger = logging.getLogger(__name__)
 
 def lang_display(response_language: str) -> str:
     """Map codes to display strings for the prompt."""
@@ -21,12 +25,12 @@ def get_device_and_dtype():
     dtype = torch.float32 if device == "cuda:0" else torch.bfloat16
     if has_cuda:
         props = torch.cuda.get_device_properties(0)
-        print(f"✅ CUDA available: {props.name} ({round(props.total_memory/1024**3)} GB), CC {props.major}.{props.minor}")
+        logger.info(f"✅ CUDA available: {props.name} ({round(props.total_memory/1024**3)} GB), CC {props.major}.{props.minor}")
         
     else:
-        print("ℹ️ CUDA NOT available — running on CPU.")
+        logger.warning("⚠️ CUDA NOT available — running on CPU.")
     
-    print(f"ℹ️ Using device: {device}, dtype: {dtype}")
+    logger.info(f"ℹ️ Using device: {device}, dtype: {dtype}")
     return device, dtype
 
 def default_avatar_for_role(

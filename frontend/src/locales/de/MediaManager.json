@@ -1,0 +1,69 @@
+{
+  "title": "Medienverwaltung",
+  "subtitle": "Lade Kursbilder hoch und verwalte sie. Kopiere die Markdown-Referenz und füge sie in den Kursinhalt ein.",
+  "actions": {
+    "refresh": "Aktualisieren",
+    "retry": "Erneut versuchen"
+  },
+  "loading": {
+    "courses": "Kurse werden geladen...",
+    "images": "Kursbilder werden geladen..."
+  },
+  "status": {
+    "selectedCourse": "Ausgewählter Kurs: {{title}}",
+    "uploaded": "Bild hochgeladen: {{filename}}",
+    "deleted": "Bild erfolgreich gelöscht."
+  },
+  "empty": {
+    "noCoursesTitle": "Keine Kurse gefunden",
+    "noCoursesDescription": "Erstelle oder speichere zuerst einen Kurs. Danach kannst du Bilder für diesen Kurs hochladen."
+  },
+  "errors": {
+    "noCourseSelected": "Bitte zuerst einen Kurs auswählen.",
+    "loadCoursesTitle": "Kurse konnten nicht geladen werden",
+    "loadCoursesDescription": "Bitte erneut versuchen.",
+    "loadImagesTitle": "Bilder konnten nicht geladen werden",
+    "loadImagesDescription": "Bitte erneut versuchen.",
+    "uploadFailed": "Bild konnte nicht hochgeladen werden.",
+    "deleteFailed": "Bild konnte nicht gelöscht werden."
+  },
+  "courseSelector": {
+    "title": "Kurs auswählen",
+    "subtitle": "Bilder werden getrennt pro Kurs gespeichert.",
+    "label": "Kurs"
+  },
+  "upload": {
+    "title": "Bild hochladen",
+    "subtitle": "Unterstützte Formate: PNG, JPG, JPEG, GIF, WebP, SVG.",
+    "dropLabel": "Hier klicken, um ein Bild auszuwählen",
+    "button": "Bild hochladen",
+    "uploading": "Wird hochgeladen...",
+    "remove": "Ausgewähltes Bild entfernen",
+    "invalidType": "Dieser Dateityp wird nicht unterstützt. Bitte PNG, JPG, JPEG, GIF, WebP oder SVG hochladen.",
+    "noFile": "Bitte zuerst ein Bild auswählen."
+  },
+  "gallery": {
+    "title": "Bildergalerie",
+    "subtitle": "{{count}} Bild(er) in diesem Kurs.",
+    "emptyTitle": "Keine Bilder hochgeladen",
+    "emptyDescription": "Lade oben ein Bild hoch. Danach kannst du die Markdown-Referenz in den Kursinhalt kopieren.",
+    "loadingImage": "Bild wird geladen...",
+    "loadFailed": "Bild konnte nicht geladen werden.",
+    "size": "Größe",
+    "type": "Typ",
+    "uploadedAt": "Hochgeladen",
+    "markdownLabel": "Markdown-Referenz",
+    "copy": "Markdown kopieren",
+    "copied": "Kopiert",
+    "download": "Herunterladen",
+    "delete": "Löschen"
+  },
+  "deleteDialog": {
+    "title": "Bild löschen?",
+    "body": "Du bist dabei, {{filename}} zu löschen.",
+    "warning": "Diese Aktion kann nicht rückgängig gemacht werden. Kursinhalte, die dieses Bild verwenden, können danach ein defektes Bild anzeigen.",
+    "cancel": "Abbrechen",
+    "confirm": "Bild löschen",
+    "deleting": "Wird gelöscht..."
+  }
+}

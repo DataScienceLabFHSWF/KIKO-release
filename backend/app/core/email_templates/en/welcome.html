@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+  <body
+    style="font-family: Arial, sans-serif; color: #0f172a; line-height: 1.6"
+  >
+    <h2>Welcome to {{ app_name }}</h2>
+
+    <p>Hello {{ user_name }},</p>
+
+    <p>
+      Your email address has been verified successfully. Welcome to
+      <strong>{{ app_name }}</strong>.
+    </p>
+
+    <p>
+      KIKO is an AI-powered knowledge and learning platform for nuclear
+      decommissioning. It helps users work with documents, retrieve relevant
+      information, ask grounded questions, and support role-based learning
+      workflows.
+    </p>
+
+    <h3>Your role: {{ role_title }}</h3>
+
+    <p>{{ role_intro }}</p>
+
+    <h3>What you can do next</h3>
+
+    <ul>
+      {% for action in primary_actions %}
+      <li>{{ action }}</li>
+      {% endfor %}
+    </ul>
+
+    <p>
+      <a
+        href="{{ dashboard_link }}"
+        style="
+          display: inline-block;
+          background: #0f75bc;
+          color: #ffffff;
+          padding: 12px 18px;
+          text-decoration: none;
+          font-weight: bold;
+        "
+      >
+        Open KIKO dashboard
+      </a>
+    </p>
+
+    {% if original_recipient_email %}
+    <hr />
+    <p style="color: #64748b; font-size: 12px">
+      Stage note: this email was originally intended for {{
+      original_recipient_name or original_recipient_email }} &lt;{{
+      original_recipient_email }}&gt;.
+    </p>
+    {% endif %}
+
+    <p>
+      Regards,<br />
+      {{ from_name }}
+    </p>
+  </body>
+</html>

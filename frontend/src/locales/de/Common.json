@@ -1,0 +1,37 @@
+{
+  "auth": {
+    "login": "Einloggen",
+    "register": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "fullName": "Vollständiger Name",
+    "role": "Rolle"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "chat": "Chat-Assistent",
+    "courseGenerator": "Kursgenerator",
+    "courses": "Meine Kurse",
+    "documents": "Meine Dokumente",
+    "profile": "Profil",
+    "faq": "FAQ",
+    "evaluation": "Evaluationsergebnisse",
+    "changePassword": "Passwort ändern"
+  },
+  "shell": {
+    "logout": "Abmelden"
+  },
+  "actions": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "refresh": "Aktualisieren",
+    "back": "Zurück"
+  },
+  "states": {
+    "loading": "Wird geladen...",
+    "empty": "Keine Daten verfügbar.",
+    "error": "Etwas ist schief gelaufen."
+  },
+  "placeholderpage": "Diese Seite wird in der nächsten Phase migriert."
+}

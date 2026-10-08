@@ -1,0 +1,115 @@
+/* frontend/src/features/chat/components/ChatComposer.css */
+
+.chat-composer {
+  width: 100%;
+  display: grid;
+  gap: 6px;
+}
+
+.chat-composer__file-input {
+  display: none;
+}
+
+.chat-composer__shell {
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 42px 48px;
+  align-items: center;
+  background: var(--color-surface-blue);
+  clip-path: polygon(18px 0, 100% 0, 100% 72%, 98% 100%, 0 100%, 0 22px);
+}
+
+.chat-composer--dragging .chat-composer__shell {
+  outline: 2px dashed var(--color-primary-dark);
+  outline-offset: 6px;
+}
+
+.chat-composer__shell input {
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  color: var(--color-primary-dark);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.chat-composer__shell input::placeholder {
+  color: var(--color-primary-dark);
+  opacity: 0.85;
+}
+
+.chat-composer__shell button {
+  border: 0;
+  cursor: pointer;
+}
+
+.chat-composer__upload {
+  height: 100%;
+  color: var(--color-text);
+}
+
+.chat-composer__mic {
+  height: 34px;
+  background: #ffffff;
+  color: var(--color-text);
+  opacity: 0.5;
+  cursor: not-allowed !important;
+  clip-path: polygon(10px 0, 100% 0, 100% 72%, 94% 100%, 0 100%, 0 10px);
+}
+
+.chat-composer__send {
+  height: 34px;
+  margin-right: 10px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+}
+
+.chat-composer__send:disabled,
+.chat-composer__upload:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.chat-composer__files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chat-composer__file-chip {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  background: #eef8fd;
+  border: 1px solid var(--color-border);
+  color: var(--color-primary-dark);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.chat-composer__file-chip button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.chat-composer__hint,
+.chat-composer__error {
+  margin: 0;
+  padding-left: 2px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.chat-composer__hint {
+  color: var(--color-primary-dark);
+}
+
+.chat-composer__error {
+  color: var(--color-danger);
+}

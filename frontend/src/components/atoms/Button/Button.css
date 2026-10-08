@@ -1,0 +1,105 @@
+/* frontend/src/components/atoms/Button/Button.css */
+
+.ui-button {
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--color-text);
+  font-weight: 900;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  clip-path: polygon(12px 0, 100% 0, 100% 72%, 96% 100%, 0 100%, 0 12px);
+}
+
+.ui-button--sm {
+  min-height: 34px;
+  padding-inline: 12px;
+  font-size: 12px;
+}
+
+.ui-button--md {
+  min-height: 42px;
+  padding-inline: 18px;
+  font-size: 14px;
+}
+
+.ui-button--lg {
+  min-height: 48px;
+  padding-inline: 22px;
+  font-size: 16px;
+}
+
+.ui-button--primary {
+  background: var(--color-primary);
+}
+
+.ui-button--secondary {
+  background: var(--color-primary-soft);
+}
+
+.ui-button--ghost {
+  background: var(--color-surface-blue);
+}
+
+.ui-button--danger {
+  background: var(--color-danger);
+  color: #ffffff;
+}
+
+.ui-button--success {
+  background: var(--color-success);
+  color: #ffffff;
+}
+
+.ui-button--plain {
+  min-height: auto;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  clip-path: none;
+}
+
+.ui-button--full-width {
+  width: 100%;
+}
+
+.ui-button:not(.ui-button--plain):hover {
+  background: var(--color-surface-blue-strong);
+}
+
+.ui-button--danger:hover {
+  background: #b83333;
+}
+
+.ui-button--success:hover {
+  background: #168158;
+}
+
+.ui-button--plain:hover {
+  color: var(--color-primary-dark);
+}
+
+.ui-button:disabled,
+.ui-button--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ui-button--disabled:hover {
+  background: var(--color-primary);
+}
+
+.ui-button--danger.ui-button--disabled:hover {
+  background: var(--color-danger);
+}
+
+.ui-button--success.ui-button--disabled:hover {
+  background: var(--color-success);
+}
+
+.ui-button svg {
+  flex: 0 0 auto;
+}

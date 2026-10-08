@@ -9,5 +9,5 @@ Database configuration is read from `.env`.
 Start from:
 
 ```bash
-cp .env.example .env
+cat .env.dev
 ```

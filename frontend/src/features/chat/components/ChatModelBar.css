@@ -1,0 +1,48 @@
+/* frontend/src/features/chat/components/ChatModelBar.css */
+
+.chat-model-bar {
+  width: 100%;
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.9fr);
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  background: var(--color-surface-blue);
+  clip-path: polygon(18px 0, 100% 0, 100% 72%, 98% 100%, 0 100%, 0 22px);
+}
+
+.chat-model-bar__group {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-model-bar__group span {
+  color: var(--color-primary-dark);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.chat-model-bar select {
+  min-width: 0;
+  min-height: 34px;
+  border: 0;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.chat-model-bar select {
+  width: 100%;
+  padding: 0 12px;
+  background: #ffffff;
+}
+
+@media (max-width: 780px) {
+  .chat-model-bar {
+    grid-template-columns: 1fr;
+    clip-path: none;
+  }
+}

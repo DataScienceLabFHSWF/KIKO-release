@@ -1,0 +1,30 @@
+/* frontend/src/features/courseDetails/components/CourseModuleTabs.css */
+
+.course-module-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 6px 0 22px;
+  border-bottom: 2px solid rgba(16, 35, 71, 0.12);
+}
+
+.course-module-tabs__button {
+  min-height: 40px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--color-text);
+  border-bottom: 3px solid transparent;
+}
+
+.course-module-tabs__button:hover {
+  color: var(--color-primary-dark);
+  background: rgba(215, 243, 252, 0.45);
+}
+
+.course-module-tabs__button--active {
+  color: var(--color-primary-dark);
+  border-bottom-color: var(--color-primary);
+  background: rgba(215, 243, 252, 0.55);
+}

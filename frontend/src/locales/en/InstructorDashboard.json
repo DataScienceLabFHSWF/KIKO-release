@@ -1,0 +1,50 @@
+{
+  "metaTitle": "Dashboard",
+  "title": "Dashboard",
+  "subtitle": "A simple overview of your courses, learners, questions, and uploaded materials.",
+  "sections": {
+    "overview": "Teaching Overview",
+    "overviewDescription": "Use these numbers to quickly understand your current teaching activity.",
+    "nextActions": "Quick Actions",
+    "nextActionsDescription": "Jump directly to the areas you are most likely to need next."
+  },
+  "metrics": {
+    "coursesCreated": "Courses created",
+    "students": "Learners enrolled",
+    "questionsAsked": "Questions created by you",
+    "learnerQuestions": "Learner questions",
+    "documentsUploaded": "Documents uploaded",
+    "lastActivity": "Last activity"
+  },
+  "actionsGrid": {
+    "courseSetup": {
+      "title": "Create a course",
+      "description": "Upload material and prepare a new course."
+    },
+    "myCourses": {
+      "title": "Manage courses",
+      "description": "Review, edit, and organize your courses."
+    },
+    "documents": {
+      "title": "Manage documents",
+      "description": "Preview, download, or remove uploaded files."
+    },
+    "chat": {
+      "title": "Open Chat Assistant",
+      "description": "Ask questions about documents or course content."
+    },
+    "evaluation": {
+      "title": "View evaluation results",
+      "description": "Compare model speed, quality, and grading behavior."
+    }
+  },
+  "messages": {
+    "loading": "Loading dashboard...",
+    "loadFailed": "Could not load dashboard.",
+    "unavailableTitle": "Dashboard unavailable",
+    "unavailableDescription": "The dashboard could not be loaded right now."
+  },
+  "actions": {
+    "retry": "Retry"
+  }
+}

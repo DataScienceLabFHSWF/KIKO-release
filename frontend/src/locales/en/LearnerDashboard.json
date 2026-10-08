@@ -1,0 +1,35 @@
+{
+  "metaTitle": "Dashboard",
+  "title": "Dashboard",
+  "subtitle": "Welcome to your personalized learning dashboard.",
+
+  "sections": {
+    "learningStatistics": "Learning Statistics",
+    "learningStatisticsDescription": "Monitor your learning progress, activity, and uploaded materials.",
+    "courseProgress": "Course Progress",
+    "courseProgressDescription": "This shows how much of your enrolled course work has been completed."
+  },
+
+  "metrics": {
+    "coursesEnrolled": "Courses enrolled",
+    "coursesInProgress": "Courses in progress",
+    "coursesCompleted": "Courses completed",
+    "examsPassed": "Exams passed",
+    "examsFailed": "Exams failed",
+    "examsInProgress": "Exams in progress",
+    "questionsAsked": "Questions asked to Chat Assistant",
+    "documentsUploaded": "Documents uploaded",
+    "lastActivity": "Last activity"
+  },
+
+  "messages": {
+    "loading": "Loading your dashboard...",
+    "loadFailed": "Could not load your dashboard.",
+    "unavailableTitle": "Dashboard unavailable",
+    "unavailableDescription": "Your dashboard could not be loaded right now."
+  },
+
+  "actions": {
+    "retry": "Retry"
+  }
+}

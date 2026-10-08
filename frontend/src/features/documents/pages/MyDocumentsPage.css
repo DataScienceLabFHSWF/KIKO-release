@@ -1,0 +1,53 @@
+/* frontend/src/features/documents/pages/MyDocumentsPage.css */
+
+.documents-page {
+  width: 100%;
+  display: grid;
+  gap: 28px;
+}
+
+.documents-page__error {
+  margin: 0;
+  padding: 14px 16px;
+  background: #ffe8e8;
+  color: var(--color-danger);
+  font-weight: 800;
+}
+
+.documents-page__list {
+  display: grid;
+  gap: 22px;
+}
+
+.documents-page__status {
+  margin: 0;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+.documents-page__empty {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  box-shadow: 10px 10px 0 var(--color-surface-blue);
+  text-align: center;
+}
+
+.documents-page__empty svg {
+  color: var(--color-primary-dark);
+}
+
+.documents-page__empty h2 {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.documents-page__empty p {
+  margin: 0;
+  max-width: 520px;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}

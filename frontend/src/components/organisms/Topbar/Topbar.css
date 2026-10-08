@@ -1,0 +1,54 @@
+/* frontend/src/components/organisms/Topbar/Topbar.css */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  padding: 0 28px;
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.92) 100%
+  );
+}
+
+.topbar__profile-link {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+
+  border: 6px solid var(--color-primary);
+  background: #ffffff;
+  color: var(--color-text);
+
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.topbar__profile-link:hover {
+  background: var(--color-surface-blue);
+  color: var(--color-primary-dark);
+}
+
+.topbar__profile-link:focus-visible {
+  outline: 2px solid var(--color-primary-dark);
+  outline-offset: 4px;
+}
+
+.topbar__profile-link--active {
+  background: var(--color-surface-blue);
+  color: var(--color-primary-dark);
+}
+
+.topbar__mark {
+  width: 34px;
+  height: 46px;
+  background: var(--color-primary);
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%);
+}

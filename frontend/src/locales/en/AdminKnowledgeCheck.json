@@ -1,0 +1,67 @@
+{
+  "title": "Knowledge Check — Configuration",
+  "subtitle": "Choose which questions can appear and how many questions learners receive per assessment.",
+
+  "settings": {
+    "title": "Settings",
+    "enabled": "Enable Knowledge Check",
+    "questionsPerAssessment": "Questions per assessment",
+    "selectedCount": "{{selected}} of {{total}} questions selected"
+  },
+
+  "filters": {
+    "title": "Filters",
+    "topic": "Topic",
+    "type": "Type",
+    "search": "Search text",
+    "allTopics": "All topics",
+    "allTypes": "All types",
+    "searchPlaceholder": "Search in question text..."
+  },
+
+  "questions": {
+    "title": "Question Pool",
+    "visibleCount": "Showing {{visible}} of {{total}} questions",
+    "include": "Include",
+    "noTopic": "No topic",
+    "noType": "No type"
+  },
+
+  "actions": {
+    "save": "Save configuration",
+    "retry": "Retry",
+    "selectFiltered": "Select shown questions",
+    "clearFiltered": "Clear shown questions",
+    "clearFilters": "Clear filters",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+
+  "status": {
+    "loading": "Loading Knowledge Check configuration...",
+    "saved": "Configuration saved successfully."
+  },
+
+  "validation": {
+    "selectOne": "Select at least one question or disable the Knowledge Check.",
+    "sizeMinimum": "Questions per assessment must be at least 1.",
+    "sizeTooLarge": "Questions per assessment ({{size}}) cannot exceed selected questions ({{selected}})."
+  },
+
+  "errors": {
+    "loadTitle": "Could not load Knowledge Check configuration",
+    "loadDescription": "An unexpected error occurred while loading the configuration.",
+    "saveDescription": "Could not save the configuration."
+  },
+
+  "empty": {
+    "title": "No questions found",
+    "description": "There are no Knowledge Check questions available yet."
+  },
+
+  "delete": {
+    "title": "Delete question?",
+    "description": "This will permanently delete question #{{id}}. This action cannot be undone.",
+    "confirm": "Delete question"
+  }
+}

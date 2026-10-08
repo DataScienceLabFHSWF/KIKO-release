@@ -67,10 +67,10 @@ async def verify_course_ownership(
         
         return course
     except SQLAlchemyError as e:
-        logger.error(f"Database error verifying course ownership: {e}")
+        logger.error(f"❌ Database error verifying course ownership: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Database error occurred"
+            detail="❌ Database error occurred"
         )
 
 
@@ -118,10 +118,10 @@ async def verify_course_access(
         
         return course
     except SQLAlchemyError as e:
-        logger.error(f"Database error verifying course access: {e}")
+        logger.error(f"❌ Database error verifying course access: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Database error occurred"
+            detail="❌ Database error occurred"
         )
 
 
@@ -177,11 +177,13 @@ async def upload_course_image(
         await db.commit()
         await db.refresh(image_record)
         
-        logger.info(f"Image uploaded: {stored_filename} for course {course_id}")
+        logger.info(f"ℹ️ Image uploaded: {stored_filename} for course {course_id}")
         
         return {
+            "message": "success",
             "image_id": image_record.image_id,
-            "filename": image_record.filename,
+            "course_id": image_record.course_id,
+            "original_filename": image_record.filename,
             "stored_filename": image_record.stored_filename,
             "content_type": image_record.content_type,
             "file_size": image_record.file_size,
@@ -193,20 +195,20 @@ async def upload_course_image(
         raise
     except SQLAlchemyError as e:
         await db.rollback()
-        logger.error(f"Database error uploading image: {e}")
+        logger.error(f"❌ Database error uploading image: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to save image metadata"
+            detail="❌ Failed to save image metadata"
         )
     except Exception as e:
         await db.rollback()
-        logger.error(f"Error uploading image: {e}")
+        logger.error(f"❌ Error uploading image: {e}")
         # Clean up file if it was created
         if 'file_path' in locals() and os.path.exists(file_path):
             os.remove(file_path)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to upload image"
+            detail="❌ Failed to upload image"
         )
 
 
@@ -232,11 +234,12 @@ async def list_course_images(
         return [
             {
                 "image_id": img.image_id,
-                "filename": img.filename,
+                "course_id": img.course_id,
+                "original_filename": img.filename,
                 "stored_filename": img.stored_filename,
                 "content_type": img.content_type,
                 "file_size": img.file_size,
-                "uploaded_at": img.uploaded_at.isoformat(),
+                "uploaded_at": img.uploaded_at.isoformat() if img.uploaded_at else None,
                 "url": f"/api/course/{course_id}/images/{img.stored_filename}"
             }
             for img in images
@@ -245,10 +248,10 @@ async def list_course_images(
     except HTTPException:
         raise
     except SQLAlchemyError as e:
-        logger.error(f"Database error listing images: {e}")
+        logger.error(f"❌ Database error listing images: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to retrieve images"
+            detail="❌ Failed to retrieve images"
         )
 
 
@@ -286,10 +289,10 @@ async def get_course_image_path(
             )
         
         if not os.path.exists(image.file_path):
-            logger.error(f"Image file not found on disk: {image.file_path}")
+            logger.error(f"❌ Image file not found on disk: {image.file_path}")
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Image file not found on server"
+                detail="❌ Image file not found on server"
             )
         
         return image.file_path, image.content_type
@@ -297,10 +300,10 @@ async def get_course_image_path(
     except HTTPException:
         raise
     except SQLAlchemyError as e:
-        logger.error(f"Database error retrieving image: {e}")
+        logger.error(f"❌ Database error retrieving image: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to retrieve image"
+            detail="❌ Failed to retrieve image"
         )
 
 
@@ -336,13 +339,13 @@ async def delete_course_image(
         # Delete file from disk
         if os.path.exists(image.file_path):
             os.remove(image.file_path)
-            logger.info(f"Deleted image file: {image.file_path}")
+            logger.info(f"ℹ️ Deleted image file: {image.file_path}")
         
         # Delete database record
         await db.delete(image)
         await db.commit()
         
-        logger.info(f"Deleted image: {stored_filename} from course {course_id}")
+        logger.info(f"ℹ️ Deleted image: {stored_filename} from course {course_id}")
         
         return {"message": "Image deleted successfully"}
         
@@ -350,17 +353,17 @@ async def delete_course_image(
         raise
     except SQLAlchemyError as e:
         await db.rollback()
-        logger.error(f"Database error deleting image: {e}")
+        logger.error(f"❌ Database error deleting image: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to delete image"
+            detail="❌ Failed to delete image"
         )
     except Exception as e:
         await db.rollback()
-        logger.error(f"Error deleting image: {e}")
+        logger.error(f"❌ Error deleting image: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to delete image"
+            detail="❌ Failed to delete image"
         )
 
 
@@ -395,7 +398,7 @@ async def delete_all_course_images(
         if os.path.exists(images_dir) and not os.listdir(images_dir):
             os.rmdir(images_dir)
         
-        logger.info(f"Deleted {deleted_count} images for course {course_id}")
+        logger.info(f"ℹ️ Deleted {deleted_count} images for course {course_id}")
         
         return {
             "message": f"Deleted {deleted_count} images",
@@ -406,8 +409,8 @@ async def delete_all_course_images(
         raise
     except SQLAlchemyError as e:
         await db.rollback()
-        logger.error(f"Database error deleting course images: {e}")
+        logger.error(f"❌ Database error deleting course images: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to delete images"
+            detail="❌ Failed to delete images"
         )

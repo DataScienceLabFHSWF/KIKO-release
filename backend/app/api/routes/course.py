@@ -1,11 +1,13 @@
 # backend/app/api/routes/course.py
-import os, json
+
+import os, json, logging
 from datetime import datetime
 from typing import Annotated
 
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, Form, Body, Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import FileResponse
+from typing import Any
 from app.services import (
     require_role, process_markdown, get_doc_by_hash_name,
     generate_document_embeddings, store_embeddings_to_db, 
@@ -16,24 +18,127 @@ from app.services import (
     get_request_lang, upload_course_image, list_course_images, get_course_image_path, delete_course_image,
     get_app_config_and_libary_available, parse_course_markdown,
     CourseMarkdownStructureError, get_doc_by_derivation, save_doc_to_db, get_embeddings_from_db,
-    course_upload_job_manager,
-    get_course_generation_count_defaults,
-    validate_course_generation_counts,
+    course_upload_job_manager, get_course_generation_count_defaults, validate_course_generation_counts
 )
 from app.database import get_db
 from app.utils import compute_sha256, canonical_storage_path, canonical_storage_path_for_ext
 from app.schemas import (
-    CourseUpdateRequest,
-    CourseUploadJobResponse,
-    CourseUploadPdfJobRequest,
-    GradePayload,
+    AnswerGradingRequest, CourseUpdateRequest, COMMON_ERROR_RESPONSES,
+    CourseUploadResponse, CourseCreateResponse, AnswerGradingResponse,
+    InstructorCourseSummary, InstructorCourseDetailsResponse, CourseUpdateResponse,
+    CourseImageUploadResponse, CourseImageResponse, CourseUploadJobResponse,
+    CourseUploadPdfJobRequest
 )
 from app.core import PromptManager
 
-router = APIRouter()
+logger = logging.getLogger(__name__)
+
+router = APIRouter(responses=COMMON_ERROR_RESPONSES)
 
 COURSE_GENERATION_COUNT_DEFAULTS = get_course_generation_count_defaults()
 
+def build_course_image_response(
+    image: Any,
+    course_id: int | None = None,
+) -> CourseImageResponse:
+    """
+    Convert DB image model or old image dict into the public API response shape.
+
+    DB/internal names:
+    - filename
+    - file_size
+
+    Public API names:
+    - original_filename
+    - size_bytes
+    """
+
+    if isinstance(image, dict):
+        image_course_id = image.get("course_id") or course_id
+        stored_filename = image.get("stored_filename")
+
+        return CourseImageResponse(
+            image_id=image.get("image_id"),
+            course_id=image_course_id,
+            original_filename=(
+                image.get("original_filename")
+                or image.get("filename")
+                or image.get("name")
+                or "uploaded-image"
+            ),
+            stored_filename=stored_filename,
+            url=(
+                image.get("url")
+                or (
+                    f"/api/course/{image_course_id}/images/{stored_filename}"
+                    if image_course_id and stored_filename
+                    else None
+                )
+            ),
+            content_type=image.get("content_type"),
+            size_bytes=image.get("size_bytes") or image.get("file_size"),
+            uploaded_at=image.get("uploaded_at"),
+        )
+
+    image_course_id = getattr(image, "course_id", None) or course_id
+    stored_filename = getattr(image, "stored_filename", None)
+
+    return CourseImageResponse(
+        image_id=getattr(image, "image_id", None),
+        course_id=image_course_id,
+        original_filename=(
+            getattr(image, "original_filename", None)
+            or getattr(image, "filename", None)
+            or "uploaded-image"
+        ),
+        stored_filename=stored_filename,
+        url=f"/api/course/{image_course_id}/images/{stored_filename}"
+        if image_course_id and stored_filename
+        else None,
+        content_type=getattr(image, "content_type", None),
+        size_bytes=(
+            getattr(image, "size_bytes", None)
+            or getattr(image, "file_size", None)
+        ),
+        uploaded_at=getattr(image, "uploaded_at", None),
+    )
+
+def build_instructor_course_details_response(result: dict) -> InstructorCourseDetailsResponse:
+    course = result.get("course") or {}
+
+    quiz = result.get("quiz")
+    if isinstance(quiz, dict):
+        quiz_content = quiz.get("content")
+    else:
+        quiz_content = quiz
+
+    return InstructorCourseDetailsResponse(
+        course_id=course.get("course_id"),
+        title=course.get("title"),
+        summary=course.get("summary"),
+        created_at=course.get("created_at"),
+        created_by=course.get("created_by"),
+        template_markdown=result.get("template_markdown") or course.get("template_markdown"),
+        course_json=result.get("course_json") or course.get("course_json"),
+        quiz=quiz_content,
+        questions=result.get("questions") or [],
+    )
+
+async def _get_current_user_profile(user: dict, db: AsyncSession):
+    """
+    Helper function to get the current user's profile from the database. Raises HTTPException if the user is not found.
+    This function abstracts the logic of retrieving the user's profile based on their email, which is expected to be present in the 'user' dictionary provided by the authentication dependency. 
+    It ensures that if the user profile cannot be found in the database, an appropriate HTTPException is raised with a 404 status code.
+    """
+    user_profile = await get_user_profile_by_email(user["email"], db)
+
+    if not user_profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found.",
+        )
+
+    return user_profile
 
 def _validate_pdf_generation_counts_or_422(
     qa_count: int,
@@ -150,7 +255,9 @@ async def cancel_upload_course_document_pdf_job(
     job = await course_upload_job_manager.cancel_job(job_id, user_profile.user_id)
     return job.snapshot()
 
-@router.post("/upload_course_document")
+@router.post("/upload_course_document", 
+    response_model=CourseUploadResponse,
+    operation_id="upload_course_document")
 async def upload_course_document(
     file: UploadFile = File(...),
     embedding_model_name: str = Form(...),
@@ -163,13 +270,13 @@ async def upload_course_document(
     user=Depends(require_role(["Instructor"])),
     response_language: str = Depends(get_request_lang),
     db: AsyncSession = Depends(get_db)
-):
+) -> CourseUploadResponse:
     """
     Upload and process a course document for instructor course creation.
     If the document is already processed, notify the user. Otherwise, process, store, and generate summary/QA.
     """
     try:
-        print(
+        logger.info(
             "ℹ️ upload_course_document API: "
             f"llm:{llm_model_name}, embedding:{embedding_model_name}, lang:{response_language}, "
             f"qa_count:{qa_count}, "
@@ -178,7 +285,7 @@ async def upload_course_document(
         )
         contents = await file.read()
         if not contents:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"❌ Uploaded file {file.filename} is empty.")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"❌ Uploaded file {file.filename} is empty.")
 
         filename_lower = (file.filename or "").lower()
         is_markdown = filename_lower.endswith(".md") or filename_lower.endswith(".markdown")
@@ -195,10 +302,8 @@ async def upload_course_document(
             quiz_option_count = counts["quiz_option_count"]
             misconception_count = counts["misconception_count"]
 
-        user_profile = await get_user_profile_by_email(user["email"], db)
-        if not user_profile:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
-
+        user_profile = await _get_current_user_profile(user, db)
+        
         if is_markdown:
             text_content = contents.decode("utf-8", errors="ignore")
             try:
@@ -235,17 +340,17 @@ async def upload_course_document(
                     f"ℹ️ An existing document '{existing_doc_by_id.file_name}' already uses "
                     f"course id '{source_id}'. Uploading will replace its stored content."
                 )
-                return JSONResponse(
-                    status_code=status.HTTP_200_OK,
-                    content={
-                        "message": "markdown_exists",
-                        "detail": detail_msg,
-                        "metadata": metadata_preview,
-                        "existing_document": {
-                            "document_id": existing_doc_by_id.document_id,
-                            "file_name": existing_doc_by_id.file_name,
-                            "uploaded_at": uploaded_at_iso,
-                        },
+                
+                logger.info(f"ℹ️ Course upload API: {detail_msg}")
+
+                return CourseUploadResponse(
+                    message="markdown_exists",
+                    detail=detail_msg,
+                    metadata=metadata_preview,
+                    existing_document={
+                        "document_id": existing_doc_by_id.document_id,
+                        "file_name": existing_doc_by_id.file_name,
+                        "uploaded_at": uploaded_at_iso,
                     },
                 )
 
@@ -265,14 +370,11 @@ async def upload_course_document(
                     and docs.document_id == existing_doc_by_id.document_id
                 )
                 if not replacing_same_document:
-                    return JSONResponse(
-                        status_code=status.HTTP_200_OK,
-                        content={
-                            "message": "file_exists",
-                            "detail": f"ℹ️ File '{file.filename}' is already processed.",
-                        },
+                    return CourseUploadResponse(
+                        message="file_exists",
+                        detail=f"File '{file.filename}' is already processed.",
                     )
-
+            
             processed_data = await process_markdown(
                 file.filename,
                 content_hash,
@@ -318,23 +420,20 @@ async def upload_course_document(
                 db=db,
             )
 
-            return JSONResponse(
-                status_code=status.HTTP_200_OK,
-                content={
-                    "message": "success",
-                    "final_summary": processed_data.get("summary"),
-                    "questions": processed_data.get("questions_dict"),
-                    "quiz": processed_data.get("quiz"),
-                    "metadata": processed_data.get("doc_metadata"),
-                    "template_markdown": processed_data.get("template_markdown"),
-                    "course_json": processed_data.get("course_json"),
-                },
+            return CourseUploadResponse(
+                message="success",
+                final_summary=processed_data.get("summary"),
+                questions=processed_data.get("questions_dict"),
+                quiz=processed_data.get("quiz"),
+                metadata=processed_data.get("doc_metadata"),
+                template_markdown=processed_data.get("template_markdown"),
+                course_json=processed_data.get("course_json"),
             )
 
         # -----------------------------
         # PDF flow -> generate markdown -> process as markdown
         # -----------------------------
-        configs = await get_app_config_and_libary_available()
+        configs = await get_app_config_and_libary_available(db=db)
         if not configs:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
 
@@ -355,12 +454,9 @@ async def upload_course_document(
 
         pdf_doc = await get_doc_by_hash_name(content_hash, user_profile.user_id, db)
         if pdf_doc:
-            return JSONResponse(
-                status_code=status.HTTP_200_OK,
-                content={
-                    "message": "file_exists",
-                    "detail": f"File '{file.filename}' is already processed.",
-                },
+            return CourseUploadResponse(
+                message="file_exists",
+                detail=f"File '{file.filename}' is already processed.",
             )
 
         pdf_doc = await save_doc_to_db(
@@ -441,17 +537,17 @@ async def upload_course_document(
                     db=db,
                 )
 
-            return JSONResponse(status_code=status.HTTP_200_OK, content={
-                "message": "success",
-                "final_summary": processed_markdown_data.get("summary"),
-                "questions": processed_markdown_data.get("questions_dict"),
-                "quiz": processed_markdown_data.get("quiz"),
-                "generated_markdown": linked_markdown_doc.doc_content,
-                "generated_markdown_file_name": linked_markdown_doc.file_name,
-                "metadata": processed_markdown_data.get("doc_metadata"),
-                "template_markdown": processed_markdown_data.get("template_markdown"),
-                "course_json": processed_markdown_data.get("course_json"),
-            })
+            return CourseUploadResponse(
+                message="success",
+                final_summary=processed_markdown_data.get("summary"),
+                questions=processed_markdown_data.get("questions_dict"),
+                quiz=processed_markdown_data.get("quiz"),
+                generated_markdown=linked_markdown_doc.doc_content,
+                generated_markdown_file_name=linked_markdown_doc.file_name,
+                metadata=processed_markdown_data.get("doc_metadata"),
+                template_markdown=processed_markdown_data.get("template_markdown"),
+                course_json=processed_markdown_data.get("course_json")
+            )
 
         course_data = await processor.summarize_document(
             storage_path,
@@ -534,27 +630,33 @@ async def upload_course_document(
             db=db,
         )
 
-        return JSONResponse(status_code=status.HTTP_200_OK, content={
-            "message": "success",
-            "final_summary": processed_markdown_data.get("summary"),
-            "questions": processed_markdown_data.get("questions_dict"),
-            "quiz": processed_markdown_data.get("quiz"),
-            "generated_markdown": generated_markdown,
-            "generated_markdown_file_name": generated_markdown_file_name,
-            "metadata": processed_markdown_data.get("doc_metadata"),
-            "template_markdown": processed_markdown_data.get("template_markdown"),
-            "course_json": processed_markdown_data.get("course_json"),
-        })
+        return CourseUploadResponse(
+            message="success",
+            final_summary=processed_markdown_data.get("summary"),
+            questions=processed_markdown_data.get("questions_dict"),
+            quiz=processed_markdown_data.get("quiz"),
+            generated_markdown=generated_markdown,
+            generated_markdown_file_name=generated_markdown_file_name,
+            metadata=processed_markdown_data.get("doc_metadata"),
+            template_markdown=processed_markdown_data.get("template_markdown"),
+            course_json=processed_markdown_data.get("course_json"),
+        )
 
     except HTTPException:
         raise
     except Exception as e:
+        logger.exception(f"❌ Error in upload_course_document: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e),
         )
 
-@router.post("/create_course_with_summary_and_qas")
+@router.post(
+    "/create_course_with_summary_and_qas",
+    response_model=CourseCreateResponse,
+    status_code=status.HTTP_201_CREATED,
+    operation_id="create_course_from_generated_content"
+)
 async def create_course_with_summary_and_qas(
     title: str = Form(...),
     summary: str = Form(...),
@@ -565,24 +667,19 @@ async def create_course_with_summary_and_qas(
     user=Depends(require_role(["Instructor"])),
     response_language: str = Depends(get_request_lang),
     db: AsyncSession = Depends(get_db)
-):
+) -> CourseCreateResponse:
     """
     Create a new course with a summary and associated questions.
     """
-    print(f"ℹ️ Creating course summary of title {title} and {response_language}")
+    logger.info(f"ℹ️ Creating course summary of title {title} and {response_language}")
     
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    if not user_profile:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
-            detail="❌ User not found"
-        )
+    user_profile = await _get_current_user_profile(user, db)
     
     try:
         questions_list = json.loads(questions)
     except Exception:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
+            status_code=status.HTTP_400_BAD_REQUEST, 
             detail="❌ Invalid questions format"
         )
     
@@ -596,7 +693,7 @@ async def create_course_with_summary_and_qas(
                 detail="❌ Invalid course_json format",
             )
 
-    return await create_course_with_summary_and_qas_for_instructor(
+    result =await create_course_with_summary_and_qas_for_instructor(
         title=title,
         summary=summary,
         questions=questions_list,
@@ -607,22 +704,51 @@ async def create_course_with_summary_and_qas(
         course_json=parsed_course_json,
     )
 
-@router.post("/answer_grading")
+    logger.info(f"✅ Course created with ID: {result.get('course_id')} for instructor ID: {user_profile.user_id}")
+    
+    return CourseCreateResponse.model_validate(result)
+
+@router.post(
+    "/answer_grading",
+    response_model=AnswerGradingResponse,
+    operation_id="grade_answer"
+)
 async def answer_grading(
-    payload: GradePayload,
+    payload: AnswerGradingRequest,
     user=Depends(require_role(["Learner", "Instructor","Admin"])),
     response_language: str = Depends(get_request_lang),
     db: AsyncSession = Depends(get_db)
-):
+) -> AnswerGradingResponse:
     """
     Grade a user's answer against a reference answer.
     """
-    print(f"ℹ️ answer_grading API: {payload} and {response_language}")
-    
+
     question = (payload.question or "").strip()
     reference_answer = (payload.reference_answer or "").strip()
     user_answer = (payload.user_answer or "").strip()
-    reasoning_model_name = payload.reasoning_model_name
+    misconceptions = [
+        item.strip()
+        for item in (payload.misconceptions or [])
+        if isinstance(item, str) and item.strip()
+    ]
+
+    user_id = user.get("user_id", "unknown") if isinstance(user, dict) else "unknown"
+
+    logger.info(
+        "ℹ️ answer_grading API called. user_id=%s language=%s question_chars=%s answer_chars=%s misconception_count=%s",
+        user_id,
+        response_language,
+        len(question),
+        len(user_answer),
+        len(misconceptions),
+    )
+
+    configs = await get_app_config_and_libary_available(db=db)
+    
+    if not configs:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ Application configurations not found")
+    
+    reasoning_model_name = payload.reasoning_model_name or configs.get("app_config").default_reasoning_model
     
     if not question:
         raise HTTPException(
@@ -650,66 +776,88 @@ async def answer_grading(
         user_answer=user_answer,
         inference_model_name=reasoning_model_name,
         reference_answer=reference_answer,
-        no_max_tokens=1024,
+        misconceptions=misconceptions,
+        no_max_tokens=1536,
         response_language=response_language,
     )
-    
-    print(f"ℹ️ Response from answer_grading services: {graded_response}")
-    
-    response = JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content={
-            "message": "success",
-            "grade": graded_response["grade"],
-            "summary": graded_response["summary"]
-        }
+
+    response = AnswerGradingResponse(
+        message="success",
+        grade=graded_response["grade"],
+        summary=graded_response["summary"],
+        misconceptions_considered=misconceptions,
     )
-    print(f"✅ From answer_grading API response: {response}")
-    
+
+    logger.info(
+        "✅ answer_grading completed. user_id=%s grade=%s misconception_count=%s",
+        user_id,
+        response.grade,
+        len(misconceptions),
+    )
+
     return response
 
-@router.get("/my_courses")
+@router.get(
+    "/my_courses",
+    response_model=list[InstructorCourseSummary],
+    operation_id="list_instructor_courses"
+)
 async def list_my_courses(
-    user=Depends(require_role(["Learner", "Instructor",])),
+    user=Depends(require_role(["Instructor"])),
     db: AsyncSession = Depends(get_db)
-):
+) -> list[InstructorCourseSummary]:
     """
     List all courses created by the authenticated instructor.
     Returns minimal info plus question counts for convenience.
     For new instructors, automatically creates template courses.
     """
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    
-    if not user_profile:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
-            detail="User not found"
-        )
-    
-    return await list_courses_for_instructor(user_profile.user_id, db)
+    logger.info("ℹ️ Listing courses for instructor.")
 
-@router.get("/{course_id}")
+    user_profile = await _get_current_user_profile(user, db)
+    
+    courses = await list_courses_for_instructor(user_profile.user_id, db)
+
+    logger.info(f"✅ Found {len(courses)} courses for instructor ID: {user_profile.user_id}")
+    
+    return [
+        InstructorCourseSummary.model_validate(course)
+        for course in courses
+    ]
+
+@router.get(
+    "/{course_id}",
+    response_model=InstructorCourseDetailsResponse,
+    operation_id="get_instructor_course_details"
+)
 async def get_course_detail(
     course_id: int = Path(..., gt=0),
-    user=Depends(require_role(["Learner", "Instructor"])),
+    user=Depends(require_role(["Instructor"])),
     db: AsyncSession = Depends(get_db)
-):
+) -> InstructorCourseDetailsResponse:
     """
     Get details for a single course (owned by the instructor) including questions.
     """
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
-    return await get_course_detail_for_instructor(course_id, user_profile.user_id, db)
+    logger.info(f"ℹ️ Fetching details for course ID: {course_id} for instructor.")
 
+    user_profile = await _get_current_user_profile(user, db)
+    
+    result = await get_course_detail_for_instructor(course_id, user_profile.user_id, db)
 
-@router.put("/{course_id}")
+    logger.info(f"✅ Retrieved details for course ID: {course_id} for instructor ID: {user_profile.user_id}")
+    
+    return build_instructor_course_details_response(result)
+
+@router.put(
+    "/{course_id}",
+    response_model=CourseUpdateResponse,
+    operation_id="update_instructor_course"
+)
 async def update_course(
     course_id: int = Path(..., gt=0),
     payload: CourseUpdateRequest = Body(...),
     user=Depends(require_role(["Instructor"])),
     db: AsyncSession = Depends(get_db)
-):
+) -> CourseUpdateResponse:
     """
     Update an instructor-owned course.
     
@@ -721,91 +869,139 @@ async def update_course(
     - course_json?: dict | None
     - questions?: List[{question_id?: int, text: str, answer_text: str}]
     """
+    logger.info(f"ℹ️ Updating course ID: {course_id} for instructor with data: {payload}")
     
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
+    user_profile = await _get_current_user_profile(user, db)
     
-    return await update_course_for_instructor(
-        course_id, 
+    result = await update_course_for_instructor(
+        course_id,
         user_profile.user_id, 
-        payload.model_dump(exclude_unset=False), 
+        payload.model_dump(exclude_unset=True), 
         db
     )
+    
+    updated_details = build_instructor_course_details_response(result)
 
-@router.delete("/{course_id}")
+    logger.info(
+        f"✅ Course updated with ID: {course_id} "
+        f"for instructor ID: {user_profile.user_id}"
+    )
+
+    return CourseUpdateResponse(
+        **updated_details.model_dump(),
+        message="success",
+    )
+
+@router.delete(
+    "/{course_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    operation_id="delete_instructor_course"
+)
 async def delete_course(
     course_id: int = Path(..., gt=0),
     user=Depends(require_role(["Instructor"])),
     db: AsyncSession = Depends(get_db)
-):
+) -> None:
     """
     Delete a course owned by instructor, along with dependent records to avoid FK conflicts.
     """
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
-    return await delete_course_for_instructor(course_id, user_profile.user_id, db)
+    logger.info(f"ℹ️ Deleting course ID: {course_id} for instructor.")
+    
+    user_profile = await _get_current_user_profile(user, db)
 
+    await delete_course_for_instructor(course_id, user_profile.user_id, db)
+    
+    logger.info(f"✅ Course deleted with ID: {course_id} for instructor ID: {user_profile.user_id}")
+    
+    return None
 
 # ============================================================
 # Course Image Management Endpoints
 # ============================================================
 
-@router.post("/{course_id}/images")
+@router.post(
+    "/{course_id}/images",
+    response_model=CourseImageUploadResponse,
+    operation_id="upload_course_image"
+)
 async def upload_image(
     course_id: int = Path(..., gt=0),
     file: UploadFile = File(...),
     user=Depends(require_role(["Instructor"])),
     db: AsyncSession = Depends(get_db)
-):
+) -> CourseImageUploadResponse:
     """
     Upload an image for a course.
     Only the course owner (instructor) can upload images.
     """
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     
-    return await upload_course_image(course_id, user_profile.user_id, file, db)
+    logger.info(f"ℹ️ Uploading image for course ID: {course_id} for instructor.")
 
+    user_profile = await _get_current_user_profile(user, db)
+    
+    result = await upload_course_image(course_id, user_profile.user_id, file, db)
 
-@router.get("/{course_id}/images")
+    logger.info(f"✅ Image uploaded for course ID: {course_id} for instructor ID: {user_profile.user_id}, image filename: {result.get('original_filename')}")
+    
+    image_response = build_course_image_response(result, course_id=course_id)
+
+    return CourseImageUploadResponse(
+        **image_response.model_dump(),
+        message="success",
+    )
+
+@router.get(
+    "/{course_id}/images",
+    response_model=list[CourseImageResponse],
+    operation_id="list_course_images"
+)
 async def list_images(
     course_id: int = Path(..., gt=0),
     user=Depends(require_role(["Instructor"])),
     db: AsyncSession = Depends(get_db)
-):
+) -> list[CourseImageResponse]:
     """
     List all images for a course.
     Only the course owner (instructor) can list images.
     """
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    logger.info(f"ℹ️ Listing images for course ID: {course_id} for instructor.")
     
-    return await list_course_images(course_id, user_profile.user_id, db)
+    user_profile = await _get_current_user_profile(user, db)
+    
+    images = await list_course_images(course_id, user_profile.user_id, db)
+    
+    logger.info(f"✅ Retrieved images for course ID: {course_id} for instructor ID: {user_profile.user_id}")
 
+    return [
+        build_course_image_response(image, course_id=course_id)
+        for image in images
+    ]
 
-@router.get("/{course_id}/images/{image_filename}")
+@router.get(
+    "/{course_id}/images/{image_filename}",
+    response_class=FileResponse,
+    operation_id="get_course_image"
+)
 async def get_image(
     course_id: int = Path(..., gt=0),
     image_filename: str = Path(...),
     user=Depends(require_role(["Instructor", "Learner"])),
     db: AsyncSession = Depends(get_db)
-):
+) -> FileResponse:
     """
     Retrieve an image file for a course.
     Both instructors and learners can view images.
     Accepts either the original filename or stored_filename (UUID).
     """
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    logger.info(f"ℹ️ Fetching image '{image_filename}' for course ID: {course_id} for user.")
+
+    user_profile = await _get_current_user_profile(user, db)
     
     file_path, content_type = await get_course_image_path(
         course_id, image_filename, user_profile.user_id, db
     )
+
+    logger.info(f"✅ Found image path for '{image_filename}' for course ID: {course_id} for user ID: {user_profile.user_id}")
     
     return FileResponse(
         file_path,
@@ -816,20 +1012,27 @@ async def get_image(
         }
     )
 
-
-@router.delete("/{course_id}/images/{stored_filename}")
+@router.delete(
+    "/{course_id}/images/{stored_filename}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    operation_id="delete_course_image"
+)
 async def delete_image(
     course_id: int = Path(..., gt=0),
     stored_filename: str = Path(...),
     user=Depends(require_role(["Instructor"])),
     db: AsyncSession = Depends(get_db)
-):
+) -> None:
     """
     Delete an image from a course.
     Only the course owner (instructor) can delete images.
     """
-    user_profile = await get_user_profile_by_email(user["email"], db)
-    if not user_profile:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    logger.info(f"ℹ️ Deleting image '{stored_filename}' for course ID: {course_id} for instructor.")
     
-    return await delete_course_image(course_id, stored_filename, user_profile.user_id, db)
+    user_profile = await _get_current_user_profile(user, db)
+    
+    await delete_course_image(course_id, stored_filename, user_profile.user_id, db)
+
+    logger.info(f"✅ Image '{stored_filename}' deleted for course ID: {course_id} for instructor ID: {user_profile.user_id}")
+    
+    return None

@@ -1,0 +1,36 @@
+{
+  "title": "Profil",
+  "subtitle": "Verwalte deine persönlichen Informationen. Gesperrte Felder werden vom System verwaltet.",
+  "fields": {
+    "fullName": "Vollständiger Name",
+    "avatar": "Avatar-URL",
+    "email": "E-Mail",
+    "role": "Rolle",
+    "joined": "Beigetreten",
+    "lastLogin": "Letzte Anmeldung"
+  },
+  "placeholders": {
+    "fullName": "Vollständigen Namen eingeben",
+    "avatar": "Avatar-Bild-URL einfügen"
+  },
+  "helpers": {
+    "emailLocked": "Die E-Mail-Adresse kann nicht geändert werden.",
+    "roleLocked": "Rollenänderungen müssen von einem Administrator vorgenommen werden."
+  },
+  "hints": {
+    "noChanges": "Keine Änderungen zum Speichern."
+  },
+  "actions": {
+    "save": "Änderungen speichern",
+    "reset": "Zurücksetzen",
+    "retry": "Erneut versuchen"
+  },
+  "messages": {
+    "loading": "Profil wird geladen...",
+    "saved": "Profil erfolgreich aktualisiert.",
+    "saveFailed": "Profil konnte nicht aktualisiert werden.",
+    "unavailableTitle": "Profil nicht verfügbar",
+    "unavailableDescription": "Dein Profil konnte nicht geladen werden. Bitte versuche es erneut."
+  },
+  "notAvailable": "Nicht verfügbar"
+}

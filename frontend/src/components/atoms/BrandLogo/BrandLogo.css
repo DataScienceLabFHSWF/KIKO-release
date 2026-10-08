@@ -1,0 +1,36 @@
+/* frontend/src/components/atoms/BrandLogo/BrandLogo.css */
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.brand-logo__image {
+  display: block;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.brand-logo--sidebar .brand-logo__image {
+  width: 128px;
+  max-height: 56px;
+}
+
+.brand-logo--auth .brand-logo__image {
+  width: 150px;
+  max-height: 72px;
+}
+
+.brand-logo--compact .brand-logo__image {
+  width: 44px;
+  max-height: 44px;
+}
+
+.brand-logo__tagline {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--color-text);
+}

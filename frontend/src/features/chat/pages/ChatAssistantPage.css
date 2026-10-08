@@ -1,0 +1,112 @@
+/* frontend/src/features/chat/pages/ChatAssistantPage.css */
+
+.chat-page {
+  min-height: calc(100vh - var(--topbar-height) - 64px);
+  position: relative;
+  color: var(--color-text);
+}
+
+.chat-page--empty {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.chat-page__empty-main {
+  width: min(860px, 100%);
+  justify-self: center;
+  align-self: center;
+  display: grid;
+  justify-items: center;
+  gap: 52px;
+  transform: translateY(-6vh);
+}
+
+.chat-page__empty-composer {
+  width: min(760px, 100%);
+  display: grid;
+  gap: 8px;
+}
+
+.chat-page h1 {
+  margin: 0;
+  font-size: clamp(34px, 3.4vw, 52px);
+  letter-spacing: 1.5px;
+  font-weight: 900;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.chat-page__model-dock {
+  width: min(760px, 100%);
+  justify-self: center;
+  padding-bottom: 18px;
+}
+
+.chat-page--conversation {
+  height: calc(100vh - var(--topbar-height) - 64px);
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+
+.chat-page__messages {
+  width: min(1100px, 100%);
+  justify-self: center;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 32px 0 28px;
+}
+
+.chat-page__bottom-dock {
+  z-index: 5;
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  padding: 16px 0 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(247, 252, 254, 0) 0%,
+    rgba(247, 252, 254, 0.94) 24%,
+    rgba(247, 252, 254, 1) 100%
+  );
+}
+
+.chat-page__bottom-inner {
+  width: min(760px, 100%);
+  display: grid;
+  gap: 8px;
+}
+
+.chat-page__error,
+.chat-page__status {
+  width: 100%;
+  margin: 0;
+  padding-left: 2px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.chat-page__error {
+  color: var(--color-danger);
+}
+
+.chat-page__status {
+  color: var(--color-primary-dark);
+}
+
+@media (max-width: 780px) {
+  .chat-page__empty-main {
+    gap: 36px;
+    transform: none;
+  }
+
+  .chat-page--conversation {
+    height: auto;
+    min-height: calc(100vh - var(--topbar-height) - 64px);
+    overflow: visible;
+  }
+
+  .chat-page__messages {
+    overflow: visible;
+  }
+}

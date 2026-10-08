@@ -1,0 +1,54 @@
+{
+  "metaTitle": "Chat Assistant",
+  "heading": "What do you want to learn?",
+  "defaultPlaceHolder": "Write something...",
+  "history": {
+    "loading": "Loading chat history...",
+    "loadFailed": "Could not load chat history."
+  },
+  "actions": {
+    "send": "Send question",
+    "close": "Close",
+    "download": "Download"
+  },
+  "upload": {
+    "title": "Upload PDF files",
+    "hint": "Use + to upload PDFs, or drag and drop them here. Maximum 20 MB per PDF.",
+    "dropHint": "Drop PDF files here.",
+    "removeFile": "Remove {{fileName}}",
+    "errors": {
+      "pdfOnly": "Only PDF files are supported.",
+      "maxSize": "Maximum file size is {{size}} MB."
+    }
+  },
+  "voice": {
+    "disabled": "Voice input is not available yet."
+  },
+  "footer": {
+    "llm": "LLM:",
+    "sysInformation": "System Information"
+  },
+  "status": {
+    "uploading": "Processing uploaded PDF files...",
+    "thinking": "Generating answer...",
+    "filesReady": "{{count}} PDF file(s) ready.",
+    "failed": "Something went wrong. Please try again.",
+    "systemMessage": "System message"
+  },
+  "sources": {
+    "show": "Show {{count}} Sources",
+    "hide": "Hide {{count}} Sources",
+    "unknown": "Unknown source"
+  },
+  "system": {
+    "title": "System Information",
+    "aiModels": "AI Models Available:",
+    "advancedVlm": "Advanced VLM Models",
+    "trocr": "TrOCR Available",
+    "opencv": "OpenCV Computer Vision",
+    "embeddingAndLlm": "Embedding and LLM Model:",
+    "embeddingModel": "Embedding Model",
+    "largeLanguageModel": "Large Language Model",
+    "runtime": "System:"
+  }
+}

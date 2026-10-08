@@ -1,0 +1,24 @@
+{
+  "welcome": "Willkommen, {{name}}",
+  "userFallback": "Benutzer",
+  "navigation": "Hauptnavigation",
+  "collapse": "Seitenleiste einklappen",
+  "expand": "Seitenleiste ausklappen",
+  "logout": "Abmelden",
+  "nav": {
+    "dashboard": "Dashboard",
+    "myCourses": "Meine Kurse",
+    "mediaManager": "Medienverwaltung",
+    "courseGenerator": "Kursgenerator",
+    "chatAssistant": "Chat-Assistent",
+    "knowledgeAssessment": "Wissensbewertung",
+    "knowledgeCheckConfig": "Wissenscheck-Konfiguration",
+    "adminConsole": "Admin-Konsole",
+    "myDocuments": "Meine Dokumente",
+    "profile": "Profil",
+    "faq": "FAQ",
+    "evaluationResults": "Evaluationsergebnisse",
+    "changePassword": "Passwort ändern"
+  },
+  "goToDashboard": "Zum Dashboard"
+}

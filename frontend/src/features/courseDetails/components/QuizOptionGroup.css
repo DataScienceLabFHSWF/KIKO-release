@@ -1,0 +1,44 @@
+/* frontend/src/features/courseDetails/components/QuizOptionGroup.css */
+
+.quiz-option-group {
+  display: grid;
+  gap: 10px;
+}
+
+.quiz-option {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(16, 35, 71, 0.18);
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  color: var(--color-text);
+  font: inherit;
+}
+
+.quiz-option:hover {
+  background: var(--color-surface-blue);
+}
+
+.quiz-option--selected {
+  border-color: var(--color-primary);
+  background: var(--color-surface-blue);
+  box-shadow: 6px 6px 0 var(--color-surface-blue-strong);
+}
+
+.quiz-option__indicator {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-primary-dark);
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  border-radius: 999px;
+}
+
+.quiz-option__indicator--multi {
+  border-radius: 2px;
+}

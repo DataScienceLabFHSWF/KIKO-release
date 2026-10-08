@@ -1,0 +1,88 @@
+{
+  "title": "Admin Console",
+  "subtitle": "Manage safe application defaults for models, course generation, OCR, VLM, and multilingual behaviour.",
+
+  "actions": {
+    "save": "Save changes",
+    "reset": "Reset changes",
+    "retry": "Retry"
+  },
+
+  "status": {
+    "loading": "Loading application configuration...",
+    "saved": "Application configuration saved successfully."
+  },
+
+  "errors": {
+    "loadTitle": "Could not load application configuration",
+    "loadDescription": "An unexpected error occurred while loading the configuration.",
+    "saveDescription": "Could not save application configuration."
+  },
+
+  "validation": {
+    "title": "Please fix the configuration before saving."
+  },
+
+  "runtime": {
+    "python": "Python",
+    "platform": "Platform",
+    "cuda": "CUDA",
+    "device": "GPU device",
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+
+  "sections": {
+    "models": {
+      "title": "Default models",
+      "description": "Choose the default models used by chat, embeddings, and answer grading."
+    },
+    "courseGeneration": {
+      "title": "Course generation limits",
+      "description": "Control how many questions, quiz items, options, and misconceptions are generated."
+    },
+    "vlm": {
+      "title": "Vision language model",
+      "description": "Configure image-aware document understanding for PDFs and visual content."
+    },
+    "ocr": {
+      "title": "OCR settings",
+      "description": "Configure text extraction quality for scanned or image-heavy documents."
+    },
+    "multilingual": {
+      "title": "Multilingual support",
+      "description": "Configure language detection and default language behaviour."
+    }
+  },
+
+  "groups": {
+    "qa": "Q&A pairs",
+    "quizQuestions": "Quiz questions",
+    "quizOptions": "Quiz options",
+    "misconceptions": "Misconceptions"
+  },
+
+  "fields": {
+    "defaultEmbeddingModel": "Default embedding model",
+    "defaultLlmModel": "Default LLM model",
+    "defaultReasoningModel": "Default reasoning model",
+
+    "minimum": "Minimum",
+    "default": "Default",
+    "maximum": "Maximum",
+
+    "enableVlm": "Enable VLM",
+    "preferredVlmModel": "Preferred VLM model",
+
+    "useAdvancedOcr": "Use advanced OCR",
+    "preferredOcrEngine": "Preferred OCR engine",
+    "ocrPreprocessing": "OCR preprocessing",
+    "ocrSkewCorrection": "OCR skew correction",
+    "ocrNoiseReduction": "OCR noise reduction",
+    "ocrLanguage": "OCR language",
+
+    "enableMultilingual": "Enable multilingual mode",
+    "languageDetection": "Language detection",
+    "defaultLanguage": "Default language"
+  }
+}

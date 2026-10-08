@@ -1,3 +1,5 @@
+# backend/app/core/table_extractor.py
+
 import numpy as np, cv2 as cv, logging
 from PIL import Image
 from .ocr_manager import OCRManager
@@ -8,13 +10,13 @@ class TableExtractor:
     """Extract tables from documents using advanced computer vision."""
     
     def __init__(self, config):
-        print("ℹ️ Initializing TableExtractor with advanced CV techniques...")
+        logger.info("ℹ️ Initializing TableExtractor with advanced CV techniques...")
         self.config = config
     
     async def detect_tables(self, image):
         """Detect tables in image using advanced CV techniques."""
         if not self.config.get("flags").get('is_cv2_available'):
-            print("⚠️ OpenCV is not available. Table detection will be skipped.")
+            logger.warning("⚠️ OpenCV is not available. Table detection will be skipped.")
             return []
             
         try:
@@ -43,11 +45,11 @@ class TableExtractor:
             # Remove duplicates and filter
             tables = await self._filter_and_merge_tables(tables)
 
-            print(f"ℹ️ Detected {len(tables)} potential tables.")            
+            logger.info(f"ℹ️ Detected {len(tables)} potential tables.")            
             return tables
             
         except Exception as e:
-            print(f"❌ Error during table detection: {str(e)}")
+            logger.exception(f"❌ Error during table detection: {str(e)}")
             return []
     
     async def _detect_tables_by_lines(self, gray):
@@ -84,11 +86,11 @@ class TableExtractor:
                 
                 tables.append([x, y, x+w, y+h])
             
-            print(f"ℹ️ Detected {len(tables)} tables using line analysis.")
+            logger.info(f"ℹ️ Detected {len(tables)} tables using line analysis.")
             return tables
             
         except Exception as e:
-            print(f"❌ Error during line-based table detection: {str(e)}")
+            logger.exception(f"❌ Error during line-based table detection: {str(e)}")
             return []
     
     async def _detect_tables_by_contours(self, gray):
@@ -119,17 +121,17 @@ class TableExtractor:
                         if aspect_ratio < 10:  # Not too elongated
                             tables.append([x, y, x+w, y+h])
             
-            print(f"ℹ️ Detected {len(tables)} tables using contour analysis.")
+            logger.info(f"ℹ️ Detected {len(tables)} tables using contour analysis.")
             return tables
             
         except Exception as e:
-            print(f"❌ Error during contour-based table detection: {str(e)}")
+            logger.exception(f"❌ Error during contour-based table detection: {str(e)}")
             return []
     
     async def _filter_and_merge_tables(self, tables):
         """Filter and merge overlapping table detections."""
         if not tables:
-            print("⚠️ No tables detected to filter or merge.")
+            logger.warning("⚠️ No tables detected to filter or merge.")
             return []
         
         # Remove duplicates and merge overlapping
@@ -163,7 +165,7 @@ class TableExtractor:
             
             if not overlap_found:
                 merged_tables.append(table)
-        print(f"✅ Merged to {len(merged_tables)} unique table detections.")
+        logger.info(f"✅ Merged to {len(merged_tables)} unique table detections.")
         return merged_tables
     
     async def extract_table_structure(self, image, table_bbox):
@@ -187,7 +189,7 @@ class TableExtractor:
             # Also try to detect structure
             structure = await self._analyze_table_structure(table_np)
 
-            print(f"✅ Extracted table structure: {structure}")
+            logger.info(f"✅ Extracted table structure: {structure}")
             
             return {
                 "rows": structure.get("rows", 1),
@@ -197,14 +199,14 @@ class TableExtractor:
                 "structure": structure
             }
         except Exception as e:
-            print(f"❌ Error extracting table structure: {str(e)}")
+            logger.exception(f"❌ Error extracting table structure: {str(e)}")
             return {"error": str(e)}
     
     async def _analyze_table_structure(self, table_image):
         """Analyze table structure to determine rows and columns."""
         try:
             if not self.config.get("flags").get('is_cv2_available'):
-                print("⚠️ OpenCV is not available. Table structure analysis will be skipped.")
+                logger.warning("⚠️ OpenCV is not available. Table structure analysis will be skipped.")
                 return {"rows": 1, "columns": 1}
             
             gray = cv.cvtColor(table_image, cv.COLOR_RGB2GRAY) if len(table_image.shape) == 3 else table_image
@@ -231,7 +233,7 @@ class TableExtractor:
             row_count = max(1, row_count - 1)  # Lines define rows between them
             col_count = max(1, col_count - 1)  # Lines define columns between them
             
-            print(f"ℹ️ Detected {row_count} rows and {col_count} columns in table structure.")
+            logger.info(f"ℹ️ Detected {row_count} rows and {col_count} columns in table structure.")
             return {
                 "rows": row_count,
                 "columns": col_count,
@@ -240,7 +242,7 @@ class TableExtractor:
             }
             
         except Exception as e:
-            print(f"❌ Error analyzing table structure: {str(e)}")
+            logger.exception(f"❌ Error analyzing table structure: {str(e)}")
             return {"rows": 1, "columns": 1}
     
     async def _find_peaks(self, projection, min_height=None, min_distance=10):
@@ -258,5 +260,5 @@ class TableExtractor:
                 if not peaks or i - peaks[-1] >= min_distance:
                     peaks.append(i)
         
-        print(f"ℹ️ Found {len(peaks)} peaks in projection profile.")
+        logger.info(f"ℹ️ Found {len(peaks)} peaks in projection profile.")
         return peaks

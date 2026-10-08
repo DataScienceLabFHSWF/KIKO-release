@@ -1,0 +1,2 @@
+chat_n_items,chat_ROUGE-L_avg,chat_BLEU_avg,chat_BERTScore_F1_avg,chat_CitationRate,chat_Recall_k_avg,chat_MRR_avg,chat_nDCG_avg,chat_AttributionMatch_avg,grade_n_items,grade_Accuracy_exact,grade_MAE,grade_Within1,grade_QWKappa
+20,0.10208320114600844,0.05560642026324496,0.6466951012611389,1.0,0.4,0.4,0.652371901428583,0.26539322378696345,12,0.25,0.8333333333333334,0.9166666666666666,0.7591973244147157

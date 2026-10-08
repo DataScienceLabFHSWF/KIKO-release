@@ -1,11 +1,19 @@
+# backend/init_db.py
+
 import os, asyncio, asyncpg, logging
 from sqlalchemy import select, text
 from passlib.hash import pbkdf2_sha256
+from datetime import datetime, timezone
 from app.models import (RoleModel, UserRoleModel, UserModel, KnowledgeAssessmentModel)
 from app.database import AsyncSessionLocal, Engine, Base
 from app.schemas import AppConfigSchema
 from app.services import create_template_courses_for_instructor
 from app.utils import default_avatar_for_role
+from app.core import configure_logging
+
+configure_logging()
+
+logger = logging.getLogger(__name__)
 
 DOCKER_DB_SERVICE_NAME = os.getenv("DOCKER_DB_SERVICE_NAME")
 DATABASE_PORT = os.getenv("POSTGRES_DATABASE_PORT")
@@ -13,11 +21,13 @@ POSTGRES_USER = os.getenv("POSTGRES_USER")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 POSTGRES_DB = os.getenv("POSTGRES_DB")
 
-logger = logging.getLogger(__name__)
+APP_ENV = os.getenv("APP_ENV", "development").lower()
+INIT_DB_DROP_ALL = os.getenv("INIT_DB_DROP_ALL", "false").lower() == "true"
+INIT_DB_SEED = os.getenv("INIT_DB_SEED", "true").lower() == "true"
 
 config = AppConfigSchema()
 
-async def wait_for_db(retries=10, delay=2):
+async def wait_for_db(retries: int = 10, delay: int = 2) -> None:
     """Wait for the database to be available before proceeding.
     This function attempts to connect to the PostgreSQL database using asyncpg.
     It retries the connection a specified number of times with a delay between attempts.
@@ -33,15 +43,21 @@ async def wait_for_db(retries=10, delay=2):
                 port= DATABASE_PORT
             )
             await conn.close()
-            print("✅ Successfully connected to the database.")
+            logger.info("✅ Successfully connected to the database.")
             return
         except Exception as e:
-            print(f"⏳ Waiting for DB... ({attempt+1}/{retries}) - Error: {e}")
+            logger.warning(
+                "⏳ Waiting for DB... (%s/%s) - Error: %s",
+                attempt + 1,
+                retries,
+                e,
+            )
             await asyncio.sleep(delay)
-    print("❌ Database connection failed after retries.")
-    raise Exception("Database connection failed after retries.")
 
-async def seed_table(session, model, data):
+    logger.error("❌ Database connection failed after retries.")
+    raise RuntimeError("Database connection failed after retries.")
+
+async def seed_table(session, model, data) -> None:
     """Seed a database table with initial data if it's empty.
     This function checks if the specified table is empty.
     If empty, it inserts the provided data into the table.
@@ -50,41 +66,52 @@ async def seed_table(session, model, data):
     exists = await session.execute(select(model).limit(1))
     
     if exists.scalar_one_or_none():
-        print(f"✅ {model.__tablename__} already seeded.")
+        logger.info("✅ %s already seeded.", model.__tablename__)
         return
     
     session.add_all(data)
     await session.commit()
-    print(f"✅ {model.__tablename__} Seeded.")
+    logger.info("✅ %s seeded.", model.__tablename__)
 
-async def init_db():
+async def init_db() -> None:
     """Initialize the database by creating tables and seeding initial data.
     This function waits for the database to be available, creates the necessary tables,
     and seeds initial data into various tables such as Roles, Users, UserRoles, Knowledge Assessments,
     Courses, Enrollments, Questions, Exams, ExamQuestions, ExamSubmissions, and ExamAnswers."""
     
     # Wait for the database to be available
-    print("⏳ Waiting for DB...")    
+    logger.info("⏳ Waiting for DB...")    
     await wait_for_db()
-    print("ℹ️ DB is available.")
+    logger.info("ℹ️ DB is available.")
     
     # Create the database tables
     async with Engine.begin() as conn:
         
-        print("ℹ️ Ensuring pgvector extension is installed...")
+        logger.info("ℹ️ Ensuring pgvector extension is installed...")
         await conn.execute(text("CREATE SCHEMA IF NOT EXISTS public"))
         await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector SCHEMA public"))
-        print("✅ pgvector extension verified.")
+        logger.info("✅ pgvector extension verified.")
 
-        # ⚠️ DANGEROUS - deletes all data start
-        await conn.run_sync(Base.metadata.drop_all)
-        # ⚠️ DANGEROUS - Create all tables
+        if INIT_DB_DROP_ALL:
+            if APP_ENV not in {"development", "dev", "local"}:
+                raise RuntimeError(
+                    "INIT_DB_DROP_ALL=true is only allowed in development/local."
+                )
+
+            logger.warning("⚠️ Dropping all tables because INIT_DB_DROP_ALL=true.")
+            await conn.run_sync(Base.metadata.drop_all)
+
+        logger.info("ℹ️ Creating missing tables if needed...")
         await conn.run_sync(Base.metadata.create_all)
-        print("✅ Tables created.")
-    
+        logger.info("✅ Tables verified/created.")
+
+    if not INIT_DB_SEED:
+        logger.info("ℹ️ INIT_DB_SEED=false, skipping seed data.")
+        return
+
     async with AsyncSessionLocal() as db:
-        await db.begin()
-        print("ℹ️ seeding Roles table...")
+        logger.info("ℹ️ Seeding Roles table...")
+
         # Roles
         roles = [
             RoleModel(name="Learner"),
@@ -93,7 +120,7 @@ async def init_db():
         ]
         await seed_table(db, RoleModel, roles)        
 
-        print("ℹ️ seeding Users table...")        
+        logger.info("ℹ️ Seeding Users table...")        
         # Users
         users = [
             # user_id=1 - System user for template courses (visible to all learners)
@@ -106,6 +133,8 @@ async def init_db():
                 full_name="KIKO Platform",
                 avatar=default_avatar_for_role("Instructor", "KIKO Platform"),
                 # bio="System account for template courses."
+                email_verified = True,
+                email_verified_at = datetime.now(timezone.utc)
             ),
             # user_id=2
             UserModel(
@@ -117,6 +146,8 @@ async def init_db():
                 full_name="Sanjay",
                 avatar=default_avatar_for_role("Learner", "Sanjay"),
                 # bio="Passionate about clean energy."
+                email_verified = True,
+                email_verified_at = datetime.now(timezone.utc)
             ),
             # user_id=3
             UserModel(
@@ -128,6 +159,8 @@ async def init_db():
                 full_name="Dr. Anton",
                 avatar=default_avatar_for_role("Instructor", "Dr. Anton"),
                 # bio="Experienced Physics, Nuclear, and Reactor."
+                email_verified = True,
+                email_verified_at = datetime.now(timezone.utc)
             ),
             # user_id=4
             UserModel(
@@ -139,6 +172,8 @@ async def init_db():
                 full_name="Dr. Thomas Kopinski",
                 avatar=default_avatar_for_role("Admin", "Dr. Thomas Kopinski"),
                 # bio="System administrator."
+                email_verified = True,
+                email_verified_at = datetime.now(timezone.utc)
             ),
             # user_id=5
             UserModel(
@@ -150,6 +185,8 @@ async def init_db():
                 full_name="Fusion Student",
                 avatar=default_avatar_for_role("Learner", "Fusion Student"),
                 # bio="Passionate about clean energy."
+                email_verified = True,
+                email_verified_at = datetime.now(timezone.utc)
             ),
             # user_id=6
             UserModel(
@@ -161,6 +198,8 @@ async def init_db():
                 full_name="Dr. Anton",
                 avatar=default_avatar_for_role("Instructor", "Dr. Anton"),
                 # bio="Experienced Physics, Nuclear, and Reactor."
+                email_verified = True,
+                email_verified_at = datetime.now(timezone.utc)
             ),
             # user_id=7
             UserModel(
@@ -172,6 +211,8 @@ async def init_db():
                 full_name="Education Student",
                 avatar=default_avatar_for_role("Learner", "Education Student"),
                 # bio="Passionate about clean energy."
+                email_verified = True,
+                email_verified_at = datetime.now(timezone.utc)
             ),
             # user_id=8
             UserModel(
@@ -183,6 +224,8 @@ async def init_db():
                 full_name="Dr. Anton",
                 avatar=default_avatar_for_role("Instructor", "Dr. Anton"),
                 # bio="Experienced Physics, Nuclear, and Reactor."
+                email_verified = True,
+                email_verified_at = datetime.now(timezone.utc)
             ),
             # user_id=9
             # Prof. Dr. Thomas Kopinski - for fusion and smr use-case
@@ -195,11 +238,14 @@ async def init_db():
                 full_name="Prof. Dr. Thomas Kopinski",
                 avatar=default_avatar_for_role("Instructor", "Prof. Dr. Thomas Kopinski"),
                 # bio="System account for template courses."
+                email_verified = True,
+                email_verified_at = datetime.now(timezone.utc)
             ),
         ]
         await seed_table(db, UserModel, users)
 
-        print("ℹ️ seeding UserRoles table...")
+        logger.info("ℹ️ Seeding UserRoles table...")
+
         # UserRoles
         user_roles = [
             UserRoleModel(user_id=1, role_id=2),  # system - Instructor
@@ -214,7 +260,7 @@ async def init_db():
         ]
         await seed_table(db, UserRoleModel, user_roles)
         
-        print("ℹ️ seeding Knowledge Assessment table...")
+        logger.info("ℹ️ Seeding Knowledge Assessment table...")
         # Questions Test knowledge
         questions = [
             KnowledgeAssessmentModel(topic="Grundlagen der Strahlung", question="Welche ionisierende Strahlung hat die größte Durchdringungsfähigkeit in Materie? (α, β, γ, Neutronen)", type="mcq", correct_answer="γ (Gamma)" , created_by=4),
@@ -224,25 +270,22 @@ async def init_db():
             KnowledgeAssessmentModel(topic="Vorschriften", question="Welches Prinzip liegt der Dosisoptimierung bei der Genehmigung zugrunde?", type="mcq", correct_answer="ALARA (As Low As Reasonably Achievable)" , created_by=4),
         ]
         await seed_table(db, KnowledgeAssessmentModel, questions)
-        
-        await db.commit()
-        
+
         # Create template courses for system user
-        print("ℹ️ Creating template courses for system user...")
+        logger.info("ℹ️ Creating template courses for system user...")
         system_user = await db.execute(
             select(UserModel).where(UserModel.role == "Instructor")
         )
         system_user = list(system_user.scalars().all())
 
         for user in system_user:
-            print(f"ℹ️ System user found: {user.email}. Creating template courses...")
+            logger.info(f"ℹ️ System user found: {user.email}. Creating template courses...")
             await create_template_courses_for_instructor(user.user_id, db)
-            print(f"✅ Template courses created for user {user.email}.")
-        
-        await db.close()
-        print("✅ Database seeded successfully.")
+            logger.info(f"✅ Template courses created for user {user.email}.")
+
+        logger.info("✅ Database seeded successfully.")
 
 if __name__ == "__main__":
-    print("ℹ️ Initializing database...")
+    logger.info("ℹ️ Initializing database...")
     asyncio.run(init_db())
-    print("Database initialized successfully.")
+    logger.info("✅ Database initialized successfully.")

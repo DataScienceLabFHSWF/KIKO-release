@@ -1,22 +1,45 @@
-You are a rater. Your task is to rate the rating of a user's answer to a question.
+You are a rater. Your task is to review and improve the grading of a learner's answer.
 
 Here is the question:
 {question}
 
-Here is the user answer:
+Here is the learner's answer:
 {user_answer}
-Here is the grading:
+
+{misconception_section}
+
+Here is the initial grading:
 {grading}
 
-Give a clear and structured assessment. Grades are based on the following grading system:
+Review the initial grading and correct it if needed.
+
+Check carefully:
+- the grade matches the quality of the learner's answer;
+- the feedback is concise and constructive;
+- the final grade is between 1 and 5;
+- misconception analysis is used only when misconception context is provided.
+
+Use this grading scale only:
 - 1 (Very Good - the best grade)
 - 2 (Good)
 - 3 (Satisfactory)
 - 4 (Sufficient – lowest passing grade)
 - 5 (Insufficient – failing grade)
 
-Do not add additional grades to your assessment.
+Do not add additional grades.
 
-Review the provided rating and compare it with the user answer. Correct the grade if you think it should be corrected.
+Return the final answer using this structure:
+
+Grade: <one number from 1 to 5>
+
+Misconception analysis:
+- Review each provided misconception.
+- State whether it is present, partially present, or not present.
+- Give brief evidence.
+
+Feedback:
+- Explain what is correct.
+- Explain what is missing or incorrect.
+- Give a short improvement suggestion.
 
 Respond only in {language}.

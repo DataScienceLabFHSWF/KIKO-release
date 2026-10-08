@@ -1,0 +1,45 @@
+/* frontend/src/features/adminAppConfig/components/AdminAppConfigField.css */
+
+.admin-app-config-field {
+  min-width: 0;
+  display: grid;
+  gap: 7px;
+}
+
+.admin-app-config-field__label {
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.admin-app-config-field__description {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.admin-app-config-field input,
+.admin-app-config-field select {
+  width: 100%;
+  min-height: 42px;
+  border: 0;
+  padding: 0 14px;
+  background: #eef2f6;
+  color: var(--color-text);
+  font-weight: 800;
+  outline: none;
+}
+
+.admin-app-config-field input:focus,
+.admin-app-config-field select:focus {
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.admin-app-config-field input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  min-height: unset;
+  padding: 0;
+  accent-color: var(--color-primary-dark);
+}

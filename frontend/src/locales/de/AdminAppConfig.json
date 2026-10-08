@@ -1,0 +1,88 @@
+{
+  "title": "Admin-Konsole",
+  "subtitle": "Verwalte sichere Anwendungsvorgaben für Modelle, Kursgenerierung, OCR, VLM und Mehrsprachigkeit.",
+
+  "actions": {
+    "save": "Änderungen speichern",
+    "reset": "Änderungen zurücksetzen",
+    "retry": "Erneut versuchen"
+  },
+
+  "status": {
+    "loading": "Anwendungskonfiguration wird geladen...",
+    "saved": "Anwendungskonfiguration wurde erfolgreich gespeichert."
+  },
+
+  "errors": {
+    "loadTitle": "Anwendungskonfiguration konnte nicht geladen werden",
+    "loadDescription": "Beim Laden der Konfiguration ist ein unerwarteter Fehler aufgetreten.",
+    "saveDescription": "Anwendungskonfiguration konnte nicht gespeichert werden."
+  },
+
+  "validation": {
+    "title": "Bitte korrigiere die Konfiguration vor dem Speichern."
+  },
+
+  "runtime": {
+    "python": "Python",
+    "platform": "Plattform",
+    "cuda": "CUDA",
+    "device": "GPU-Gerät",
+    "enabled": "Aktiviert",
+    "disabled": "Deaktiviert"
+  },
+
+  "sections": {
+    "models": {
+      "title": "Standardmodelle",
+      "description": "Wähle die Standardmodelle für Chat, Embeddings und Antwortbewertung."
+    },
+    "courseGeneration": {
+      "title": "Grenzwerte für Kursgenerierung",
+      "description": "Steuere, wie viele Fragen, Quizfragen, Antwortoptionen und Fehlvorstellungen generiert werden."
+    },
+    "vlm": {
+      "title": "Vision-Language-Modell",
+      "description": "Konfiguriere bildbasiertes Dokumentverständnis für PDFs und visuelle Inhalte."
+    },
+    "ocr": {
+      "title": "OCR-Einstellungen",
+      "description": "Konfiguriere die Texterkennungsqualität für gescannte oder bildreiche Dokumente."
+    },
+    "multilingual": {
+      "title": "Mehrsprachigkeit",
+      "description": "Konfiguriere Spracherkennung und Standardsprache."
+    }
+  },
+
+  "groups": {
+    "qa": "Frage-Antwort-Paare",
+    "quizQuestions": "Quizfragen",
+    "quizOptions": "Quizoptionen",
+    "misconceptions": "Fehlvorstellungen"
+  },
+
+  "fields": {
+    "defaultEmbeddingModel": "Standard-Embedding-Modell",
+    "defaultLlmModel": "Standard-LLM",
+    "defaultReasoningModel": "Standard-Reasoning-Modell",
+
+    "minimum": "Minimum",
+    "default": "Standard",
+    "maximum": "Maximum",
+
+    "enableVlm": "VLM aktivieren",
+    "preferredVlmModel": "Bevorzugtes VLM-Modell",
+
+    "useAdvancedOcr": "Erweiterte OCR verwenden",
+    "preferredOcrEngine": "Bevorzugte OCR-Engine",
+    "ocrPreprocessing": "OCR-Vorverarbeitung",
+    "ocrSkewCorrection": "OCR-Schrägkorrektur",
+    "ocrNoiseReduction": "OCR-Rauschreduzierung",
+    "ocrLanguage": "OCR-Sprache",
+
+    "enableMultilingual": "Mehrsprachigkeit aktivieren",
+    "languageDetection": "Spracherkennung",
+    "defaultLanguage": "Standardsprache"
+  }
+}

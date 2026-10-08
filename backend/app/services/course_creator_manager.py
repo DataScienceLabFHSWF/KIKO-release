@@ -1,5 +1,5 @@
 # backend/app/services/course_creator_manager.py
-import os, time, asyncio, re, yaml
+import os, time, asyncio, re, yaml, logging
 from copy import deepcopy
 from dotenv import load_dotenv
 from fastapi import HTTPException, status
@@ -29,6 +29,8 @@ from app.models import (
 from app.utils import rewrite_markdown_image_urls, lang_display
 
 load_dotenv()
+logger = logging.getLogger(__name__)
+
 DOCKER_OLLAMA_URL = os.getenv("DOCKER_OLLAMA_URL")
 COURSE_CREATOR_NUM_CTX = int(os.getenv("COURSE_CREATOR_NUM_CTX", "8192"))
 COURSE_CREATOR_KEEP_ALIVE = os.getenv("COURSE_CREATOR_KEEP_ALIVE", "10m")
@@ -553,7 +555,7 @@ class AsyncBatchProcessor:
             candidate = _sanitize_course_title(candidate)
             return candidate or fallback_title
         except Exception as exc:
-            print(f"⚠️ Title generation failed; falling back to filename/summary title: {exc}")
+            logger.exception(f"⚠️ Title generation failed; falling back to filename/summary title: {exc}")
             return fallback_title
 
     async def generate_structured_quiz_yaml(
@@ -639,13 +641,13 @@ class AsyncBatchProcessor:
             )
         except asyncio.TimeoutError:
             suffix = f" ({context_label})" if context_label else ""
-            print(
+            logger.exception(
                 f"⚠️ Misconception generation timed out after "
                 f"{timeout_seconds}s{suffix}; using fallback misconceptions."
             )
         except Exception as exc:
             suffix = f" ({context_label})" if context_label else ""
-            print(f"⚠️ Misconception generation failed{suffix}: {exc}")
+            logger.exception(f"⚠️ Misconception generation failed{suffix}: {exc}")
 
         return self._fallback_misconceptions(misconception_count)
 
@@ -657,7 +659,7 @@ class AsyncBatchProcessor:
                     return result.get('text', "")
                 except Exception as e:
                     if attempt == 2:
-                        print(f"Chunk failed after retries: {e}")
+                        logger.exception(f"Chunk failed after retries: {e}")
                         return ""
                     await asyncio.sleep(1)
 
@@ -737,7 +739,7 @@ class AsyncBatchProcessor:
             length_function=len
         )
         chunks = splitter.split_documents(docs)
-        print(f"Document split into {len(chunks)} chunks.")
+        logger.info(f"Document split into {len(chunks)} chunks.")
         await self._maybe_report_progress(
             progress_callback,
             0.2,
@@ -746,7 +748,7 @@ class AsyncBatchProcessor:
         await self._maybe_check_cancel(cancellation_check)
 
         if len(chunks) == 1:
-            print("Single chunk detected. Using reduce on original content.")
+            logger.info("Single chunk detected. Using reduce on original content.")
             await self._maybe_report_progress(
                 progress_callback,
                 0.45,
@@ -790,7 +792,7 @@ class AsyncBatchProcessor:
                     task.cancel()
                 raise
 
-            print("Generating final summary...")
+            logger.info("Generating final summary...")
             await self._maybe_report_progress(
                 progress_callback,
                 0.65,
@@ -801,7 +803,7 @@ class AsyncBatchProcessor:
 
         generated_quiz = None
         try:
-            print("Generating structured quiz YAML...")
+            logger.info("Generating structured quiz YAML...")
             await self._maybe_report_progress(
                 progress_callback,
                 0.76,
@@ -817,11 +819,11 @@ class AsyncBatchProcessor:
                 timeout=180,
             )
         except asyncio.TimeoutError:
-            print("⚠️ Quiz generation timed out after 180s; continuing without quiz.")
+            logger.exception("⚠️ Quiz generation timed out after 180s; continuing without quiz.")
         except Exception as exc:
-            print(f"⚠️ Quiz generation failed: {exc}")
+            logger.exception(f"⚠️ Quiz generation failed: {exc}")
 
-        print("Generating common misconceptions...")
+        logger.info("Generating common misconceptions...")
         await self._maybe_report_progress(
             progress_callback,
             0.82,
@@ -834,7 +836,7 @@ class AsyncBatchProcessor:
             context_label="PDF",
         )
 
-        print("Generating questions...")
+        logger.info("Generating questions...")
         await self._maybe_report_progress(
             progress_callback,
             0.88,
@@ -850,7 +852,7 @@ class AsyncBatchProcessor:
         questions_dict = qa_list_obj.model_dump()  # Convert to dict
 
         processing_time = round(time.time() - start_time, 2)
-        print(f"Total processing time: {processing_time} seconds")
+        logger.info(f"Total processing time: {processing_time} seconds")
 
         await self._maybe_report_progress(
             progress_callback,
@@ -917,10 +919,10 @@ class AsyncBatchProcessor:
             length_function=len
         )
         chunks = splitter.split_text(text or "")
-        print(f"Raw text split into {len(chunks)} chunks.")
+        logger.info(f"Raw text split into {len(chunks)} chunks.")
 
         if len(chunks) == 1:
-            print("Single chunk text. Using reduce on original text.")
+            logger.info("Single chunk text. Using reduce on original text.")
             reduce_out = await self.reduce_chain.ainvoke({"text": text or ""})
             final_summary = reduce_out.get("text", "")
         else:
@@ -929,12 +931,12 @@ class AsyncBatchProcessor:
             summaries = await asyncio.gather(*tasks)
             summaries = [s for s in summaries if s]
 
-            print("Generating final summary (text)...")
+            logger.info("Generating final summary (text)...")
             final_summary = await self.batch_reduce(summaries)
 
         generated_quiz = None
         try:
-            print("Generating structured quiz YAML (text)...")
+            logger.info("Generating structured quiz YAML (text)...")
             generated_quiz = await asyncio.wait_for(
                 self.generate_structured_quiz_yaml(
                     final_summary,
@@ -944,18 +946,18 @@ class AsyncBatchProcessor:
                 timeout=180,
             )
         except asyncio.TimeoutError:
-            print("⚠️ Quiz generation timed out after 180s (text); continuing without quiz.")
+            logger.exception("⚠️ Quiz generation timed out after 180s (text); continuing without quiz.")
         except Exception as exc:
-            print(f"⚠️ Quiz generation failed (text): {exc}")
+            logger.exception(f"⚠️ Quiz generation failed (text): {exc}")
 
-        print("Generating common misconceptions (text)...")
+        logger.info("Generating common misconceptions (text)...")
         generated_misconceptions = await self.generate_structured_misconceptions_or_fallback(
             final_summary,
             misconception_count=misconception_count,
             context_label="text",
         )
 
-        print("Generating questions (text)...")
+        logger.info("Generating questions (text)...")
         qa_list_obj: QuestionAnswerList = await self.question_chain.ainvoke(
             {
                 "text": final_summary,
@@ -965,7 +967,7 @@ class AsyncBatchProcessor:
         questions_dict = qa_list_obj.model_dump()
 
         processing_time = round(time.time() - start_time, 2)
-        print(f"Total processing time (text): {processing_time} seconds")
+        logger.info(f"Total processing time (text): {processing_time} seconds")
 
         return {
             "final_summary": final_summary,
@@ -1249,6 +1251,7 @@ async def list_courses_for_instructor(user_id: int, db: AsyncSession) -> list[Di
                 "summary": course.summary,
                 "quiz": course.quiz.content if course.quiz else None,
                 "created_at": course.created_at.isoformat() if course.created_at else None,
+                "created_by": course.created_by,
                 "question_count": counts_map.get(course.course_id, 0),
                 "is_template": getattr(course, "is_template", False),
                 "has_course_json": bool(getattr(course, "course_json", None)),
@@ -1278,7 +1281,7 @@ async def get_course_detail_for_instructor(course_id: int, user_id: int, db: Asy
             )
             .where(CourseModel.course_id == course_id)
         )
-        course = result.scalars().first()
+        course = result.unique().scalars().first()
 
         if not course:
             raise HTTPException(
@@ -1298,6 +1301,9 @@ async def get_course_detail_for_instructor(course_id: int, user_id: int, db: Asy
                 "summary": course.summary,
                 "quiz": course.quiz.content if course.quiz else None,
                 "created_at": course.created_at.isoformat() if course.created_at else None,
+                "created_by": course.created_by,
+                "template_markdown": course.template_markdown,
+                "course_json": course.course_json,
             },
             "questions": [
                 {
@@ -1457,7 +1463,7 @@ async def create_course_with_summary_and_qas_for_instructor(
         
         if referenced_images:
             unique_refs = sorted(set(referenced_images))
-            print(
+            logger.info(
                 f"ℹ️ Course {course.course_id} references {len(unique_refs)} images: {unique_refs}"
             )
 
@@ -1471,38 +1477,69 @@ async def create_course_with_summary_and_qas_for_instructor(
                 )
             )
 
-        valid_questions_added = 0
+        created_questions: list[QuestionModel] = []
+
         for item in questions:
             if not isinstance(item, dict):
                 continue
 
-            text = str(item.get("text") or "").strip()
-            answer_text = str(item.get("answer_text") or "").strip()
+            text = str(
+                item.get("text")
+                or item.get("question")
+                or item.get("prompt")
+                or ""
+            ).strip()
+
+            answer_text = str(
+                item.get("answer_text")
+                or item.get("answer")
+                or item.get("reference_answer")
+                or ""
+            ).strip()
 
             if not text or not answer_text:
                 continue
 
-            db.add(
-                QuestionModel(
-                    text=text,
-                    answer_text=answer_text,
-                    course_id=course.course_id,
-                    created_by=user_id,
-                )
+            question_model = QuestionModel(
+                text=text,
+                answer_text=answer_text,
+                course_id=course.course_id,
+                created_by=user_id,
             )
-            valid_questions_added += 1
 
-        await db.commit()
-        await db.refresh(course)
+            db.add(question_model)
+            created_questions.append(question_model)
 
-        return {
-            "message": "Course and QAs saved successfully",
+        await db.flush()
+
+        response_payload = {
+            "message": "success",
             "course_id": course.course_id,
-            "questions_saved": valid_questions_added,
+            "title": course.title,
+            "summary": course.summary,
+            "quiz": quiz_content,
+            "template_markdown": course.template_markdown,
+            "course_json": course.course_json,
+            "questions": [
+                {
+                    "question_id": question.question_id,
+                    "text": question.text,
+                    "answer_text": question.answer_text,
+                }
+                for question in created_questions
+            ],
+            "question_count": len(created_questions),
             "has_quiz": bool(quiz_content),
             "has_template_markdown": bool(course.template_markdown),
             "has_course_json": bool(course.course_json),
+            "created_at": course.created_at,
+            "created_by": course.created_by,
+            "updated_at": getattr(course, "updated_at", None),
         }
+
+        await db.commit()
+
+        return response_payload
     except HTTPException:
         await db.rollback()
         raise
@@ -1534,7 +1571,8 @@ async def update_course_for_instructor(
             )
             .where(CourseModel.course_id == course_id)
         )
-        course = result.scalars().first()
+
+        course = result.unique().scalars().first()
 
         if not course:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
@@ -1562,7 +1600,7 @@ async def update_course_for_instructor(
             rewritten_summary, referenced_images = rewrite_markdown_image_urls(summary.strip(), course_id)
             course.summary = rewritten_summary
             if referenced_images:
-                print(f"ℹ️ Course {course_id} update references {len(referenced_images)} images: {referenced_images}")
+                logger.info(f"ℹ️ Course {course_id} update references {len(referenced_images)} images: {referenced_images}")
         
         # -----------------------------
         # template_markdown
@@ -1578,7 +1616,7 @@ async def update_course_for_instructor(
                 course.template_markdown = rewritten_template_markdown
 
                 if referenced_images:
-                    print(
+                    logger.info(
                         f"ℹ️ Course {course_id} update references "
                         f"{len(referenced_images)} images in template_markdown: {referenced_images}"
                     )
@@ -1698,7 +1736,51 @@ async def update_course_for_instructor(
                 )
 
         await db.commit()
-        return {"message": "updated", "course_id": course.course_id}
+
+        refreshed_result = await db.execute(
+            select(CourseModel)
+            .options(
+                joinedload(CourseModel.questions),
+                joinedload(CourseModel.quiz),
+            )
+            .where(CourseModel.course_id == course_id)
+        )
+
+        updated_course = refreshed_result.unique().scalars().first()
+
+        if not updated_course:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Updated course not found",
+            )
+
+        return {
+            "course": {
+                "course_id": updated_course.course_id,
+                "title": updated_course.title,
+                "summary": updated_course.summary,
+                "created_at": updated_course.created_at,
+                "created_by": updated_course.created_by,
+                "template_markdown": updated_course.template_markdown,
+                "course_json": updated_course.course_json,
+            },
+            "quiz": (
+                {"content": updated_course.quiz.content}
+                if updated_course.quiz
+                else None
+            ),
+            "questions": [
+                {
+                    "question_id": question.question_id,
+                    "text": question.text,
+                    "answer_text": question.answer_text,
+                }
+                for question in updated_course.questions or []
+            ],
+        }        
+    except HTTPException:
+        await db.rollback()
+        raise
     except SQLAlchemyError as e:
         await db.rollback()
         raise HTTPException(

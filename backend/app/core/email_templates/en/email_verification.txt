@@ -1,0 +1,16 @@
+Hello {{ user_name }},
+
+Welcome to {{ app_name }}.
+
+Please verify your email address before logging in:
+
+{{ verification_link }}
+
+This link expires in {{ expires_minutes }} minutes.
+
+{% if original_recipient_email %}
+Stage note: this email was originally intended for {{ original_recipient_name or original_recipient_email }} <{{ original_recipient_email }}>.
+{% endif %}
+
+Regards,
+{{ from_name }}

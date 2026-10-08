@@ -21,8 +21,8 @@ authors:
     affiliation: "FH Südwestfalen, Meschede"
   - name: "DataScienceLabFHSWF"
 
-repository-code: "https://github.com/DataScienceLabFHSWF/KIKO-release"
-url: "https://datasciencelabfhswf.github.io/KIKO-release/"
+repository-code: "https://github.com/DataScienceLabFHSWF/kiko-platform"
+url: "https://datasciencelabfhswf.github.io/kiko-platform/"
 abstract: "KIKO is an AI-powered knowledge and learning platform for nuclear decommissioning. It supports document processing, retrieval-augmented generation, role-based learning workflows, and open-source language model integration."
 keywords:
   - artificial intelligence

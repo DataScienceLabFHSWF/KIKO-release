@@ -1,3 +1,5 @@
+# backend/app/models/question_model.py
+
 from sqlalchemy import Column, Integer, ForeignKey, String, DateTime
 from datetime import datetime, timezone
 from sqlalchemy.orm import relationship

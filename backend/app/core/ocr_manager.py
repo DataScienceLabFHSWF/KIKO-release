@@ -1,3 +1,5 @@
+# backend/app/core/ocr_manager.py
+
 import torch, numpy as np, cv2 as cv, pytesseract, logging
 import shutil
 from PIL import Image
@@ -16,15 +18,15 @@ logger = logging.getLogger(__name__)
 tess_path = shutil.which("tesseract")
 if tess_path:
     pytesseract.pytesseract.tesseract_cmd = tess_path
-    print(f"ℹ️ Tesseract OCR found at: {tess_path}")
+    logger.info(f"ℹ️ Tesseract OCR found at: {tess_path}")
 else:
-    print("❌ Tesseract OCR binary not found in PATH. OCR functionality may be limited.")
+    logger.error("❌ Tesseract OCR binary not found in PATH. OCR functionality may be limited.")
 
 class OCRManager:
     """Advanced OCR manager using state-of-the-art open-source models."""
     
     def __init__(self, config):
-        print("ℹ️ OCRManager: Initializing OCRManager with advanced preprocessing and classification capabilities.")
+        logger.info("ℹ️ OCRManager: Initializing OCRManager with advanced preprocessing and classification capabilities.")
         self.config = config
         self.ocr_engines = {}
         self.document_classifiers = {}
@@ -39,15 +41,15 @@ class OCRManager:
         """Initialize advanced image preprocessing pipeline."""
 
         if not self.config.get("flags").get("is_cv2_available"):
-            print("❌ OCRManager: OpenCV is not available, cannot initialize advanced preprocessing.")
+            logger.error("❌ OCRManager: OpenCV is not available, cannot initialize advanced preprocessing.")
             return False
         
-        print("ℹ️ OCRManager: Initializing advanced preprocessing pipeline for OCR.")
+        logger.info("ℹ️ OCRManager: Initializing advanced preprocessing pipeline for OCR.")
 
         try:
             def advanced_preprocess(image):
                 """Advanced preprocessing pipeline for better OCR results."""
-                print("ℹ️ OCRManager: Starting advanced preprocessing...")
+                logger.info("ℹ️ OCRManager: Starting advanced preprocessing...")
                 if isinstance(image, Image.Image):
                     image = np.asarray(image)
                 
@@ -82,21 +84,21 @@ class OCRManager:
                 # Morphological cleanup
                 kernel = np.ones((1,1), np.uint8)
                 cleaned = cv.morphologyEx(binary, cv.MORPH_OPEN, kernel)
-                print("✅ Advanced preprocessing completed successfully.")                
+                logger.info("✅ Advanced preprocessing completed successfully.")                
                 return cleaned
             
             self.preprocessing_pipeline = advanced_preprocess 
-            print("✅ Advanced preprocessing pipeline initialized successfully.")
+            logger.info("✅ Advanced preprocessing pipeline initialized successfully.")
             return True
         except Exception as e:
-            print(f"❌ Error initializing advanced preprocessing: {str(e)}")
+            logger.exception(f"❌ Error initializing advanced preprocessing: {str(e)}")
             return False
     
     def _correct_skew(self, image):
         """Correct document skew using Hough Line Transform."""
 
         try:
-            print("ℹ️ Starting skew correction...")
+            logger.info("ℹ️ Starting skew correction...")
             # Edge detection
             edges = cv.Canny(image, 50, 150, apertureSize=3)
             
@@ -124,35 +126,35 @@ class OCRManager:
                         rotated = cv.warpAffine(image, M, (w, h), 
                                                flags=cv.INTER_CUBIC, 
                                                borderMode=cv.BORDER_REPLICATE)
-                        print(f"✅ Skew corrected by {median_angle:.2f} degrees.")
+                        logger.info(f"✅ Skew corrected by {median_angle:.2f} degrees.")
                         return rotated
                 else:
-                    print("ℹ️ No significant skew detected, returning original image.")
+                    logger.info("ℹ️ No significant skew detected, returning original image.")
                     return image
             else:
-                print("ℹ️ No significant skew detected, returning original image.")
+                logger.info("ℹ️ No significant skew detected, returning original image.")
             return image
         except Exception as e:
-            print(f"❌ Error correcting skew, returning original image. {str(e)}")
+            logger.exception(f"❌ Error correcting skew, returning original image. {str(e)}")
             return image
     
     async def get_advanced_document_classifier(self):
         """Get advanced document type classifier."""
         
-        print("ℹ️ Initializing advanced document classifier...")
+        logger.info("ℹ️ Initializing advanced document classifier...")
         if 'document_classifier' in self.document_classifiers:
-            print("ℹ️ Using cached document classifier.")
+            logger.info("ℹ️ Using cached document classifier.")
             return self.document_classifiers['document_classifier']
         
         if not self.config.get("app_config").enable_document_classification:
-            print("ℹ️ Document classification is disabled, using basic classifier.")
+            logger.info("ℹ️ Document classification is disabled, using basic classifier.")
             return self._get_basic_classifier()
         
         try:
             if self.config.get("flags").get("is_advanced_models_available"):
                 # Try to load document layout analysis model
                 try:
-                    print("ℹ️ Loading advanced document classifier using transformers...")
+                    logger.info("ℹ️ Loading advanced document classifier using transformers...")
                     
                     device, dtype = get_device_and_dtype()
                     
@@ -173,7 +175,7 @@ class OCRManager:
                     
                     def classify_document(image):
                         """Classify document type using transformer model."""
-                        print("ℹ️ Classifying document type using advanced model...")
+                        logger.info("ℹ️ Classifying document type using advanced model...")
                         inputs = processor(images=image, return_tensors="pt")
                         device = next(model.parameters()).device  # Get model device
                         for k in inputs:
@@ -191,33 +193,33 @@ class OCRManager:
                             8: "general", 9: "general", 10: "general", 11: "general",
                             12: "scientific", 13: "general", 14: "general", 15: "general"
                         }
-                        print(f"✅ Document classified as: {class_mapping.get(predicted_class_idx, 'general')}")
+                        logger.info(f"✅ Document classified as: {class_mapping.get(predicted_class_idx, 'general')}")
                         return class_mapping.get(predicted_class_idx, "general")
                     
                     self.document_classifiers['document_classifier'] = classify_document
-                    print("✅ Advanced document classifier loaded successfully.")
+                    logger.info("✅ Advanced document classifier loaded successfully.")
                     return classify_document
                 except Exception as e:
-                    print(f"❌ Error loading advanced document classifier: {str(e)}")
+                    logger.exception(f"❌ Error loading advanced document classifier: {str(e)}")
                     return self._get_opencv_classifier()
             else:
-                print("ℹ️ Advanced models not available, using OpenCV classifier.")
+                logger.info("ℹ️ Advanced models not available, using OpenCV classifier.")
                 return self._get_opencv_classifier()
         except Exception as e:
-            print(f"❌ Error initializing document classifier: {str(e)}. ℹ️ Using basic document classifier as fallback.")                
+            logger.exception(f"❌ Error initializing document classifier: {str(e)}. ℹ️ Using basic document classifier as fallback.")                
             return self._get_basic_classifier()
     
     def _get_opencv_classifier(self):
         """Enhanced OpenCV-based document classifier."""
-        print("ℹ️ Initializing OpenCV-based document classifier...")
+        logger.info("ℹ️ Initializing OpenCV-based document classifier...")
         
         if not self.config.get("flags").get('is_cv2_available'):
-            print("❌ OpenCV is not available, cannot initialize advanced preprocessing.")     
+            logger.error("❌ OpenCV is not available, cannot initialize advanced preprocessing.")     
             return self._get_basic_classifier()
             
         def classify_document_opencv(image):
             try:
-                print("ℹ️ Classifying document type using OpenCV...")
+                logger.info("ℹ️ Classifying document type using OpenCV...")
                 if isinstance(image, Image.Image):
                     image = np.asarray(image)
                 
@@ -247,35 +249,35 @@ class OCRManager:
                 
                 # Classification logic
                 if features['horizontal_density'] > 0.01 and features['vertical_density'] > 0.01:
-                    print("ℹ️ Classification logic table..")
+                    logger.info("ℹ️ Classification logic table..")
                     return "table"
                 elif features['form_field_count'] > 3:
-                    print("ℹ️ Classification logic form..")
+                    logger.info("ℹ️ Classification logic form..")
                     return "form"
                 elif features['math_symbol_density'] > 5:
-                    print("ℹ️ Classification logic scientific..")
+                    logger.info("ℹ️ Classification logic scientific..")
                     return "scientific"
                 else:
-                    print("ℹ️ Classification logic general..")
+                    logger.info("ℹ️ Classification logic general..")
                     return "general"                    
             except Exception as e:
-                print(f"OpenCV classification error: {str(e)}")                                  
+                logger.exception(f"OpenCV classification error: {str(e)}")                                  
                 return "general"
-        print("✅ OpenCV-based document classifier initialized successfully.")
+        logger.info("✅ OpenCV-based document classifier initialized successfully.")
         return classify_document_opencv
     
     def _get_basic_classifier(self):
         """Basic fallback classifier."""
-        print("ℹ️ Initializing basic document classifier as fallback.")
+        logger.info("ℹ️ Initializing basic document classifier as fallback.")
         def basic_classify(image):
-            print("ℹ️ Using basic document classifier (general classification).")
+            logger.info("ℹ️ Using basic document classifier (general classification).")
             return "general"
-        print("✅ Basic document classifier initialized successfully.")
+        logger.info("✅ Basic document classifier initialized successfully.")
         return basic_classify
     
     def _detect_math_symbols(self, gray_image):
         """Detect mathematical symbols and formulas."""
-        print("ℹ️ Starting mathematical symbol detection...")
+        logger.info("ℹ️ Starting mathematical symbol detection...")
         try:
             symbols = []
             
@@ -291,20 +293,20 @@ class OCRManager:
                     if abs(y2 - y1) < 5:  # Nearly horizontal
                         symbols.append(('fraction_line', (x1, y1, x2, y2)))
             
-            print(f"✅ Detected {len(symbols)} mathematical symbols.")
+            logger.info(f"✅ Detected {len(symbols)} mathematical symbols.")
             return symbols            
         except Exception:
-            print("❌ Error detecting mathematical symbols.")
+            logger.exception("❌ Error detecting mathematical symbols.")
             return []
     
     def _detect_form_fields_advanced(self, gray_image):
         """Advanced form field detection."""
-        print("ℹ️ Starting advanced form field detection...")
+        logger.info("ℹ️ Starting advanced form field detection...")
         try:
             fields = []
             
             # Rectangle detection for form fields
-            print("ℹ️ Detecting contours for form fields...")
+            logger.info("ℹ️ Detecting contours for form fields...")
             contours, _ = cv.findContours(
                 cv.threshold(gray_image, 127, 255, cv.THRESH_BINARY_INV)[1],
                 cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE
@@ -325,35 +327,35 @@ class OCRManager:
                             fields.append(('checkbox', (x, y, w, h)))
                         elif aspect_ratio > 2:
                             fields.append(('input_field', (x, y, w, h)))
-            print(f"✅ Detected {len(fields)} form fields.")
+            logger.info(f"✅ Detected {len(fields)} form fields.")
             return fields            
         except Exception:
-            print("❌ Error detecting form fields.")
+            logger.exception("❌ Error detecting form fields.")
             return []
     
     def get_surya_ocr_engine(self, language="auto"):
         """Get Surya OCR engine - state-of-the-art open source OCR."""
         
-        print("ℹ️ Initializing Surya OCR engine...")
+        logger.info("ℹ️ Initializing Surya OCR engine...")
         engine_key = f"surya_{language}"
         
         if engine_key in self.ocr_engines:
-            print("ℹ️ Using cached Surya OCR engine.")
+            logger.info("ℹ️ Using cached Surya OCR engine.")
             return self.ocr_engines[engine_key]
         
         if not self.config.get("flags").get('is_surya_available'):
-            print("❌ Surya OCR is not available, falling back to TrOCR.")
+            logger.error("❌ Surya OCR is not available, falling back to TrOCR.")
             return self.get_trocr_engine(language)
         
         try:
-            print("ℹ️ Loading Surya OCR models (state-of-the-art)...")            
+            logger.info("ℹ️ Loading Surya OCR models (state-of-the-art)...")            
             det_processor, det_model = load_det_processor(), load_det_model()
             rec_model, rec_processor = load_rec_model(), load_rec_processor()
-            print("✅ Successfully loaded Surya OCR models")
+            logger.info("✅ Successfully loaded Surya OCR models")
             
             def process_with_surya(image):
                 try:
-                    print("ℹ️ Processing image with Surya OCR...")
+                    logger.info("ℹ️ Processing image with Surya OCR...")
                     if isinstance(image, np.ndarray):
                         image = Image.fromarray(image)
                     
@@ -363,40 +365,40 @@ class OCRManager:
                         image = Image.fromarray(processed_img)
                     
                     # Run Surya OCR
-                    print("ℹ️ Running OCR with Surya...")
+                    logger.info("ℹ️ Running OCR with Surya...")
                     predictions = run_ocr([image], [language], det_model, det_processor, rec_model, rec_processor)
                     
                     if predictions and len(predictions) > 0:
-                        print("✅ OCR processing completed successfully.")
+                        logger.info("✅ OCR processing completed successfully.")
                         text_lines = []
                         for line in predictions[0].text_lines:
                             text_lines.append(line.text)
-                        print(f"ℹ️ Extracted {len(text_lines)} text lines.")
+                        logger.info(f"ℹ️ Extracted {len(text_lines)} text lines.")
                         return "\n".join(text_lines)
                     return ""                    
                 except Exception as e:
-                    print(f"❌ Surya OCR error: {str(e)}")
+                    logger.exception(f"❌ Surya OCR error: {str(e)}")
                     return ""
             # Store the Surya OCR engine            
             self.ocr_engines[engine_key] = process_with_surya
-            print("✅ Surya OCR engine initialized successfully.")
+            logger.info("✅ Surya OCR engine initialized successfully.")
             return process_with_surya            
         except Exception as e:
-            print(f"❌ Surya OCR error: {str(e)}")           
+            logger.exception(f"❌ Surya OCR error: {str(e)}")           
             return self.get_trocr_engine(language)
     
     def get_trocr_engine(self, language="auto"):
         """Get enhanced TrOCR engine with latest models."""
         
-        print("ℹ️ Initializing TrOCR engine...")
+        logger.info("ℹ️ Initializing TrOCR engine...")
         engine_key = f"trocr_{language}"
         
         if engine_key in self.ocr_engines:
-            print("ℹ️ Using cached TrOCR engine.")
+            logger.info("ℹ️ Using cached TrOCR engine.")
             return self.ocr_engines[engine_key]
         
         if not self.config.get("flags").get('is_advanced_models_available'):
-            print("❌ Advanced models are not available, falling back to Tesseract.")
+            logger.error("❌ Advanced models are not available, falling back to Tesseract.")
             return self._get_tesseract_engine_enhanced(language)
         
         try:
@@ -442,12 +444,12 @@ class OCRManager:
                     
                     # Process with TrOCR
                     pixel_values = processor(image, return_tensors="pt").pixel_values.to(device)
-                    print(f"ℹ️ Pixel values dtype: {pixel_values.dtype}")
-                    print(f"ℹ️ Model dtype: {next(model.parameters()).dtype}")
-                    print(f"ℹ️ Model device: {next(model.parameters()).device}")
+                    logger.info(f"ℹ️ Pixel values dtype: {pixel_values.dtype}")
+                    logger.info(f"ℹ️ Model dtype: {next(model.parameters()).dtype}")
+                    logger.info(f"ℹ️ Model device: {next(model.parameters()).device}")
                     # Force pixel_values to float32 for TrOCR
                     pixel_values = pixel_values.to(device=device, dtype=torch.float16)
-                    print(f"ℹ️ After converted to Pixel values dtype: {pixel_values.dtype} and {pixel_values.device}")
+                    logger.info(f"ℹ️ After converted to Pixel values dtype: {pixel_values.dtype} and {pixel_values.device}")
                     
                     with torch.no_grad():
                         generated_ids = model.generate(
@@ -460,15 +462,15 @@ class OCRManager:
                     generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
                     return generated_text                    
                 except Exception as e:
-                    print(f"❌ TrOCR processing error: {str(e)}")
+                    logger.exception(f"❌ TrOCR processing error: {str(e)}")
                     return ""
             
-            print("✅ TrOCR engine initialized successfully.")            
+            logger.info("✅ TrOCR engine initialized successfully.")            
             self.ocr_engines[engine_key] = process_with_trocr
-            print(f"ℹ️ TrOCR engine for {language} loaded successfully.")
+            logger.info(f"ℹ️ TrOCR engine for {language} loaded successfully.")
             return process_with_trocr            
         except Exception as e:
-            print(f"❌ Error loading TrOCR engine: {str(e)}")            
+            logger.exception(f"❌ Error loading TrOCR engine: {str(e)}")            
             return self._get_tesseract_engine_enhanced(language)
     
     def _get_tesseract_engine_enhanced(self, language="auto"):
@@ -507,12 +509,12 @@ class OCRManager:
                     )
                     return text                    
                 except Exception as e:
-                    print(f"❌ Enhanced Tesseract error: {str(e)}")
+                    logger.exception(f"❌ Enhanced Tesseract error: {str(e)}")
                     return ""
-            print("✅ Enhanced Tesseract processing completed successfully.")            
+            logger.info("✅ Enhanced Tesseract processing completed successfully.")            
             return process_with_tesseract            
         except ImportError:
-            print("❌ Tesseract OCR is not available, cannot initialize enhanced Tesseract engine.")           
+            logger.error("❌ Tesseract OCR is not available, cannot initialize enhanced Tesseract engine.")           
             return lambda image: ""
     
     async def get_best_ocr_engine(
@@ -522,7 +524,7 @@ class OCRManager:
     ):
         """Get the best available OCR engine based on document type and language."""
 
-        print(f"ℹ️ Selecting best OCR engine for document type '{document_type}' and language '{language}'...")
+        logger.info(f"ℹ️ Selecting best OCR engine for document type '{document_type}' and language '{language}'...")
         
         # Initialize preprocessing if not done
         if self.preprocessing_pipeline is None and self.config.get("app_config").ocr_preprocessing:
@@ -553,12 +555,12 @@ class OCRManager:
                 engine = engine_getter(language)
                 if engine:
                     if self.config.get("app_config").debug_mode:
-                        print(f"Using {engine_name} OCR engine")
+                        logger.info(f"ℹ️ Using {engine_name} OCR engine")
                         # st.info(f"Using {engine_name} OCR engine")
                     return engine
             except Exception as e:
-                print(f"❌ Failed to load {engine_name} OCR engine: {str(e)}")
+                logger.exception(f"❌ Failed to load {engine_name} OCR engine: {str(e)}")
                 continue        
         # Last resort fallback
-        print("❗ All advanced OCR engines failed, using basic fallback.")
+        logger.error("❗ All advanced OCR engines failed, using basic fallback.")
         return lambda image: "OCR processing failed"

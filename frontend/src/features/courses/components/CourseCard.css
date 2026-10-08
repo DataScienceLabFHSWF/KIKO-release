@@ -1,0 +1,136 @@
+/* frontend/src/features/courses/components/CourseCard.css */
+
+.course-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  gap: 24px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  box-shadow: 10px 10px 0 var(--color-surface-blue);
+}
+
+.course-card__main {
+  min-width: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.course-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.course-card__title-row svg {
+  color: var(--color-primary-dark);
+  flex: 0 0 auto;
+}
+
+.course-card h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 20px;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.course-card__id {
+  padding: 2px 8px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.course-card__description {
+  margin: 0;
+  color: var(--color-text);
+  line-height: 1.6;
+  max-width: 96ch;
+}
+
+.course-card__reason {
+  margin: 0;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.course-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.course-card__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.course-card__progress-block {
+  display: grid;
+  gap: 8px;
+}
+
+.course-card__progress-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-primary-dark);
+  font-weight: 900;
+}
+
+.course-card__progress {
+  height: 12px;
+  background: #eef6fb;
+  overflow: hidden;
+}
+
+.course-card__progress span {
+  display: block;
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 200ms ease;
+}
+
+.course-card__status {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.course-card__actions {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+}
+
+.course-card__action {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .course-card {
+    grid-template-columns: 1fr;
+  }
+
+  .course-card__actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .course-card__actions {
+    grid-template-columns: 1fr;
+  }
+}

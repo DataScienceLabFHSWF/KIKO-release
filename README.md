@@ -1,14 +1,28 @@
-# ![KIKO Logo](./frontend/assets/images/KIKO-Logo.png)
+<p align="center">
+  <img src="./frontend/public/KIKO-Logo.png" alt="KIKO logo" width="240">
+</p>
 
-KIKO is an AI-powered knowledge and learning platform for nuclear decommissioning. It combines document processing, retrieval-augmented generation (RAG), role-based learning workflows, and open-source language models to make expert knowledge easier to preserve, search, teach, and reuse.
+<h1 align="center">KIKO Platform</h1>
+
+<p align="center">
+  AI-assisted knowledge preservation, learning, and retrieval for
+  knowledge-intensive domains.
+</p>
+
+<p align="center">
+  <a href="./docs/development/">Documentation</a> ·
+  <a href="SECURITY.md">Issues</a> ·
+  <a href="CONTRIBUTING.md">Contributing</a> ·
+  <a href="CITATION.cff">Citation</a>
+</p>
 
 <!-- Tech stack start -->
 <p>
     <a href="https://www.python.org/" target="_blank" style="margin: 2px;">
         <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white&style=flat-square" alt="Python 3.10+" />
     </a>
-    <a href="https://streamlit.io/" target="_blank" style="margin: 2px;">
-        <img src="https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white&style=flat-square" alt="Streamlit" />
+    <a href="https://react.dev/" target="_blank" style="margin: 2px;">
+        <img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB&style=flat-square" alt="React" />
     </a>
     <a href="https://fastapi.tiangolo.com/" target="_blank" style="margin: 2px;">
         <img src="https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white&style=flat-square" alt="FastAPI" />
@@ -80,122 +94,256 @@ KIKO is an AI-powered knowledge and learning platform for nuclear decommissionin
 
 # 🌱 Why KIKO?
 
-Nuclear decommissioning depends on specialized expert knowledge (Nuclear Engineering, Mechanical/Civil Engineering, and Health Physics) that is often distributed across documents, training material, and experienced practitioners. KIKO supports this knowledge lifecycle by helping users upload documents, retrieve relevant information, ask grounded questions, and support learning workflows for different roles.
+KIKO is an AI-powered knowledge and learning platform originally developed for
+knowledge preservation and learning workflows in nuclear decommissioning. It combines document processing, retrieval-augmented generation, course
+generation, AI-assisted learning, and role-based workflows for learners,
+instructors, and administrators.
 
-# ✨ Features
+# ✨ Key Features
 
-- AI-assisted chat over uploaded documents.
-- Retrieval-augmented generation using PostgreSQL and pgvector.
-- FastAPI backend with role-based access control.
-- Streamlit frontend for the current stable user interface.
-- Ollama and Hugging Face model integration.
-- Document processing with OCR/VLM support.
-- Learner, instructor, and admin roles.
-- Docker Compose deployment for local and server use.
+## 👨‍🏫 Instructors
+
+- Generate structured courses from source documents
+- Review and edit generated modules
+- Create practice questions and quizzes
+- Review common misconceptions
+- Manage courses and learning resources
+
+## 👨‍🎓 Learners
+
+- Discover and enroll in courses
+- Learn through structured modules
+- Answer practice questions
+- Receive AI-assisted grading and feedback
+- Complete module and final assessments
+- Track learning progress
+
+## 💬 Knowledge Assistant
+
+- Upload and manage documents
+- Ask questions using available knowledge
+- Review supporting sources
+- Choose from configured AI models
+- Maintain or clear chat history
+
+## 🛡️ Administrators
+
+- Manage application configuration
+- Configure supported models and platform behavior
+- Maintain knowledge-assessment settings
 
 # 🏗️ Architecture
 
 ```bash
 User
-  └── Streamlit Frontend
-        └── FastAPI Backend
-              ├── PostgreSQL + pgvector
-              ├── Ollama models
-              ├── Hugging Face models
-              └── Document processing pipeline
+  └── React + TypeScript Frontend
+        └── Nginx /api proxy
+              └── FastAPI Backend
+                    ├── PostgreSQL + pgvector
+                    ├── Ollama models
+                    ├── Hugging Face models
+                    ├── Email service
+                    └── Document processing pipeline
 ```
 
 See [docs/architecture.md](docs/architecture.md) for details.
 
-# 🚦 Current status
+# 🚦 Project Status
 
-The current stable frontend is implemented with Streamlit.
+KIKO currently uses a React + TypeScript frontend with a FastAPI backend.
 
-A ReactJS frontend migration is under active development. It is not yet the default public frontend. Until the migration is completed, the `main` branch focuses on the stable Streamlit, FastAPI, PostgreSQL/pgvector, Docker, Ollama, and Hugging Face stack.
+The active application stack consists of:
+
+- **Frontend:** React + TypeScript (`frontend/`)
+- **Backend:** FastAPI (`backend/`)
+- **Database:** PostgreSQL + pgvector
+- **Local AI runtime:** Ollama
+- **Additional model integration:** Hugging Face
+- **Deployment:** Docker Compose
+- **Roles:** Learner, Instructor, and Admin
+
+The previous Streamlit implementation is retained in
+[`frontend-streamlit/`](frontend-streamlit) for legacy reference only.
+
+> **Note:**
+> New frontend development should be implemented in `frontend/`.
+> The Streamlit frontend is no longer the active application frontend.
 
 # 🚀 Quick Start
 
 ## ✅ Prerequisites
 
+Required:
+
 - Git
-- Docker and Docker Compose
-- Python 3.10+
-- NVIDIA GPU + NVIDIA Container Toolkit for local model acceleration
-- Hugging Face token for gated/private models
+- Docker Engine
+- Docker Compose v2
+
+For GPU acceleration:
+
+- NVIDIA GPU
+- Compatible NVIDIA driver
+- NVIDIA Container Toolkit
+
+For optional local/non-container development:
+
+- Python version defined by the backend project
+- Node.js version defined by the frontend project
+
+Some Hugging Face models may require a Hugging Face access token.
 
 ## ▶️ Run locally
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/DataScienceLabFHSWF/KIKO-release.git
+   git clone https://github.com/DataScienceLabFHSWF/kiko-platform.git
    ```
    ```bash
-   cd KIKO-release
+   cd kiko-platform
    ```
+2. Review the development environment file:
    ```bash
-   cp .env.example .env
+   cat .env.dev
    ```
-2. Launch the app:
+3. Start the development stack:
    ```bash
-   docker compose --project-name <YOUR_PROJECT_NAME> up --build
+   ENV_FILE=.env.dev docker compose --env-file .env.dev -p <YOUR_PROJECT_NAME> -f docker-compose.dev.yml up -d --build
+   ```
+4. Check running containers:
+   ```bash
+   docker compose --env-file .env.dev -p <YOUR_PROJECT_NAME> -f docker-compose.dev.yml ps
    ```
 
-## ▶️ Open:
+## ▶️ Open locally:
 
-- Streamlit Frontend -> http://localhost:8003
+Default development ports from `.env.dev`:
+
+- React + TypeScript Frontend -> http://localhost:8003
 - Fast API Backend (API) -> http://localhost:8004
 - Fast API Backend (docs) -> http://localhost:8004/docs
 - PostgreSQL -> Docker Host port is 8005 and database port is **5432**.
 - Ollama -> Docker Host port is 8006 and Ollama port is **11434**.
 
+The frontend proxies API requests through `/api`, so normal users should open only the frontend URL.
+
 **Note**:
 
-- If multiple people are running the `docker-compose` on same server then it would be better to change the all service name in both `.env.example` and `docker-compose.yml` to avoid conflicts. e.g.- kiko-frontend-service => kiko-frontend-service-**username**.
-- If you get port issue? Then change the respective **docker host port number** of service in file `.env.example` to different unused port.
+- If multiple people are running the `docker-compose.dev` on same server then it would be better to change the all service name in both `.env.dev` and `docker-compose.dev.yml` to avoid conflicts. e.g.- kiko-frontend-service-dev => kiko-frontend-service-dev-**username**.
+- If you get port issue? Then change the respective **docker host port number** of service in file `.env.dev` to different unused port.
 
-## 🛑 Stop the app:
+## 🛑 Stop the development stack:
 
 ```bash
-docker compose --project-name <YOUR_PROJECT_NAME> down --remove-orphans
+ENV_FILE=.env.dev docker compose --env-file .env.dev -p <YOUR_PROJECT_NAME> -f docker-compose.dev.yml down --remove-orphans
 ```
+
+To also remove local development volumes:
+
+```bash
+ENV_FILE=.env.dev docker compose --env-file .env.dev -p <YOUR_PROJECT_NAME> -f docker-compose.dev.yml down --remove-orphans --volumes
+```
+
+Use `--volumes` only when you intentionally want to delete the local database and local Ollama model
 
 # ⚙️ Configuration
 
 KIKO is configured through environment variables.
 
-Start from the example file:
+For local development, the repository includes:
 
 ```bash
-cp .env.example .env
+.env.dev
+docker-compose.dev.yml
 ```
 
-Never commit your real `.env` file.
+Never commit your real `.env.dev` file.
 
 Important variables:
 
-| Variable              | Purpose                            |
-| --------------------- | ---------------------------------- |
-| SECRET_KEY            | JWT/application secret             |
-| DATABASE_URL          | Backend database connection        |
-| HUGGINGFACE_HUB_TOKEN | Optional Hugging Face access token |
-| DOCKER_OLLAMA_URL     | Backend-to-Ollama service URL      |
-| FRONTEND_PORT         | Host port for the frontend         |
-| BACKEND_PORT          | Host port for the backend          |
+| Variable                    | Purpose                                                              |
+| --------------------------- | -------------------------------------------------------------------- |
+| APP_ENV                     | Runtime environment: development, stage, production                  |
+| LOG_LEVEL                   | Backend logging level                                                |
+| SECRET_KEY                  | JWT/application signing secret                                       |
+| ACCESS_TOKEN_EXPIRE_MINUTES | Access token lifetime                                                |
+| DATABASE_URL                | Backend database connection                                          |
+| HUGGINGFACE_HUB_TOKEN       | Optional Hugging Face access token                                   |
+| DOCKER_OLLAMA_URL           | Backend-to-Ollama service URL                                        |
+| FRONTEND_PORT               | Host port for the frontend                                           |
+| FRONTEND_PUBLIC_URL         | Public frontend URL used in password-reset emails                    |
+| BACKEND_PORT                | Host port for the backend                                            |
+| EMAIL_PROVIDER              | Email backend: console for development, SMTP/provider for production |
+| NVIDIA_GPU_DEVICE_ID        | GPU ID used by Docker/NVIDIA runtime                                 |
 
-See [.env.example](.env.example) for the full list.
+See [.env.dev](.env.dev) for the full list.
+
+# 🐛 Troubleshooting
+
+For Docker logs, email debugging, GPU troubleshooting, and common development
+issues, see [docs/development/troubleshooting.md](docs/development/troubleshooting.md).
+
+# 🚀 Stage and production deployment
+
+Stage and production deployment files are **server-only** and must not be committed to GitHub.
+
+Expected server-only files:
+
+```bash
+.env.stage
+docker-compose.stage.yml
+.env.production
+docker-compose.production.yml
+```
+
+Example stage command on the server:
+
+```bash
+ENV_FILE=.env.stage docker compose --env-file .env.stage -p kiko-stage -f docker-compose.stage.yml up -d --build
+```
+
+Stage backend logs:
+
+```bash
+docker compose --env-file .env.stage -p kiko-stage -f docker-compose.stage.yml logs -f kiko-backend-service-stage
+```
+
+Example production command on the server:
+
+```bash
+ENV_FILE=.env.production docker compose --env-file .env.production -p kiko-production -f docker-compose.production.yml up -d --build
+```
+
+Production backend logs:
+
+```bash
+docker compose --env-file .env.production -p kiko-production -f docker-compose.production.yml logs -f kiko-backend-service-production
+```
+
+Production should not expose PostgreSQL or Ollama publicly. Only the frontend or a reverse proxy should be publicly reachable.
+
+# 🔐 Security notes
+
+- Never commit real `.env`, `.env.dev`, `.env.stage`, or `.env.production` files.
+- Never commit real Hugging Face, SMTP, database, or JWT secrets.
+- `.env.dev` is committed only for local development and must contain dummy values.
+- Use different `SECRET_KEY` values for development, stage, and production.
+- Use `EMAIL_PROVIDER=console` only for development.
+- Use HTTPS in production.
+- Do not run destructive database reset commands in stage or production.
 
 # 📁 Project Structure
 
-| Folder         | Purpose                                       |
-| -------------- | --------------------------------------------- |
-| backend/       | FastAPI backend                               |
-| frontend/      | Current stable Streamlit frontend             |
-| docker/ollama/ | Ollama container setup                        |
-| shared/        | Shared utilities and configuration            |
-| notebooks/     | Research and evaluation notebooks             |
-| tests/backend/ | Backend tests                                 |
-| docs/          | Public documentation and GitHub Pages content |
-| .github/       | GitHub workflows and contribution templates   |
+| Folder              | Purpose                                          |
+| ------------------- | ------------------------------------------------ |
+| backend/            | FastAPI backend                                  |
+| frontend/           | Current React + TypeScript frontend              |
+| frontend-streamlit/ | Legacy Streamlit frontend retained for reference |
+| docker/ollama/      | Ollama container/runtime configuration           |
+| shared/             | Shared utilities and configuration               |
+| notebooks/          | Research and evaluation notebooks                |
+| tests/backend/      | Backend tests                                    |
+| docs/               | Public documentation and GitHub Pages content    |
+| .github/            | GitHub workflows and contribution templates      |
 
 # 📚 Documentation
 
@@ -233,4 +381,8 @@ If you use KIKO in academic work, please cite it using [`CITATION.cff`](CITATION
 
 # 💬 Questions or Feedback?
 
-Open an [issue](https://github.com/DataScienceLabFHSWF/KIKO-release/issues) for bugs, feature requests, or documentation improvements.
+Open an [issue](https://github.com/DataScienceLabFHSWF/kiko-platform/issues) for bugs, feature requests, or documentation improvements.
+
+```
+
+```

@@ -1,0 +1,51 @@
+{
+  "title": "Meine Dokumente",
+  "subtitle": "Hier kannst du deine hochgeladenen Dokumente ansehen und verwalten.",
+
+  "toolbar": {
+    "refresh": "Aktualisieren",
+    "deleteAll": "Alle löschen"
+  },
+
+  "fields": {
+    "uploaded": "Hochgeladen",
+    "status": "Status"
+  },
+
+  "actions": {
+    "preview": "Vorschau",
+    "download": "Herunterladen",
+    "delete": "Löschen",
+    "closePreview": "Vorschau schließen"
+  },
+
+  "status": {
+    "loading": "Deine Dokumente werden geladen...",
+    "unknown": "unbekannt"
+  },
+
+  "empty": {
+    "title": "Noch keine Dokumente",
+    "description": "Hochgeladene PDFs und generierte Markdown-Dateien werden nach der Verarbeitung hier angezeigt."
+  },
+
+  "messages": {
+    "loadFailed": "Deine Dokumente konnten nicht geladen werden.",
+    "downloadFailed": "Der Download ist fehlgeschlagen.",
+    "previewFailed": "Die Vorschau konnte nicht geladen werden.",
+    "deleteFailed": "Das Dokument konnte nicht gelöscht werden.",
+    "deleteAllFailed": "Die Dokumente konnten nicht gelöscht werden."
+  },
+
+  "confirm": {
+    "singleTitle": "Löschen bestätigen",
+    "singleDescription": "Möchtest du \"{{fileName}}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "allTitle": "ALLE Dokumente löschen?",
+    "allDescription": "Dadurch werden alle hochgeladenen Dokumente und die dazugehörigen Embeddings dauerhaft entfernt.",
+    "allAcknowledgement": "Ich verstehe, dass alle meine hochgeladenen Dokumente entfernt werden.",
+    "yesDelete": "Ja, löschen",
+    "yesDeleteAll": "Ja, alle löschen",
+    "cancel": "Nein, behalten",
+    "working": "Bitte warten..."
+  }
+}

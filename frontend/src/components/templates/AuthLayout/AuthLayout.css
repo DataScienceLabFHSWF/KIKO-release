@@ -1,0 +1,61 @@
+/* frontend/src/components/templates/AuthLayout/AuthLayout.css */
+
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  position: relative;
+  padding: 32px;
+  background: linear-gradient(180deg, #ffffff 0%, #f4fbfd 100%);
+}
+
+.auth-page__language {
+  position: fixed;
+  top: 28px;
+  right: 32px;
+  z-index: 10;
+}
+
+.auth-card {
+  width: min(520px, calc(100vw - 32px));
+  padding: 40px;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  box-shadow: 16px 16px 0 var(--color-surface-blue);
+}
+
+.auth-card__brand {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 42px;
+}
+
+.auth-card__title {
+  margin: 0 0 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-text);
+  font-size: 36px;
+  line-height: 1.1;
+}
+
+.auth-card__title-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-primary-dark);
+}
+
+.auth-card__footer {
+  margin-top: 26px;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.auth-card__footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}

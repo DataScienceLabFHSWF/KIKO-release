@@ -6,6 +6,8 @@ from .vlm_processor import VLMProcessor
 from .table_extractor import TableExtractor
 from .prompt_manager import PromptManager
 from .qa_chain_manager import QAChainManager
+from .email_config import get_email_settings
+from .logging_config import configure_logging
 
 __all__ = [
     "DocumentProcessor",
@@ -16,4 +18,6 @@ __all__ = [
     "TableExtractor",
     "PromptManager",
     "QAChainManager",
+    "get_email_settings",
+    "configure_logging",
 ]

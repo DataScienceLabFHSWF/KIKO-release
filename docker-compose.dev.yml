@@ -1,0 +1,147 @@
+networks:
+  kiko_platform_network:
+    driver: bridge
+
+x-gpu-1: &gpu-1
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            device_ids:
+              - "${NVIDIA_GPU_DEVICE_ID:-0}"
+            capabilities: [gpu]
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "50m"
+    max-file: "5"
+
+services:
+  kiko-db-service-dev:
+    image: ankane/pgvector:latest
+    container_name: ${DOCKER_DB_SERVICE_NAME}
+    ports:
+      - "${DATABASE_HOST_PORT}:${POSTGRES_DATABASE_PORT}"
+    env_file:
+      - ${ENV_FILE:-.env.dev}
+    volumes:
+      - kiko_dev_db_data:/var/lib/postgresql/data
+    networks:
+      - kiko_platform_network
+    restart: unless-stopped
+    healthcheck:
+      # $$ escapes $ so Compose doesn't substitute at parse time
+      test:
+        [
+          "CMD-SHELL",
+          "PGPASSWORD=$${POSTGRES_PASSWORD} psql -h localhost -U $${POSTGRES_USER} -d $${POSTGRES_DB} -c 'SELECT 1' >/dev/null",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    logging: *default-logging
+
+  kiko-ollama-service-dev:
+    build:
+      context: ./docker/ollama
+    container_name: ${DOCKER_OLLAMA_SERVICE_NAME}
+    ports:
+      - "${OLLAMA_HOST_PORT}:${OLLAMA_PORT}"
+    env_file:
+      - ${ENV_FILE:-.env.dev}
+    environment:
+      - OLLAMA_KEEP_ALIVE=5m
+      - OLLAMA_NUM_PARALLEL=2
+    volumes:
+      - kiko_dev_ollama_models:/root/.ollama
+    networks:
+      - kiko_platform_network
+    restart: unless-stopped
+    <<: *gpu-1
+    healthcheck:
+      # /api/tags returns 200 when the API is up
+      test:
+        [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:${OLLAMA_PORT}/api/tags >/dev/null || exit 1",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+    logging: *default-logging
+
+  kiko-backend-service-dev:
+    build: ./backend
+    container_name: ${DOCKER_BE_SERVICE_NAME}
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    env_file:
+      - ${ENV_FILE:-.env.dev}
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - HF_ALLOW_DOWNLOAD=1
+      - HUGGINGFACE_HUB_TOKEN=${HUGGINGFACE_HUB_TOKEN}
+    volumes:
+      - ./backend/data/default_images:/backend/data/default_images:ro
+      - ./backend/data/default_courses:/backend/data/default_courses:ro
+    depends_on:
+      kiko-db-service-dev:
+        condition: service_healthy
+      kiko-ollama-service-dev:
+        condition: service_healthy
+    networks:
+      - kiko_platform_network
+    restart: unless-stopped
+    <<: *gpu-1
+    healthcheck:
+      # If your backend image doesn't have curl, use the python variant below instead.
+      test:
+        [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:${BACKEND_PORT}/ >/dev/null || exit 1",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    logging: *default-logging
+
+  kiko-frontend-service-dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: /api
+    container_name: ${DOCKER_FE_SERVICE_NAME}
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    env_file:
+      - ${ENV_FILE:-.env.dev}
+    environment:
+      - FRONTEND_PORT=${FRONTEND_PORT}
+      - BACKEND_API_URL=${BACKEND_API_URL}
+    depends_on:
+      kiko-backend-service-dev:
+        condition: service_healthy
+    networks:
+      - kiko_platform_network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:${FRONTEND_PORT}/healthz >/dev/null || exit 1",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    logging: *default-logging
+
+volumes:
+  kiko_dev_db_data:
+  kiko_dev_ollama_models:

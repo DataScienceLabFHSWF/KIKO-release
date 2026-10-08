@@ -1,52 +1,166 @@
+# backend/app/services/security_service.py
 # JWT Utilities
+
 import os, logging
+from typing import Optional
 from fastapi import HTTPException, status, Depends, Header
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
-from datetime import timedelta
+from datetime import timedelta, timezone, datetime
+from jose import ExpiredSignatureError, JWTError, jwt
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.database import get_db
+from app.models import UserModel
 
 logger = logging.getLogger(__name__)
 
 TOKEN_SECRET_KEY = os.getenv("SECRET_KEY")
-TOKEN_ALGORITHM = os.getenv("ALGORITHM")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+TOKEN_ALGORITHM = os.getenv("ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/authentication/authenticate")
 
+def _require_secret_key() -> str:
+    if not TOKEN_SECRET_KEY:
+        raise RuntimeError("SECRET_KEY environment variable is required.")
+    return TOKEN_SECRET_KEY
+
+def datetime_to_token_timestamp(value: datetime | None) -> int:
+    """
+    Convert password_changed_at to a stable integer timestamp.
+
+    None means password was never changed after registration/reset.
+    """
+    if value is None:
+        return 0
+
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=timezone.utc)
+
+    return int(value.timestamp())
+
 async def create_access_token(
-    data: dict, 
-    expires_delta: timedelta = None
+    data: dict,
+    expires_delta: timedelta | None = None,
 ) -> str:
-    """Create a JWT access token with the provided data and expiration time.
-    If expires_delta is not provided, it defaults to the value set in ACCESS_TOKEN_EXPIRE_MINUTES.
-    The token is encoded using the secret key and algorithm specified in the environment variables."""
+    """
+    Create a JWT access token with expiry.
+
+    Required claims are added here:
+    - exp: token expiry
+    - iat: issued-at timestamp
+    - type: token type
+    """
+    now = datetime.now(timezone.utc)
+    expire = now + (
+        expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
 
     to_encode = data.copy()
-    # Temporary removing the expiration of tokens
-    # expire = datetime.now((timezone.utc)) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-    # to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM)
+    to_encode.update(
+        {
+            "exp": expire,
+            "iat": now,
+            "type": "access",
+        }
+    )
 
-async def decode_access_token(token: str):
-    """Decode the JWT access token and return the payload.
-    If the token is invalid or expired, it returns None.
-    This function uses the secret key and algorithm specified in the environment variables to decode the token."""
+    return jwt.encode(
+        to_encode,
+        _require_secret_key(),
+        algorithm=TOKEN_ALGORITHM,
+    )
 
+async def decode_access_token(token: str) -> dict | None:
     try:
-        payload = jwt.decode(token, TOKEN_SECRET_KEY, algorithms=[TOKEN_ALGORITHM])
+        payload = jwt.decode(
+            token,
+            _require_secret_key(),
+            algorithms=[TOKEN_ALGORITHM],
+        )
+
+        if payload.get("type") != "access":
+            return None
+
         return payload
-    except JWTError:
+
+    except ExpiredSignatureError:
+        logger.info("JWT access token expired.")
         return None
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    """Get the current user from the JWT token.
-    This function decodes the token and retrieves the user information.
-    If the token is invalid or expired, it raises an HTTPException with a HTTP_401_UNAUTHORIZED status code.
-    If the token is valid, it returns a dictionary containing the user's email and role."""
+    except JWTError:
+        logger.info("Invalid JWT access token.")
+        return None
 
+async def _get_user_from_token_payload(
+    payload: dict,
+    db: AsyncSession,
+) -> UserModel | None:
+    user_id = payload.get("sub")
+
+    if user_id is not None:
+        try:
+            result = await db.execute(
+                select(UserModel).where(UserModel.user_id == int(user_id))
+            )
+            return result.scalar_one_or_none()
+        except (TypeError, ValueError):
+            return None
+
+    email = payload.get("email")
+
+    if not email:
+        return None
+
+    result = await db.execute(
+        select(UserModel)
+        .where(UserModel.email == email.lower().strip())
+    )
+
+    return result.scalar_one_or_none()
+
+async def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Validate JWT and return the current user.
+
+    Also invalidates old tokens when password_changed_at is newer than the
+    timestamp stored in the token.
+    """
     payload = await decode_access_token(token)
+
     if not payload:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
-    return {"email": payload["email"], "role": payload["role"]}
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token.",
+        )
+
+    db_user = await _get_user_from_token_payload(payload, db)
+
+    if not db_user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token.",
+        )
+
+    token_password_changed_at = int(payload.get("pwd_changed_at") or 0)
+    current_password_changed_at = datetime_to_token_timestamp(
+        db_user.password_changed_at
+    )
+
+    if token_password_changed_at < current_password_changed_at:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Session expired because password was changed.",
+        )
+
+    return {
+        "user_id": db_user.user_id,
+        "email": db_user.email,
+        "role": db_user.role,
+    }
 
 # 🎯 Role checker
 def require_role(allowed_roles: list):
@@ -65,12 +179,14 @@ def require_role(allowed_roles: list):
         return user
     return role_checker
 
-def get_request_lang(accept_language: str = Header(None)) -> str:
+def get_request_lang(accept_language: Optional[str] = Header(default=None, alias="Accept-Language"),) -> str:
     
     if not accept_language:
         return "en"
     
-    al = accept_language.lower()
-    if al.startswith("en"):
-        return "en"
-    return "de"
+    first_language = accept_language.split(",")[0].strip().lower()
+    
+    if first_language.startswith("de"):
+        return "de"
+    
+    return "en"

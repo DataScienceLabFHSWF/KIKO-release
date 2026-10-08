@@ -1,0 +1,76 @@
+{
+  "metaTitle": "My Courses",
+  "title": "My Courses",
+  "course": "Course",
+  "subtitleLearner": "View your enrolled courses and discover recommended learning material.",
+  "subtitleInstructor": "Create, view, and manage your courses.",
+
+  "sections": {
+    "enrolled": "Enrolled Courses",
+    "enrolledDescription": "Continue learning from courses you are already enrolled in.",
+    "recommended": "Recommended For You",
+    "recommendedDescriptionPersonalized": "These courses are recommended based on your learning activity.",
+    "recommendedDescriptionFallback": "No personalized recommendations yet. Showing available courses instead.",
+    "instructorCourses": "Your Courses",
+    "instructorCoursesDescription": "Courses created or managed by you."
+  },
+
+  "fields": {
+    "learners": "Learners",
+    "documents": "Documents"
+  },
+
+  "status": {
+    "completed": "Completed",
+    "inProgress": "In progress",
+    "eligibleFinalQuiz": "Ready for final quiz",
+    "notStarted": "Not started"
+  },
+
+  "actions": {
+    "view": "View",
+    "enroll": "Enroll",
+    "unenroll": "Unenroll",
+    "dismiss": "Dismiss",
+    "delete": "Delete",
+    "createCourse": "Create new course",
+    "retry": "Retry",
+    "preview": "Preview",
+    "edit": "Edit",
+    "resetChanges": "Reset changes",
+    "saveChanges": "Save changes"
+  },
+
+  "empty": {
+    "noEnrolledTitle": "No enrolled courses yet",
+    "noEnrolledDescription": "Enroll in a recommended course below to start learning.",
+    "noRecommendedTitle": "No courses available",
+    "noRecommendedDescription": "There are currently no recommended or available courses.",
+    "noInstructorCoursesTitle": "No courses created yet",
+    "noInstructorCoursesDescription": "Create your first course from Course Generator."
+  },
+
+  "messages": {
+    "loading": "Loading courses...",
+    "errorTitle": "Could not load courses",
+    "errorDescription": "The course list could not be loaded right now."
+  },
+
+  "confirm": {
+    "enrollTitle": "Enroll in this course?",
+    "enrollDescription": "Do you want to enroll in \"{{title}}\"?",
+    "yesEnroll": "Yes, enroll",
+    "unenrollTitle": "Unenroll from course?",
+    "unenrollDescription": "Do you want to unenroll from \"{{title}}\"? Your course progress may no longer be shown.",
+    "yesUnenroll": "Yes, unenroll",
+    "dismissTitle": "Hide this recommendation?",
+    "dismissDescription": "Do you want to hide \"{{title}}\" from your recommendations?",
+    "yesDismiss": "Yes, hide it",
+    "deleteTitle": "Delete course?",
+    "deleteDescription": "Do you want to delete \"{{title}}\"? This action cannot be undone.",
+    "yesDelete": "Yes, delete",
+    "cancel": "No, keep it",
+    "working": "Working..."
+  },
+  "progress": "Progress"
+}

@@ -1,0 +1,186 @@
+/* frontend/src/features/adminAppConfig/pages/AdminAppConfigPage.css */
+
+.admin-app-config-page {
+  width: 100%;
+  display: grid;
+  gap: 28px;
+}
+
+.admin-app-config-page__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-app-config-page__notice {
+  margin: 0;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-weight: 800;
+}
+
+.admin-app-config-page__notice ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+.admin-app-config-page__notice--warning {
+  background: #fff8d8;
+  color: #8a6200;
+}
+
+.admin-app-config-page__notice--success {
+  background: #e3f8eb;
+  color: var(--color-success);
+}
+
+.admin-app-config-page__notice--error {
+  background: #ffe7e7;
+  color: var(--color-danger);
+}
+
+.admin-app-config-page__runtime {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-app-config-page__runtime article {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  box-shadow: 8px 8px 0 var(--color-surface-blue);
+}
+
+.admin-app-config-page__runtime strong {
+  color: var(--color-primary-dark);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.admin-app-config-page__runtime span {
+  min-width: 0;
+  color: var(--color-text);
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.admin-app-config-page__grid {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-app-config-page__grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-app-config-page__grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.admin-app-config-page__range-grid {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: end;
+}
+
+.admin-app-config-page__range-grid h3 {
+  margin: 0 0 11px;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.admin-app-config-page__switch {
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.admin-app-config-page__switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.admin-app-config-page__switch > span {
+  width: 42px;
+  height: 22px;
+  position: relative;
+  background: #d7e8f1;
+  transition: background 160ms ease;
+}
+
+.admin-app-config-page__switch > span::after {
+  content: "";
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  background: #ffffff;
+  transition: transform 160ms ease;
+}
+
+.admin-app-config-page__switch input:checked + span {
+  background: var(--color-primary);
+}
+
+.admin-app-config-page__switch input:checked + span::after {
+  transform: translateX(20px);
+}
+
+.admin-app-config-page__switch strong {
+  display: block;
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.admin-app-config-page__switch small {
+  display: block;
+  margin-top: 3px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 1200px) {
+  .admin-app-config-page__runtime,
+  .admin-app-config-page__grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-app-config-page__range-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .admin-app-config-page__range-grid h3 {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-app-config-page__header-actions,
+  .admin-app-config-page__runtime,
+  .admin-app-config-page__grid--2,
+  .admin-app-config-page__grid--3,
+  .admin-app-config-page__range-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-app-config-page__header-actions {
+    display: grid;
+    width: 100%;
+  }
+}

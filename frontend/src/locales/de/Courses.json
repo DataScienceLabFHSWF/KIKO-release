@@ -1,0 +1,76 @@
+{
+  "metaTitle": "Meine Kurse",
+  "title": "Meine Kurse",
+  "course": "Kurs",
+  "subtitleLearner": "Sieh dir deine eingeschriebenen Kurse an und entdecke empfohlene Lernmaterialien.",
+  "subtitleInstructor": "Erstelle, öffne und verwalte deine Kurse.",
+
+  "sections": {
+    "enrolled": "Eingeschriebene Kurse",
+    "enrolledDescription": "Setze das Lernen in deinen bereits eingeschriebenen Kursen fort.",
+    "recommended": "Für dich empfohlen",
+    "recommendedDescriptionPersonalized": "Diese Kurse werden basierend auf deiner Lernaktivität empfohlen.",
+    "recommendedDescriptionFallback": "Noch keine personalisierten Empfehlungen. Es werden verfügbare Kurse angezeigt.",
+    "instructorCourses": "Deine Kurse",
+    "instructorCoursesDescription": "Kurse, die von dir erstellt oder verwaltet werden."
+  },
+
+  "fields": {
+    "learners": "Lernende",
+    "documents": "Dokumente"
+  },
+
+  "status": {
+    "completed": "Abgeschlossen",
+    "inProgress": "In Bearbeitung",
+    "eligibleFinalQuiz": "Bereit für das Abschlussquiz",
+    "notStarted": "Nicht begonnen"
+  },
+
+  "actions": {
+    "view": "Ansehen",
+    "enroll": "Einschreiben",
+    "unenroll": "Abmelden",
+    "dismiss": "Ausblenden",
+    "delete": "Löschen",
+    "createCourse": "Neuen Kurs erstellen",
+    "retry": "Erneut versuchen",
+    "preview": "Vorschau",
+    "edit": "Bearbeiten",
+    "resetChanges": "Änderungen zurücksetzen",
+    "saveChanges": "Änderungen speichern"
+  },
+
+  "empty": {
+    "noEnrolledTitle": "Noch keine eingeschriebenen Kurse",
+    "noEnrolledDescription": "Schreibe dich unten in einen empfohlenen Kurs ein, um zu starten.",
+    "noRecommendedTitle": "Keine Kurse verfügbar",
+    "noRecommendedDescription": "Derzeit sind keine empfohlenen oder verfügbaren Kurse vorhanden.",
+    "noInstructorCoursesTitle": "Noch keine Kurse erstellt",
+    "noInstructorCoursesDescription": "Erstelle deinen ersten Kurs über Kursgenerator."
+  },
+
+  "messages": {
+    "loading": "Kurse werden geladen...",
+    "errorTitle": "Kurse konnten nicht geladen werden",
+    "errorDescription": "Die Kursliste konnte gerade nicht geladen werden."
+  },
+
+  "confirm": {
+    "enrollTitle": "In diesen Kurs einschreiben?",
+    "enrollDescription": "Möchtest du dich in \"{{title}}\" einschreiben?",
+    "yesEnroll": "Ja, einschreiben",
+    "unenrollTitle": "Vom Kurs abmelden?",
+    "unenrollDescription": "Möchtest du dich von \"{{title}}\" abmelden? Dein Kursfortschritt wird möglicherweise nicht mehr angezeigt.",
+    "yesUnenroll": "Ja, abmelden",
+    "dismissTitle": "Diese Empfehlung ausblenden?",
+    "dismissDescription": "Möchtest du \"{{title}}\" aus deinen Empfehlungen ausblenden?",
+    "yesDismiss": "Ja, ausblenden",
+    "deleteTitle": "Kurs löschen?",
+    "deleteDescription": "Möchtest du \"{{title}}\" löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "yesDelete": "Ja, löschen",
+    "cancel": "Nein, behalten",
+    "working": "Bitte warten..."
+  },
+  "progress": "Fortschritt"
+}

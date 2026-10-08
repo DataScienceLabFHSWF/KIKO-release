@@ -1,0 +1,235 @@
+/* frontend/src/features/courseDetails/components/CourseDetailsComponents.css */
+
+.course-hero {
+  padding: 30px;
+  background: linear-gradient(120deg, #102347 0%, #2563eb 100%);
+  color: #ffffff;
+  box-shadow: 14px 14px 0 var(--color-surface-blue);
+  /* clip-path: polygon(0 0, 98% 0, 100% 18%, 100% 100%, 0 100%); */
+}
+
+.course-hero__provider,
+.course-hero__meta {
+  margin: 0;
+  font-weight: 800;
+}
+
+.course-hero h1 {
+  margin: 18px 0;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.1;
+}
+
+.course-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.course-info-grid article {
+  padding: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  box-shadow: 8px 8px 0 var(--color-surface-blue);
+}
+
+.course-info-grid span {
+  display: block;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.course-info-grid strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--color-text);
+  font-size: 18px;
+}
+
+.locked-course-notice {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px 18px;
+  background: #eaf6ff;
+  border-left: 4px solid var(--color-primary);
+  box-shadow: 8px 8px 0 var(--color-surface-blue);
+}
+
+.locked-course-notice__message {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--color-text);
+}
+
+.locked-course-notice__message svg {
+  flex: 0 0 auto;
+  color: var(--color-primary-dark);
+  margin-top: 2px;
+}
+
+.locked-course-notice__message strong {
+  display: block;
+  margin-bottom: 2px;
+  font-weight: 900;
+}
+
+.locked-course-notice__message p {
+  margin: 0;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.locked-course-notice__button {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 210px;
+  white-space: nowrap;
+}
+
+.simple-quiz__submit {
+  min-height: 40px;
+  border: 0;
+  padding-inline: 18px;
+  background: var(--color-primary);
+  color: var(--color-text);
+  font-weight: 900;
+  cursor: pointer;
+  clip-path: polygon(12px 0, 100% 0, 100% 72%, 96% 100%, 0 100%, 0 12px);
+}
+
+.simple-quiz__submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.course-curriculum {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  display: grid;
+  gap: 14px;
+}
+
+.course-curriculum h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 26px;
+}
+
+.course-curriculum__items {
+  display: grid;
+  gap: 6px;
+}
+
+.course-curriculum__item {
+  width: 100%;
+  min-height: 34px;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+
+.course-curriculum__item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.course-curriculum__item--active {
+  background: var(--color-surface-blue);
+  color: var(--color-text);
+  padding-inline: 8px;
+  clip-path: polygon(12px 0, 100% 0, 100% 72%, 96% 100%, 0 100%, 0 12px);
+}
+
+.course-curriculum__item--locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.simple-quiz {
+  display: grid;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  background: #ffffff;
+}
+
+.simple-quiz__header h2,
+.simple-quiz__header p {
+  margin: 0;
+}
+
+.simple-quiz__header p {
+  margin-top: 4px;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.simple-quiz__question {
+  border: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.simple-quiz__question legend {
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.simple-quiz__question select {
+  min-height: 42px;
+  border: 1px solid rgba(16, 35, 71, 0.22);
+  background: #f3f8fc;
+  color: var(--color-text);
+  padding-inline: 12px;
+}
+
+.simple-quiz__result {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  background: #e8fff7;
+  color: var(--color-success);
+  font-weight: 800;
+}
+
+@media (max-width: 980px) {
+  .course-info-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .locked-course-notice {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .locked-course-notice button {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .locked-course-notice {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .locked-course-notice__button {
+    width: 100%;
+    min-width: 0;
+  }
+  .course-info-grid {
+    grid-template-columns: 1fr;
+  }
+}

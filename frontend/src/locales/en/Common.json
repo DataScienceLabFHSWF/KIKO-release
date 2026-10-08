@@ -1,0 +1,37 @@
+{
+  "auth": {
+    "login": "Log in",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full name",
+    "role": "Role"
+  },
+  "nav": {
+    "dashboard": "Learning Dashboard",
+    "chat": "Chat Assistant",
+    "courseGenerator": "Course Generator",
+    "courses": "My Courses",
+    "documents": "My Documents",
+    "profile": "Profile",
+    "faq": "FAQ",
+    "evaluation": "Evaluation Results",
+    "changePassword": "Change Password"
+  },
+  "shell": {
+    "logout": "Log Out"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "refresh": "Refresh",
+    "back": "Back"
+  },
+  "states": {
+    "loading": "Loading...",
+    "empty": "No data available.",
+    "error": "Something went wrong."
+  },
+  "placeholderpage": "This page will be migrated in the next phase."
+}

@@ -1,3 +1,5 @@
+# backend/app/services/documents_service.py
+
 import os, logging, time, asyncpg, re, json, yaml
 from sqlalchemy import select, and_, delete, cast, String
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -222,7 +224,7 @@ def remove_file_safely(path: Optional[str]) -> None:
         if os.path.exists(path):
             os.remove(path)
     except OSError as exc:
-        logger.warning("Failed to remove replaced markdown file %s: %s", path, exc)
+        logger.warning("⚠️ Failed to remove replaced markdown file %s: %s", path, exc)
 
 async def save_doc_to_db(
     file_name: str,
@@ -238,7 +240,7 @@ async def save_doc_to_db(
     """Save document metadata to the database."""
     
     try:
-        print(f"ℹ️ Saving the {file_name} to Database.")
+        logger.info(f"ℹ️ Saving the {file_name} to Database.")
         doc = DocumentModel(
             file_name=file_name,
             content_hash= content_hash,
@@ -251,7 +253,7 @@ async def save_doc_to_db(
         )
         db.add(doc)
         await db.commit()
-        print(f"✅ Successfully Saved the {file_name} to Database.")
+        logger.info(f"✅ Successfully Saved the {file_name} to Database.")
         return doc
     except IntegrityError as e:
         await db.rollback()
@@ -279,7 +281,7 @@ async def get_doc_by_hash_name(
     It returns the document if found, or None if not found."""
 
     try:
-        print(f"ℹ️ Getting the doc {content_hash} from database.")
+        logger.info(f"ℹ️ Getting the doc {content_hash} from database.")
         
         result = await db.execute(
             select(DocumentModel).where(
@@ -296,7 +298,7 @@ async def get_doc_by_hash_name(
         if not doc:
             return None          
         
-        print(f"✅ Successfully got the {content_hash} from database.")        
+        logger.info(f"✅ Successfully got the {content_hash} from database.")        
         return doc 
     except SQLAlchemyError as e:
         raise HTTPException(
@@ -354,7 +356,7 @@ async def update_doc_in_db(
     If the document is not found, it raises an HTTPException."""
 
     try:
-        print(f"ℹ️ Updating the docs {content_hash} from database.")
+        logger.info(f"ℹ️ Updating the docs {content_hash} from database.")
         doc_data = await get_doc_by_hash_name(content_hash, user_id, db, "uploaded")
 
         if not doc_data:
@@ -375,7 +377,7 @@ async def update_doc_in_db(
         doc_data.status = doc_status
 
         await db.commit()
-        print(f"✅ Successfully updated the {content_hash} in database.")
+        logger.info(f"✅ Successfully updated the {content_hash} in database.")
     except SQLAlchemyError as e:
         await db.rollback()
         raise HTTPException(
@@ -403,11 +405,11 @@ async def process_pdf(
     """
 
     try:
-        print(f"ℹ️ process_pdf Service: Process PDF service.")
+        logger.info(f"ℹ️ process_pdf Service: Process PDF service.")
 
-        print(f"ℹ️ process_pdf Service: getting application configuration and library availability.")
-        config = await get_app_config_and_libary_available()
-        print(f"ℹ️ process_pdf Service: Configuration loaded:")        
+        logger.info(f"ℹ️ process_pdf Service: getting application configuration and library availability.")
+        config = await get_app_config_and_libary_available(db=db)
+        logger.info(f"ℹ️ process_pdf Service: Configuration loaded:")        
 
         # 🗃️ Store in DB
         doc = await save_doc_to_db(
@@ -422,12 +424,12 @@ async def process_pdf(
             db,
         )
 
-        print(f" ℹ️ Doc saved in DB: {doc.doc_content}")
+        logger.info(f" ℹ️ Doc saved in DB: {doc.doc_content}")
         
-        print("ℹ️ process_pdf Service: Initializing DocumentProcessor with config")
+        logger.info("ℹ️ process_pdf Service: Initializing DocumentProcessor with config")
         document_processor = DocumentProcessor(config, response_language)
         
-        print(f"ℹ️ process_pdf Service: Processing PDF file: {file_name} or {storage_path} with DocumentProcessor.")
+        logger.info(f"ℹ️ process_pdf Service: Processing PDF file: {file_name} or {storage_path} with DocumentProcessor.")
 
         data = await document_processor.process_document(file_name, content_hash, storage_path)
 
@@ -437,10 +439,10 @@ async def process_pdf(
             
             return data
         else:
-            print("❌ No data extracted from the file.")
+            logger.error("❌ No data extracted from the file.")
             return None
     except Exception as e:
-        print(f"❌ process_pdf Service: Error processing PDF file {file_name}: {str(e)}")
+        logger.exception(f"❌ process_pdf Service: Error processing PDF file {file_name}: {str(e)}")
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"❌ process_pdf Service: Error processing PDF file {file_name}: {str(e)}")
 
 async def process_markdown(
@@ -464,8 +466,8 @@ async def process_markdown(
     """
 
     try:
-        print("ℹ️ process_markdown Service: Processing Markdown file.")
-        config = await get_app_config_and_libary_available()
+        logger.info("ℹ️ process_markdown Service: Processing Markdown file.")
+        config = await get_app_config_and_libary_available(db=db)
 
         with open(storage_path, "r", encoding="utf-8", errors="ignore") as fh:
             text = fh.read()
@@ -599,7 +601,7 @@ async def process_markdown(
     except HTTPException:
         raise
     except Exception as e:
-        print(f"❌ process_markdown Service: Error processing Markdown file {file_name}: {str(e)}")
+        logger.exception(f"❌ process_markdown Service: Error processing Markdown file {file_name}: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"❌ process_markdown Service: Error processing Markdown file {file_name}: {str(e)}",
@@ -739,7 +741,7 @@ async def list_user_documents(
     """
 
     try:
-        print(f"ℹ️ Getting the all doc from database for user {user_id}.")
+        logger.info(f"ℹ️ Getting the all doc from database for user {user_id}.")
         
         result = await db.execute(
             select(DocumentModel)
@@ -749,7 +751,7 @@ async def list_user_documents(
 
         doc_list = result.scalars().all()
 
-        print(f"✅ Successfully got the {len(doc_list)} docs from database.")
+        logger.info(f"✅ Successfully got the {len(doc_list)} docs from database.")
         return doc_list
     except SQLAlchemyError as e:
         raise HTTPException(
@@ -773,7 +775,7 @@ async def delete_user_document(
     """
 
     try:
-        print(f"ℹ️ Deleting the document {document_id} from database for user {user_id}.")
+        logger.info(f"ℹ️ Deleting the document {document_id} from database for user {user_id}.")
         
         # Delete embeddings associated with this doc & user (safety guard)
         await db.execute(

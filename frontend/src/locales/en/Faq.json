@@ -1,0 +1,176 @@
+{
+  "title": "FAQ - Frequently Asked Questions",
+  "userFallback": "User",
+  "subtitle": "Welcome {{name}}. This page shows tips and links tailored for your role: {{role}}.",
+  "roles": {
+    "Learner": "Learner",
+    "Instructor": "Instructor",
+    "Admin": "Admin"
+  },
+  "sections": {
+    "learner": "For Learners",
+    "instructor": "For Instructors",
+    "admin": "For Admins",
+    "common": "Common Questions"
+  },
+  "quickLinks": {
+    "title": "Quick Links",
+    "items": {
+      "learningDashboard": "Learning Dashboard",
+      "adminDashboard": "Admin Dashboard",
+      "myCourses": "My Courses",
+      "mediaManager": "Media Manager",
+      "courseGenerator": "Course Generator",
+      "chatAssistant": "Chat Assistant",
+      "knowledgeAssessment": "Knowledge Assessment",
+      "knowledgeCheckConfig": "Knowledge Check Config",
+      "adminConsole": "Admin Console",
+      "myDocuments": "My Documents",
+      "profile": "Profile",
+      "faq": "FAQ",
+      "evaluationResults": "Evaluation Results"
+    }
+  },
+  "items": {
+    "learningDashboard": {
+      "question": "Learning Dashboard - what is it and how do I use it?",
+      "bullets": [
+        "The dashboard gives you a snapshot of your learning activity, recent chats, enrolled courses, and progress.",
+        "Use it as your home base to jump into courses or continue learning from recommendations.",
+        "If the dashboard looks empty, enroll in a course first from My Courses."
+      ]
+    },
+    "chatAssistant": {
+      "question": "Chat Assistant - tips for getting useful answers",
+      "bullets": [
+        "Ask clear questions about uploaded documents, course topics, or learning materials.",
+        "Upload PDFs with the plus button before asking questions about new documents.",
+        "Use the sources shown below answers to understand where the answer came from.",
+        "If the answer is not useful, ask a more specific follow-up question."
+      ]
+    },
+    "myCoursesLearner": {
+      "question": "My Courses - enroll, view, and continue learning",
+      "bullets": [
+        "Use My Courses to view available and assigned courses.",
+        "Open a course to continue modules, quizzes, and learning activities.",
+        "If a course is missing, contact your instructor or platform administrator."
+      ]
+    },
+    "knowledgeAssessment": {
+      "question": "Knowledge Assessment - how it works",
+      "bullets": [
+        "Knowledge assessments help check your understanding of course topics.",
+        "Read each question carefully and answer in your own words where required.",
+        "Feedback may be generated automatically and should be treated as learning support, not as a final human grade."
+      ]
+    },
+    "myDocumentsLearner": {
+      "question": "My Documents - preview, download, and delete",
+      "bullets": [
+        "My Documents shows files uploaded by you or generated during document processing.",
+        "Use Preview before downloading to quickly check the file.",
+        "Deleting a document removes it from your document list and may remove related embeddings."
+      ]
+    },
+    "courseGenerator": {
+      "question": "Course Generator - create courses from documents",
+      "bullets": [
+        "Upload course documents and let the platform generate course structure where supported.",
+        "Review generated modules before publishing them to learners.",
+        "Use clear file names to make course materials easier to manage later."
+      ]
+    },
+    "myCoursesInstructor": {
+      "question": "My Courses - view, edit, and manage courses",
+      "bullets": [
+        "Use My Courses to view courses you created or manage.",
+        "Review course content before learners start using it.",
+        "Keep course titles and descriptions understandable for non-technical users."
+      ]
+    },
+    "mediaManager": {
+      "question": "Media Manager - managing course media",
+      "bullets": [
+        "Use Media Manager for course-related images, document previews, and supporting material.",
+        "Use descriptive names so files can be recognized later.",
+        "Delete unused files carefully because learners may depend on them."
+      ]
+    },
+    "myDocumentsInstructor": {
+      "question": "My Documents - managing course files",
+      "bullets": [
+        "Use My Documents to preview, download, and delete uploaded course files.",
+        "Preview documents before using them in course generation.",
+        "For bulk deletion, confirm carefully because embeddings and document references may also be removed."
+      ]
+    },
+    "adminDashboard": {
+      "question": "Admin Dashboard - platform overview",
+      "bullets": [
+        "The Admin Dashboard provides platform-level overview and operational information.",
+        "Use it to understand system status, usage patterns, and administrative tasks.",
+        "Avoid changing settings unless you understand their effect on learners and instructors."
+      ]
+    },
+    "knowledgeCheckConfig": {
+      "question": "Knowledge Check Config - assessment settings",
+      "bullets": [
+        "Use this page to configure knowledge check behavior and supported assessment settings.",
+        "Test configuration changes before applying them broadly.",
+        "Keep assessment settings simple and transparent for learners."
+      ]
+    },
+    "adminConsole": {
+      "question": "Admin Console - administrative actions",
+      "bullets": [
+        "Use the Admin Console for restricted platform-management tasks.",
+        "Be careful with destructive actions such as deleting documents or changing system settings.",
+        "When possible, communicate major changes to affected users."
+      ]
+    },
+    "myDocumentsAdmin": {
+      "question": "My Documents - admin document management",
+      "bullets": [
+        "Admins may use My Documents to inspect, preview, and remove uploaded documents.",
+        "Delete only documents that are clearly outdated, duplicated, or uploaded by mistake.",
+        "Use confirmation dialogs carefully because deleted embeddings may affect search and chat answers."
+      ]
+    },
+    "profileEvaluation": {
+      "question": "Profile & Evaluation Results",
+      "bullets": [
+        "Use Profile to update your personal information, except protected fields such as email and role.",
+        "Evaluation Results show available feedback and assessment outcomes.",
+        "If something looks incorrect, contact the responsible instructor or administrator."
+      ]
+    },
+    "confirmations": {
+      "question": "How do confirmations and dialogs work?",
+      "bullets": [
+        "Destructive actions ask for confirmation before anything is removed.",
+        "For high-risk actions such as Delete All, an extra acknowledgement may be required.",
+        "Choose No, keep it if you are unsure."
+      ]
+    },
+    "recommendations": {
+      "question": "Why don’t I see recommendations yet?",
+      "bullets": [
+        "Recommendations may appear only after enough course, document, or assessment activity exists.",
+        "If you are a learner, start by opening courses and completing activities.",
+        "If you are an instructor, add course material first."
+      ]
+    },
+    "uploadsPreviews": {
+      "question": "Troubleshooting uploads and previews",
+      "bullets": [
+        "Make sure uploaded files use a supported format such as PDF or Markdown.",
+        "Large files may take longer to process.",
+        "If preview fails, try refreshing the page or downloading the document instead."
+      ]
+    }
+  },
+  "support": {
+    "prefix": "Need more help? Contact the support team at"
+  }
+}

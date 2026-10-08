@@ -1,0 +1,69 @@
+{
+  "title": "Media Manager",
+  "subtitle": "Upload and manage course images. Copy the Markdown reference and use it inside your course content.",
+  "actions": {
+    "refresh": "Refresh",
+    "retry": "Retry"
+  },
+  "loading": {
+    "courses": "Loading your courses...",
+    "images": "Loading course images..."
+  },
+  "status": {
+    "selectedCourse": "Selected course: {{title}}",
+    "uploaded": "Image uploaded: {{filename}}",
+    "deleted": "Image deleted successfully."
+  },
+  "empty": {
+    "noCoursesTitle": "No courses found",
+    "noCoursesDescription": "Create or save a course first. Then you can upload images for that course."
+  },
+  "errors": {
+    "noCourseSelected": "Please select a course first.",
+    "loadCoursesTitle": "Could not load courses",
+    "loadCoursesDescription": "Please try again.",
+    "loadImagesTitle": "Could not load images",
+    "loadImagesDescription": "Please try again.",
+    "uploadFailed": "Image upload failed.",
+    "deleteFailed": "Image deletion failed."
+  },
+  "courseSelector": {
+    "title": "Choose course",
+    "subtitle": "Images are stored separately for each course.",
+    "label": "Course"
+  },
+  "upload": {
+    "title": "Upload image",
+    "subtitle": "Supported formats: PNG, JPG, JPEG, GIF, WebP, SVG.",
+    "dropLabel": "Click here to choose an image",
+    "button": "Upload image",
+    "uploading": "Uploading...",
+    "remove": "Remove selected image",
+    "invalidType": "This file type is not supported. Please upload PNG, JPG, JPEG, GIF, WebP, or SVG.",
+    "noFile": "Please choose an image first."
+  },
+  "gallery": {
+    "title": "Image gallery",
+    "subtitle": "{{count}} image(s) in this course.",
+    "emptyTitle": "No images uploaded",
+    "emptyDescription": "Upload an image above. After upload, copy its Markdown reference into your course content.",
+    "loadingImage": "Loading image...",
+    "loadFailed": "Could not load image.",
+    "size": "Size",
+    "type": "Type",
+    "uploadedAt": "Uploaded",
+    "markdownLabel": "Markdown reference",
+    "copy": "Copy Markdown",
+    "copied": "Copied",
+    "download": "Download",
+    "delete": "Delete"
+  },
+  "deleteDialog": {
+    "title": "Delete image?",
+    "body": "You are about to delete {{filename}}.",
+    "warning": "This action cannot be undone. Course content that uses this image may show a broken image afterwards.",
+    "cancel": "Cancel",
+    "confirm": "Delete image",
+    "deleting": "Deleting..."
+  }
+}

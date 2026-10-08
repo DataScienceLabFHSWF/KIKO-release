@@ -30,7 +30,7 @@ nemotron-3-super:120b
 
 Some Hugging Face models require an access token or approval from the model owner.
 
-Set the token in .env:
+Set the token in `.env.dev`:
 
 ```bash
 HUGGINGFACE_HUB_TOKEN=[YOUR_HUGGINGFACE_HUB_TOKEN]

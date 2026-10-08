@@ -1,3 +1,5 @@
+# backend/app/models/quiz_model.py
+
 from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, Text
 from sqlalchemy.orm import relationship

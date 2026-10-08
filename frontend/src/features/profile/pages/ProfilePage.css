@@ -1,0 +1,27 @@
+/* frontend/src/features/profile/pages/ProfilePage.css */
+
+.profile-page {
+  width: 100%;
+  max-width: none;
+  display: grid;
+  gap: 24px;
+}
+
+.profile-page__success {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  background: #e8fff7;
+  color: var(--color-success);
+  font-weight: 800;
+}
+
+.profile-page__card {
+  width: 100%;
+  padding: 28px;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  box-shadow: 14px 14px 0 var(--color-surface-blue);
+}

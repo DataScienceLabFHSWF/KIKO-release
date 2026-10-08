@@ -1,6 +1,6 @@
 from .user_service import (
     get_user_profile_by_email, update_user_profile_by_email, check_for_duplicates, 
-    create_user, get_system_user_id
+    create_user, get_system_user_id, update_current_user_profile, find_user_by_email_or_none
 )
 from .learner_service import (
     get_learner_statistics, list_enrolled_courses, list_recommended_courses,
@@ -8,7 +8,9 @@ from .learner_service import (
     fetch_course_details, list_all_courses_excluding_enrolled, require_active_course_enrollment
 )
 from .instructor_service import get_instructor_statistics
-from .security_service import require_role, create_access_token, get_request_lang
+from .security_service import (
+    require_role, create_access_token, get_request_lang, datetime_to_token_timestamp
+)
 from .documents_service import (
     process_pdf, process_markdown, get_doc_by_hash_name, 
     process_folder_with_embeddings, list_user_documents, delete_user_document,
@@ -16,7 +18,7 @@ from .documents_service import (
     get_doc_by_derivation, save_doc_to_db,
     MarkdownStructureError
 )
-from .configuration_service import get_app_config_and_libary_available
+from .configuration_service import get_app_config_and_libary_available, update_app_config_for_admin
 from .embedding_service import (
     store_embeddings_to_db, get_embeddings_from_db,
     generate_document_embeddings, generate_query_embedding 
@@ -24,8 +26,7 @@ from .embedding_service import (
 from .vector_store_service import similarity_search
 from .chatbot_service import run_query, save_chat_turn, fetch_chat_history, clear_chat_history
 from .course_generation_config import (
-    get_course_generation_count_defaults,
-    validate_course_generation_counts,
+    get_course_generation_count_defaults, validate_course_generation_counts
 )
 from .course_creator_manager import (
     AsyncBatchProcessor,
@@ -52,19 +53,21 @@ from .course_image_service import (
 from .course_template_manager import create_template_courses_for_instructor
 from .course_markdown_parser_service import parse_course_markdown, CourseMarkdownStructureError
 from .course_generation_evaluation_service import (
-    CourseGenerationEvaluator,
-    evaluate_generated_course_json,
-    evaluate_generated_course_markdown,
-    flatten_course_generation_report,
-    load_course_artifacts_from_json_path,
-    load_course_artifacts_from_markdown_path,
-    load_pdf_text,
-    run_pdf_course_generation_benchmark,
-    save_report_json,
-    write_flat_report_csv,
+    CourseGenerationEvaluator, evaluate_generated_course_json, evaluate_generated_course_markdown,
+    flatten_course_generation_report, load_course_artifacts_from_json_path, load_course_artifacts_from_markdown_path,
+    load_pdf_text, run_pdf_course_generation_benchmark, save_report_json, write_flat_report_csv
 )
 from .learner_course_progress_service import (
-    submit_module_quiz_attempt_for_learner, update_progress_snapshot, submit_final_quiz_attempt_for_learner
+    submit_module_quiz_attempt_for_learner, update_progress_snapshot, 
+    submit_final_quiz_attempt_for_learner
+)
+from .admin_service import get_admin_statistics
+from .password_reset_token_service import (
+    create_password_reset_token, get_valid_password_reset_token,
+    get_user_based_token_id,
+)
+from .email_verification_token_service import (
+    create_email_verification_token, get_valid_email_verification_token
 )
 
 __all__ = [
@@ -151,5 +154,15 @@ __all__ = [
     "submit_final_quiz_attempt_for_learner",
     "require_active_course_enrollment",
     "generate_document_embeddings",
-    "generate_query_embedding",  
+    "generate_query_embedding",
+    "update_current_user_profile",
+    "get_admin_statistics",
+    "update_app_config_for_admin",
+    "find_user_by_email_or_none",
+    "create_password_reset_token",
+    "get_valid_password_reset_token",
+    "get_user_based_token_id",
+    "datetime_to_token_timestamp",
+    "create_email_verification_token",
+    "get_valid_email_verification_token",
 ]

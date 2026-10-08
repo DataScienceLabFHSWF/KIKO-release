@@ -1,3 +1,5 @@
+# backend/app/models/learner_progress_model.py
+
 from sqlalchemy import (
     Boolean, Column, DateTime, Float, ForeignKey,
     Integer, String, UniqueConstraint, func,

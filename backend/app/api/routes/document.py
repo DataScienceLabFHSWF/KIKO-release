@@ -1,7 +1,8 @@
+# backend/app/api/routes/document.py
+
 import os, logging, time, json
 from fastapi import (APIRouter, UploadFile, File, HTTPException, Depends, Form, status)
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi.responses import JSONResponse
 from app.services import (
     require_role, process_pdf, get_doc_by_hash_name,
     process_markdown, generate_document_embeddings, store_embeddings_to_db,
@@ -10,15 +11,70 @@ from app.services import (
     delete_user_document, delete_all_user_documents, get_request_lang,
 )
 from app.database import get_db
-from app.utils import (compute_sha256, canonical_storage_path, canonical_storage_path_for_ext, is_probably_hashed_filename)
-from typing import Dict, List, Any
-from app.schemas import DocumentResponse
+from app.utils import (
+    compute_sha256, canonical_storage_path, canonical_storage_path_for_ext, 
+    is_probably_hashed_filename
+)
+from typing import Any
+from app.schemas import (
+    DocumentResponse, COMMON_ERROR_RESPONSES, ProcessUploadedDocsResponse,
+    DocumentProcessingFileResponse, BatchProcessingResponse
+)
 from app.core import PromptManager
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(responses=COMMON_ERROR_RESPONSES)
 
+BASE_DATA_DIR = Path("/backend/data").resolve()
+
+async def _get_current_user_profile(user: dict, db: AsyncSession):
+    """
+    Helper function to get the current user's profile from the database. Raises HTTPException if the user is not found.
+    This function abstracts the logic of retrieving the user's profile based on their email, which is expected to be present in the 'user' dictionary provided by the authentication dependency. 
+    It ensures that if the user profile cannot be found in the database, an appropriate HTTPException is raised with a 404 status code.
+    """
+    user_profile = await get_user_profile_by_email(user["email"], db)
+
+    if not user_profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found.",
+        )
+
+    return user_profile
+
+def _resolve_batch_folder(folder_path: str) -> Path:
+    """
+    Resolve user-provided folder_path safely under /backend/data.
+    Prevents accidental path traversal.
+    """
+
+    raw = folder_path.strip()
+
+    if not raw:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="folder_path is required.",
+        )
+
+    relative = raw.lstrip("/")
+
+    if relative.startswith("backend/data/"):
+        relative = relative.removeprefix("backend/data/")
+    elif relative.startswith("data/"):
+        relative = relative.removeprefix("data/")
+
+    resolved = (BASE_DATA_DIR / relative).resolve()
+
+    if BASE_DATA_DIR not in resolved.parents and resolved != BASE_DATA_DIR:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Folder path is outside the allowed data directory.",
+        )
+
+    return resolved
 
 async def _process_pdf_through_markdown_pipeline(
     file_name: str,
@@ -27,7 +83,7 @@ async def _process_pdf_through_markdown_pipeline(
     user_id: int,
     response_language: str,
     db: AsyncSession,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Process PDF, generate course markdown, then process markdown and embed markdown chunks only."""
 
     content_hash = compute_sha256(file_content)
@@ -55,7 +111,7 @@ async def _process_pdf_through_markdown_pipeline(
             or len(processed_pdf_data["chunks"]) == 0
         ):
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail="❌ No data extracted from the file.",
             )
 
@@ -66,7 +122,7 @@ async def _process_pdf_through_markdown_pipeline(
                 detail="❌ PDF document not stored correctly in DB.",
             )
 
-    configs = await get_app_config_and_libary_available()
+    configs = await get_app_config_and_libary_available(db=db)
     if not configs:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -207,7 +263,7 @@ async def _process_pdf_through_markdown_pipeline(
         or len(processed_markdown_data["chunks"]) == 0
     ):
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="❌ No data extracted from generated markdown.",
         )
 
@@ -252,42 +308,43 @@ async def _process_pdf_through_markdown_pipeline(
         "embeddings_count": len(markdown_embeddings),
     }
 
-@router.post("/process_uploaded_docs")
+@router.post(
+    "/process_uploaded_docs",
+    response_model=ProcessUploadedDocsResponse,
+    operation_id="process_uploaded_documents"
+)
 async def process_uploaded_docs(
-    files: List[UploadFile] = File(...),
+    files: list[UploadFile] = File(...),
     embedding_model_name: str = Form(...),
     user=Depends(require_role(["Learner", "Instructor", "Admin"])),
     response_language: str = Depends(get_request_lang),
     db: AsyncSession = Depends(get_db)
-):
+) -> ProcessUploadedDocsResponse:
     """Process one or more PDF files:
     - Persist by SHA-256 hash (dedupe on content).
     - If doc already exists, return existing embeddings for the requested model.
     - If embeddings for this model are missing, generate & upsert.
     """   
     try:
-        print(f"ℹ️ process_uploaded_docs API: File {files} upload initiated by {user}.")
+        logger.info(f"ℹ️ process_uploaded_docs API: File {files} upload initiated by {user}.")
 
         if not files:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ No Files uploaded.")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="❌ No Files uploaded.")
         
-        user_profile = await get_user_profile_by_email(user["email"], db)
-        
-        if not user_profile:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
+        user_profile = await _get_current_user_profile(user, db)
         
         user_id = user_profile.user_id
         
-        print(f"ℹ️ process_uploaded_docs API : got user details {user_profile}")
+        logger.info(f"ℹ️ process_uploaded_docs API : got user details {user_profile}")
         
         t0 = time.time()
-        results: List[Dict[str, Any]] = []
+        results: list[DocumentProcessingFileResponse] = []
         processed_count = 0
         skipped_existing = 0
         failed = 0
         
         for upload in files:
-            file_result: Dict[str, Any] = {
+            file_result = {
                 "file_name": upload.filename,
                 "status": None,
                 "content_hash": None,
@@ -295,17 +352,19 @@ async def process_uploaded_docs(
                 "embeddings": None,
             }
 
-            print(f"ℹ️ Processing before docs: {file_result}")
+            logger.info(f"ℹ️ Processing before docs: {file_result}")
 
             try:
                 content = await upload.read()
 
                 if not content:
                     file_result.update(
-                        status="error", message="Empty file"
+                        status="error",
+                        message="Empty file"
                     )
+
                     failed += 1
-                    results.append(file_result)
+                    results.append(DocumentProcessingFileResponse.model_validate(file_result))
                     continue
 
                 unified_result = await _process_pdf_through_markdown_pipeline(
@@ -322,13 +381,17 @@ async def process_uploaded_docs(
                 if unified_result.get("status") == "exists":
                     file_result.update(
                         status="exists",
-                        message=unified_result.get("message", "ℹ️ Document already processed."),
+                        message=unified_result.get(
+                            "message", 
+                            "ℹ️ Document already processed."
+                        ),
                     )
                     skipped_existing += 1
-                    results.append(file_result)
+                    results.append(DocumentProcessingFileResponse.model_validate(file_result))
                     continue
 
                 processed_markdown_data = unified_result.get("processed_markdown_data") or {}
+                
                 file_result.update(
                     status="processed",
                     message="✅ Processed via markdown pipeline & embedded successfully.",
@@ -338,214 +401,237 @@ async def process_uploaded_docs(
                     generated_markdown_file_name=unified_result.get("generated_markdown_file_name"),
                 )
                 processed_count += 1
-                results.append(file_result)
+                results.append(DocumentProcessingFileResponse.model_validate(file_result))
             except Exception as e:
-                file_result.update(status="error", message=str(e))
+                logger.exception("❌ Error processing uploaded document")
+                file_result.update(
+                    status="error", 
+                    message=str(e)
+                )
                 failed += 1
-                results.append(file_result)
+                results.append(DocumentProcessingFileResponse.model_validate(file_result))
         
         elapsed = time.time() - t0
-        
-        return JSONResponse(
-            status_code=status.HTTP_200_OK,
-            content={
-                "message": "success",
-                "summary": {
-                    "processed": processed_count,
-                    "skipped_existing": skipped_existing,
-                    "failed": failed,
-                    "elapsed_sec": round(elapsed, 2),
-                },
-                "files": results,
-            },
-        )
-    except Exception as e:
-        print(f"❌ process_uploaded_docs API: Error processing file: {str(e)}")
-        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.post("/batch_processing")
+        logger.info("✅ process_uploaded_docs API: Processing completed", extra={"elapsed_sec": round(elapsed, 2)})
+        
+        return ProcessUploadedDocsResponse(
+            message="success",
+            summary={
+                "processed": processed_count,
+                "skipped_existing": skipped_existing,
+                "failed": failed,
+                "elapsed_sec": round(elapsed, 2),
+            },
+            files=results,
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception("❌ process_uploaded_docs failed")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+            detail=str(e)
+        ) from e
+
+@router.post(
+    "/batch_processing",
+    response_model=BatchProcessingResponse,
+    operation_id="process_document_batch"
+)
 async def process_batch_docs(
     folder_path: str = Form(...),
     embedding_model_name: str = Form(...),
     user=Depends(require_role(["Learner", "Instructor", "Admin"])),
     response_language: str = Depends(get_request_lang),
     db: AsyncSession = Depends(get_db)
-):
+) -> BatchProcessingResponse:
     """Endpoint to process a batch of PDF files in a folder.
     This endpoint allows users with the roles 'Learner' or 'Instructor' to process all PDF files in a specified folder.
     The files are read and processed, and a response is returned indicating success or failure.
     """    
     try:
-        print(f"ℹ️ batch_processing API: {folder_path} AND {embedding_model_name} ")
+        logger.info(f"ℹ️ batch_processing API: {folder_path} AND {embedding_model_name} ")
 
         # /backend/data/EducTUM/ = /backend + /data/EducTUM/
-        exact_folder_path = os.getcwd() + folder_path
+        exact_folder_path = _resolve_batch_folder(folder_path)
 
-        if not os.path.isdir(exact_folder_path):
-            print(f"❌ The folder path {exact_folder_path} does not exist or is not a directory.")
-            return JSONResponse(
+        if not exact_folder_path.is_dir():
+            raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                content={"message": "Folder_not_found", "data": folder_path}
+                detail=f"Folder not found: {folder_path}",
             )
         
         # Process PDFs with state-of-the-art models
-        pdf_files = [f for f in os.listdir(exact_folder_path) if f.lower().endswith(".pdf")]
+        pdf_files = [
+            file_path
+            for file_path in exact_folder_path.iterdir()
+            if file_path.is_file()
+            and file_path.suffix.lower() == ".pdf"
+            and not is_probably_hashed_filename(file_path.name)
+        ]
         
         if not pdf_files:
-            print(f"❌ No PDF files found in the folder: {exact_folder_path}")
-            return JSONResponse(
-                status_code=status.HTTP_200_OK,
-                content={"message": "No_PDF", "data": folder_path}
+            logger.error(f"❌ No PDF files found in the folder: {exact_folder_path}")
+            return BatchProcessingResponse(
+                message="No_PDF",
+                data={
+                    "folder_path": folder_path,
+                    "files_found": 0,
+                },
             )
         
-        print(f"ℹ️ Found {len(pdf_files)} PDF files in the folder: {exact_folder_path}")
+        logger.info(f"ℹ️ Found {len(pdf_files)} PDF files in the folder: {exact_folder_path}")
         
-        user_profile = await get_user_profile_by_email(user["email"], db)
+        user_profile = await _get_current_user_profile(user, db)
         
-        if not user_profile:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
+        logger.info(f"ℹ️ batch_processing API : got user details {user_profile} and {user_profile.user_id}")
         
-        print(f"ℹ️ batch_processing API : got user details {user_profile} and {user_profile.user_id}")
-        
-        all_chunks = []
-        all_metadatas = []
+        all_chunks: list[str] = []
+        all_metadatas: list[dict[str, Any]] = []
         processing_time_start = time.time()
+        files_processed = 0
+        files_skipped = 0
 
-        i = 0        
-        for filename in pdf_files:
-            if is_probably_hashed_filename(filename):
+        for file_path in pdf_files:
+            file_content = file_path.read_bytes()
+
+            if not file_content:
+                files_skipped += 1
                 continue
-            
-            file_path = os.path.join(exact_folder_path, filename)
 
-            print(f"ℹ️ batch_processing API: Processing file: {i+1}/{len(pdf_files)}, file: {filename}, and at: {file_path}")
-            
-            with open(file_path, "rb") as file:
-                file_content = file.read()
-            
-            print(f"ℹ️ batch_processing API: Read file {filename} with size {len(file_content)} bytes.")
-            
-            if file_content and len(file_content) > 0:                 
-                content_hash = compute_sha256(file_content)
-                storage_path = canonical_storage_path(content_hash)
-                
-                os.makedirs(os.path.dirname(storage_path), exist_ok=True)
-                
-                if not os.path.exists(storage_path):
-                    with open(storage_path, "wb") as hash_file:
-                        hash_file.write(file_content)
-                
-                print(f"ℹ️ batch_processing API: Processing file hash: {content_hash}, path: {storage_path}")
+            unified_result = await _process_pdf_through_markdown_pipeline(
+                file_name=file_path.name,
+                file_content=file_content,
+                embedding_model_name=embedding_model_name,
+                user_id=user_profile.user_id,
+                response_language=response_language,
+                db=db,
+            )
 
-                unified_result = await _process_pdf_through_markdown_pipeline(
-                    file_name=filename,
-                    file_content=file_content,
-                    embedding_model_name=embedding_model_name,
-                    user_id=user_profile.user_id,
-                    response_language=response_language,
-                    db=db,
-                )
-
-                if unified_result.get("status") == "exists":
-                    print(f"✅ batch_processing API: {filename} already processed. Skipping.")
-                    continue
-
-                processed_markdown_data = unified_result.get("processed_markdown_data") or {}
-                all_chunks.extend(processed_markdown_data.get("chunks", []))
-                all_metadatas.extend(processed_markdown_data.get("metadatas", []))
-            else:
-                print(f"❌ File {filename} at path {folder_path} is empty or not readable.")
+            if unified_result.get("status") == "exists":
+                files_skipped += 1
                 continue
-        
+
+            processed_markdown_data = unified_result.get("processed_markdown_data") or {}
+
+            all_chunks.extend(processed_markdown_data.get("chunks", []))
+            all_metadatas.extend(processed_markdown_data.get("metadatas", []))
+            files_processed += 1
+
         processing_time = time.time() - processing_time_start
-        
-        print(f"✅ Response from batch_processing API: Chunks: {all_chunks} and Metadatas: {all_metadatas} and files: {len(pdf_files)} and Processing time: {processing_time:.2f} seconds")
-        
-        return JSONResponse(
-            status_code=status.HTTP_200_OK,
-            content={"message": "success", "data": {"chunks": all_chunks, "metadatas": all_metadatas, "processing_time": processing_time}}
-        )
-    except Exception as e:
-        print(f"❌ batch_processing API: Error processing file path {folder_path}: {str(e)}")
-        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.get("/my_docs", response_model=List[DocumentResponse])
+        return BatchProcessingResponse(
+            message="success",
+            data={
+                "chunks": all_chunks,
+                "metadatas": all_metadatas,
+                "processing_time": round(processing_time, 2),
+                "files_found": len(pdf_files),
+                "files_processed": files_processed,
+                "files_skipped": files_skipped,
+            },
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception(f"❌ batch_processing API: Error processing file path {folder_path}: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+@router.get(
+    "/my_docs", 
+    response_model=list[DocumentResponse],
+    operation_id="list_my_documents"
+)
 async def get_my_documents(
     user=Depends(require_role(["Learner", "Instructor", "Admin"])),
     lang: str = Depends(get_request_lang),
     db: AsyncSession = Depends(get_db)
-):
+) -> list[DocumentResponse]:
     """
     Return all documents uploaded by the authenticated user (newest first).
     """
     try:
-        print(f"ℹ️ my_docs API: Get all docs for user.")
+        logger.info(f"ℹ️ my_docs API: Get all docs for user.")
         
-        email = user["email"]
-        
-        user_profile = await get_user_profile_by_email(email, db)
+        user_profile = await _get_current_user_profile(user, db)
 
-        if not user_profile:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
-        
         docs = await list_user_documents(user_profile.user_id, db)
-        return docs
-    except Exception as e:
-        print(f"❌ my_docs API: Error processing get my docs: {str(e)}")
-        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.delete("/delete_doc/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
+        logger.info(f"✅ my_docs API: Retrieved {len(docs)} documents for user_id: {user_profile.user_id}")
+        
+        return [
+            DocumentResponse.model_validate(doc)
+            for doc in docs
+        ]
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception(f"❌ my_docs API: Error processing get my docs: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+@router.delete(
+    "/delete_doc/{document_id}", 
+    status_code=status.HTTP_204_NO_CONTENT,
+    operation_id="delete_document"
+)
 async def delete_document(
     document_id: int,
     user=Depends(require_role(["Learner", "Instructor", "Admin"])),
     db: AsyncSession = Depends(get_db)
-):
+) -> None:
     """
     Delete a single document (and its embeddings) if it belongs to the user.
     """
     try:
-        print(f"ℹ️ delete doc API: delete selected docs for user.")
+        logger.info(f"ℹ️ delete doc API: delete selected docs for user.")
         
-        email = user["email"]
+        user_profile = await _get_current_user_profile(user, db)
         
-        user_profile = await get_user_profile_by_email(email, db)
-
-        if not user_profile:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
+        deleted = await delete_user_document(document_id, user_profile.user_id, db)
         
-        response = await delete_user_document(document_id, user_profile.user_id, db)
-        
-        if not response:
+        if not deleted:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ Document not found")
-        return
+        
+        logger.info(f"✅ delete doc API: Document {document_id} deleted for user_id: {user_profile.user_id}")
+        
+        return None
+    except HTTPException:
+        raise
     except Exception as e:
-        print(f"❌ delete_doc API: Error processing get my docs: {str(e)}")
-        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        logger.exception(f"❌ delete_doc API: Error processing get my docs: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+            detail=str(e)
+        ) from e 
 
-@router.delete("/delete_all_doc", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/delete_all_doc", 
+    status_code=status.HTTP_204_NO_CONTENT,
+    operation_id="delete_all_documents"
+)
 async def delete_all_documents(
     user=Depends(require_role(["Learner", "Instructor", "Admin"])),
     db: AsyncSession = Depends(get_db)
-):
+) -> None:
     """
     Delete ALL documents belonging to the authenticated user (and their embeddings).
     """
     try:
-        print(f"ℹ️ delete all doc API: delete ALL docs for user.")
+        logger.info(f"ℹ️ delete all doc API: delete ALL docs for user.")
         
-        email = user["email"]
+        user_profile = await _get_current_user_profile(user, db)
         
-        user_profile = await get_user_profile_by_email(email, db)
+        await delete_all_user_documents(user_profile.user_id, db)
 
-        if not user_profile:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ User not found")
+        logger.info(f"✅ delete all doc API: All documents deleted for user_id: {user_profile.user_id}")
         
-        response = await delete_all_user_documents(user_profile.user_id, db)
-        
-        if not response:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="❌ Document not found")
-        
-        return
+        return None
+    except HTTPException:
+        raise
     except Exception as e:
-        print(f"❌ delete_all_doc API: Error processing get my docs: {str(e)}")
-        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        logger.exception(f"❌ delete_all_doc API: Error processing get my docs: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+            detail=str(e)
+        ) from e

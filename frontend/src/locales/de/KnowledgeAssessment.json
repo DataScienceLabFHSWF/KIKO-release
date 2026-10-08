@@ -1,0 +1,46 @@
+{
+  "title": "Wissensüberprüfung",
+  "subtitle": "Eine kurze optionale Überprüfung, um deine Kursempfehlungen zu verbessern.",
+  "intro": "Beantworte die folgenden Fragen. Deine Antworten helfen KIKO, passendere Kurse vorzuschlagen.",
+  "progress": "{{answered}} von {{total}} beantwortet",
+  "question": {
+    "number": "F{{number}}.",
+    "fallbackTopic": "Frage",
+    "answerLabel": "Deine Antwort",
+    "placeholder": "Schreibe deine Antwort hier...",
+    "help": "Antworte kurz und klar. Ein paar verständliche Sätze reichen aus."
+  },
+  "actions": {
+    "submit": "Überprüfung absenden",
+    "submitting": "Antworten werden ausgewertet...",
+    "retry": "Erneut versuchen"
+  },
+  "status": {
+    "loading": "Fragen werden geladen..."
+  },
+  "validation": {
+    "allRequired": "Bitte beantworte alle Fragen, bevor du die Überprüfung absendest."
+  },
+  "empty": {
+    "title": "Keine Fragen verfügbar",
+    "description": "Die Wissensüberprüfung ist aktuell nicht konfiguriert. Bitte versuche es später erneut."
+  },
+  "errors": {
+    "loadTitle": "Überprüfung konnte nicht geladen werden",
+    "loadDescription": "Beim Laden der Fragen ist ein Fehler aufgetreten.",
+    "submitDescription": "Beim Absenden deiner Antworten ist ein Fehler aufgetreten."
+  },
+  "result": {
+    "title": "Überprüfung abgeschlossen",
+    "subtitle": "Hier ist dein Lernprofil und der empfohlene nächste Schritt.",
+    "knowledgeAssessment": "Wissenseinschätzung",
+    "learningPath": "Vorgeschlagener Lernpfad",
+    "nextStep": "Nächster Lernschritt",
+    "recommendedCourses": "Empfohlene Kurse",
+    "noRecommendations": "Es wurden noch keine Kursempfehlungen zurückgegeben.",
+    "untitledCourse": "Unbenannter Kurs",
+    "reason": "Warum empfohlen: {{reason}}",
+    "goToCourses": "Zu Meine Kurse",
+    "noGeneratedContent": "Es wurde kein generierter Inhalt zurückgegeben."
+  }
+}

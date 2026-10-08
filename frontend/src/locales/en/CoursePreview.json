@@ -1,0 +1,46 @@
+{
+  "infoGrid": {
+    "difficulty": "Difficulty",
+    "duration": "Duration",
+    "modules": "Modules",
+    "courseProgress": "Course progress"
+  },
+  "curriculum": {
+    "title": "Curriculum",
+    "overview": "Overview",
+    "courseInfo": "Course information",
+    "module": "Module {{index}}: {{title}}",
+    "finalQuiz": "Final assessment",
+    "grades": "Grades",
+    "resources": "Resources"
+  },
+  "sections": {
+    "overview": "Course overview",
+    "courseInfo": "Course information",
+    "skillsAndTags": "Skills and tags",
+    "prerequisites": "Prerequisites",
+    "instructors": "Instructors",
+    "practice": "Practice",
+    "moduleQuiz": "Module quiz",
+    "furtherReading": "Further reading",
+    "finalAssessment": "Final assessment",
+    "grades": "Grades",
+    "resources": "Resources",
+    "noContent": "No Contents available yet.",
+    "noItems": "No resources available yet.",
+    "enrollForGrades": "Enroll in the course to view your grades.",
+    "misconceptions": "Misconceptions",
+    "meta": "Meta",
+    "gradingPolicy": "Grading policy",
+    "provider": "Provider",
+    "language": "Language",
+    "difficulty": "Difficulty",
+    "duration": "Duration",
+    "content": "Content",
+    "suggestedAnswer": "Suggested answer",
+    "passThreshold": "Pass threshold",
+    "noPrerequisites": "No prerequisites",
+    "correctAnswer": "Correct answer",
+    "incorrectAnswer": "Incorrect answer"
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "title": "FAQ - Häufig gestellte Fragen",
+  "userFallback": "Benutzer",
+  "subtitle": "Willkommen {{name}}. Diese Seite zeigt Tipps und Links passend zu deiner Rolle: {{role}}.",
+  "roles": {
+    "Learner": "Lernende/r",
+    "Instructor": "Dozent/in",
+    "Admin": "Admin"
+  },
+  "sections": {
+    "learner": "Für Lernende",
+    "instructor": "Für Dozentinnen und Dozenten",
+    "admin": "Für Admins",
+    "common": "Allgemeine Fragen"
+  },
+  "quickLinks": {
+    "title": "Schnellzugriff",
+    "items": {
+      "learningDashboard": "Dashboard",
+      "adminDashboard": "Dashboard",
+      "myCourses": "Meine Kurse",
+      "mediaManager": "Medienverwaltung",
+      "courseGenerator": "Kursgenerator",
+      "chatAssistant": "Chat-Assistent",
+      "knowledgeAssessment": "Wissensbewertung",
+      "knowledgeCheckConfig": "Wissenscheck-Konfiguration",
+      "adminConsole": "Admin-Konsole",
+      "myDocuments": "Meine Dokumente",
+      "profile": "Profil",
+      "faq": "FAQ",
+      "evaluationResults": "Evaluationsergebnisse"
+    }
+  },
+  "items": {
+    "learningDashboard": {
+      "question": "Lern-Dashboard - was ist das und wie nutze ich es?",
+      "bullets": [
+        "Das Dashboard zeigt eine Übersicht über deine Lernaktivität, letzte Chats, Kurse und Fortschritte.",
+        "Nutze es als Startseite, um Kurse zu öffnen oder mit Empfehlungen weiterzulernen.",
+        "Wenn das Dashboard leer aussieht, melde dich zuerst unter Meine Kurse für einen Kurs an."
+      ]
+    },
+    "chatAssistant": {
+      "question": "Chat-Assistent - Tipps für gute Antworten",
+      "bullets": [
+        "Stelle klare Fragen zu hochgeladenen Dokumenten, Kursthemen oder Lernmaterialien.",
+        "Lade PDFs über die Plus-Schaltfläche hoch, bevor du Fragen zu neuen Dokumenten stellst.",
+        "Nutze die Quellen unter den Antworten, um zu verstehen, woher die Antwort kommt.",
+        "Wenn eine Antwort nicht hilfreich ist, stelle eine genauere Nachfrage."
+      ]
+    },
+    "myCoursesLearner": {
+      "question": "Meine Kurse - anmelden, ansehen und weiterlernen",
+      "bullets": [
+        "Unter Meine Kurse siehst du verfügbare und zugewiesene Kurse.",
+        "Öffne einen Kurs, um Module, Quizfragen und Lernaktivitäten fortzusetzen.",
+        "Wenn ein Kurs fehlt, kontaktiere deine Dozentin, deinen Dozenten oder die Administration."
+      ]
+    },
+    "knowledgeAssessment": {
+      "question": "Wissensbewertung - wie funktioniert sie?",
+      "bullets": [
+        "Wissensbewertungen helfen dabei, dein Verständnis von Kursthemen zu prüfen.",
+        "Lies jede Frage sorgfältig und antworte, wenn nötig, in eigenen Worten.",
+        "Automatisch erzeugtes Feedback dient als Lernhilfe und ersetzt keine abschließende menschliche Bewertung."
+      ]
+    },
+    "myDocumentsLearner": {
+      "question": "Meine Dokumente - Vorschau, Download und Löschen",
+      "bullets": [
+        "Meine Dokumente zeigt Dateien, die von dir hochgeladen oder bei der Verarbeitung erzeugt wurden.",
+        "Nutze Vorschau, um eine Datei schnell zu prüfen.",
+        "Beim Löschen wird das Dokument aus deiner Liste entfernt und zugehörige Embeddings können ebenfalls entfernt werden."
+      ]
+    },
+    "courseGenerator": {
+      "question": "Kursgenerator - Kurse aus Dokumenten erstellen",
+      "bullets": [
+        "Lade Kursdokumente hoch und lasse, wenn unterstützt, eine Kursstruktur generieren.",
+        "Prüfe generierte Module, bevor du sie für Lernende freigibst.",
+        "Verwende klare Dateinamen, damit Kursmaterial später leichter verwaltet werden kann."
+      ]
+    },
+    "myCoursesInstructor": {
+      "question": "Meine Kurse - Kurse ansehen, bearbeiten und verwalten",
+      "bullets": [
+        "Unter Meine Kurse siehst du Kurse, die du erstellt hast oder verwaltest.",
+        "Prüfe Kursinhalte, bevor Lernende damit arbeiten.",
+        "Halte Kurstitel und Beschreibungen verständlich für nicht-technische Nutzerinnen und Nutzer."
+      ]
+    },
+    "mediaManager": {
+      "question": "Medienverwaltung - Kursmedien verwalten",
+      "bullets": [
+        "Nutze die Medienverwaltung für kursbezogene Bilder, Dokumentvorschauen und ergänzende Materialien.",
+        "Verwende beschreibende Namen, damit Dateien später wiedererkannt werden.",
+        "Lösche ungenutzte Dateien vorsichtig, da Lernende darauf angewiesen sein könnten."
+      ]
+    },
+    "myDocumentsInstructor": {
+      "question": "Meine Dokumente - Kursdateien verwalten",
+      "bullets": [
+        "Nutze Meine Dokumente, um hochgeladene Kursdateien anzusehen, herunterzuladen und zu löschen.",
+        "Prüfe Dokumente in der Vorschau, bevor du sie zur Kurserstellung verwendest.",
+        "Bestätige Massenlöschungen sorgfältig, da Embeddings und Dokumentreferenzen entfernt werden können."
+      ]
+    },
+    "adminDashboard": {
+      "question": "Admin-Dashboard - Plattformüberblick",
+      "bullets": [
+        "Das Admin-Dashboard zeigt eine plattformweite Übersicht und betriebliche Informationen.",
+        "Nutze es, um Systemstatus, Nutzung und administrative Aufgaben zu verstehen.",
+        "Ändere Einstellungen nur, wenn du die Auswirkungen auf Lernende und Dozentinnen oder Dozenten verstehst."
+      ]
+    },
+    "knowledgeCheckConfig": {
+      "question": "Wissenscheck-Konfiguration - Bewertungseinstellungen",
+      "bullets": [
+        "Nutze diese Seite, um Verhalten und Einstellungen für Wissenschecks zu konfigurieren.",
+        "Teste Konfigurationsänderungen, bevor du sie breit anwendest.",
+        "Halte Bewertungseinstellungen einfach und transparent für Lernende."
+      ]
+    },
+    "adminConsole": {
+      "question": "Admin-Konsole - administrative Aktionen",
+      "bullets": [
+        "Nutze die Admin-Konsole für eingeschränkte Verwaltungsaufgaben.",
+        "Sei vorsichtig bei destruktiven Aktionen wie Löschen von Dokumenten oder Ändern von Systemeinstellungen.",
+        "Informiere betroffene Nutzerinnen und Nutzer nach Möglichkeit über größere Änderungen."
+      ]
+    },
+    "myDocumentsAdmin": {
+      "question": "Meine Dokumente - Dokumentverwaltung für Admins",
+      "bullets": [
+        "Admins können Meine Dokumente nutzen, um hochgeladene Dokumente zu prüfen, anzusehen und zu entfernen.",
+        "Lösche nur Dokumente, die eindeutig veraltet, doppelt oder versehentlich hochgeladen wurden.",
+        "Bestätigungsdialoge sind wichtig, da gelöschte Embeddings Suche und Chat-Antworten beeinflussen können."
+      ]
+    },
+    "profileEvaluation": {
+      "question": "Profil & Evaluationsergebnisse",
+      "bullets": [
+        "Im Profil kannst du persönliche Informationen aktualisieren, außer geschützte Felder wie E-Mail und Rolle.",
+        "Evaluationsergebnisse zeigen verfügbares Feedback und Bewertungsergebnisse.",
+        "Wenn etwas falsch aussieht, kontaktiere die zuständige Dozentin, den zuständigen Dozenten oder die Administration."
+      ]
+    },
+    "confirmations": {
+      "question": "Wie funktionieren Bestätigungen und Dialoge?",
+      "bullets": [
+        "Destruktive Aktionen fragen nach einer Bestätigung, bevor etwas entfernt wird.",
+        "Bei riskanten Aktionen wie Alle löschen kann eine zusätzliche Bestätigung erforderlich sein.",
+        "Wähle Nein, behalten, wenn du unsicher bist."
+      ]
+    },
+    "recommendations": {
+      "question": "Warum sehe ich noch keine Empfehlungen?",
+      "bullets": [
+        "Empfehlungen erscheinen möglicherweise erst, wenn genug Kurs-, Dokument- oder Bewertungsaktivität vorhanden ist.",
+        "Als lernende Person starte zuerst mit Kursen und Aktivitäten.",
+        "Als Dozentin oder Dozent füge zuerst Kursmaterial hinzu."
+      ]
+    },
+    "uploadsPreviews": {
+      "question": "Probleme mit Uploads und Vorschauen",
+      "bullets": [
+        "Stelle sicher, dass Dateien ein unterstütztes Format wie PDF oder Markdown haben.",
+        "Große Dateien können länger für die Verarbeitung benötigen.",
+        "Wenn die Vorschau fehlschlägt, aktualisiere die Seite oder lade das Dokument direkt herunter."
+      ]
+    }
+  },
+  "support": {
+    "prefix": "Brauchst du weitere Hilfe? Kontaktiere das Support-Team unter"
+  }
+}

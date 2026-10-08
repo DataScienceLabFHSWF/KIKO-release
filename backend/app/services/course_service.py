@@ -1,3 +1,5 @@
+# backend/app/services/course_service.py
+
 from typing import Any, Dict, List, Optional
 from sqlalchemy import select, delete, func
 from sqlalchemy.orm import joinedload

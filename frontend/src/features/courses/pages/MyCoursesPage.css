@@ -1,0 +1,16 @@
+/* frontend/src/features/courses/pages/MyCoursesPage.css */
+
+.my-courses-page {
+  width: 100%;
+  display: grid;
+  gap: 30px;
+}
+
+.my-courses-page__create {
+  width: fit-content;
+}
+
+.my-courses-page__instructor-list {
+  display: grid;
+  gap: 18px;
+}

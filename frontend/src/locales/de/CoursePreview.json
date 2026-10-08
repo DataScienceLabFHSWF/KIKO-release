@@ -1,0 +1,46 @@
+{
+  "infoGrid": {
+    "difficulty": "Schwierigkeit",
+    "duration": "Dauer",
+    "modules": "Module",
+    "courseProgress": "Kursfortschritt"
+  },
+  "curriculum": {
+    "title": "Curriculum",
+    "overview": "Übersicht",
+    "courseInfo": "Kursinformationen",
+    "module": "Modul {{index}}: {{title}}",
+    "finalQuiz": "Abschlussprüfung",
+    "grades": "Noten",
+    "resources": "Ressourcen"
+  },
+  "sections": {
+    "overview": "Kursübersicht",
+    "courseInfo": "Kursinformationen",
+    "skillsAndTags": "Fähigkeiten und Tags",
+    "prerequisites": "Voraussetzungen",
+    "instructors": "Dozierende",
+    "practice": "Übung",
+    "moduleQuiz": "Modulquiz",
+    "furtherReading": "Weiterführende Literatur",
+    "finalAssessment": "Abschlussprüfung",
+    "grades": "Noten",
+    "resources": "Ressourcen",
+    "noContent": "Noch keine Inhalte verfügbar.",
+    "noItems": "Noch keine Ressourcen verfügbar.",
+    "enrollForGrades": "Melden Sie sich für den Kurs an, um Ihre Noten einzusehen.",
+    "misconceptions": "Fehlvorstellungen",
+    "meta": "Meta",
+    "gradingPolicy": "Bewertungspolitik",
+    "provider": "Anbieter",
+    "language": "Sprache",
+    "difficulty": "Schwierigkeit",
+    "duration": "Dauer",
+    "content": "Inhalt",
+    "suggestedAnswer": "Vorgeschlagene Antwort",
+    "passThreshold": "Bestehensschwelle",
+    "noPrerequisites": "Keine Voraussetzungen",
+    "correctAnswer": "Richtige Antwort",
+    "incorrectAnswer": "Falsche Antwort"
+  }
+}

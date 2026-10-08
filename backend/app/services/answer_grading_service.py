@@ -1,10 +1,13 @@
 # backend/app/services/answer_grading_service.py
-import os, time, re
+
+import os, time, re, logging
 from typing import Optional, Tuple, Dict, Any
 from ollama import Client
 from .configuration_service import get_app_config_and_libary_available
 from app.core import PromptManager
 from app.utils import lang_display
+
+logger = logging.getLogger(__name__)
 
 DOCKER_OLLAMA_URL = os.getenv("DOCKER_OLLAMA_URL")
 LLM_GRADING_INFERENCE_MODEL_NAME = os.getenv("NEMOTRON_LLM_GRADING_INFERENCE_MODEL_NAME")
@@ -15,7 +18,7 @@ GRADE_RE = re.compile(
     r"""(?mi)          # multi-line, case-insensitive
     \b(?:note|grade)\b # 'Note' (DE) or 'Grade' (EN)
     [^\d]*             # anything until a digit
-    ([1-6])            # capture 1..6
+    ([1-5])            # capture 1..5 as the grade
     (?:\s*\([^)]+\))?  # optional '(befriedigend)' etc.
     """,
     re.VERBOSE,
@@ -24,7 +27,7 @@ GRADE_RE = re.compile(
 def extract_grade(summary: str) -> Optional[int]:
     """Extracts the grade from the summary string."""
     
-    print(f"ℹ️ extract_grade from summary: {summary}")
+    logger.info(f"ℹ️ extract_grade from summary: {summary}")
 
     if not summary:
         return None
@@ -47,7 +50,7 @@ def normalize_grade_items(summary: str) -> Tuple[Optional[int], Optional[str]]:
     if grade is None:
         return 0, summary
     
-    print(f"✅ Normalized grade: {grade} from summary: {summary}")
+    logger.info(f"✅ Normalized grade: {grade} from summary: {summary}")
 
     return int(grade), summary.strip()
 
@@ -75,7 +78,7 @@ def get_ollama_client_and_model(model_name) -> Tuple[Client, str]:
     if model_name is None:
         model_name = LLM_GRADING_INFERENCE_MODEL_NAME
     
-    print(f"ℹ️ Selected Inference model: {model_name}")
+    logger.info(f"ℹ️ Selected Inference model: {model_name}")
     return client, model_name
 
 def _ollama_chat(
@@ -86,7 +89,7 @@ def _ollama_chat(
     temperature: float = 0.2
 ) -> str:
     """Sends a chat prompt to the Ollama model and returns the response text."""
-    print(f"ℹ️ Sending prompt to Ollama model: {model_tag} with temperature: {temperature} and max_tokens: {max_tokens}")
+    logger.info(f"ℹ️ Sending prompt to Ollama model: {model_tag} with temperature: {temperature} and max_tokens: {max_tokens}")
     try:
         # Note: Ollama's num_predict is the max tokens in the response
         options = {
@@ -106,11 +109,11 @@ def _ollama_chat(
         # Extract the response text
         text = resp.get("message", {}).get("content", "").strip()
 
-        print(f"✅ Ollama response received ({len(text)} chars).")
+        logger.info(f"✅ Ollama response received ({len(text)} chars).")
 
         return text
     except Exception as e:
-        print(f"❌ Ollama chat error: {e}")
+        logger.exception(f"❌ Ollama chat error: {e}")
         return f"Error: {e}"
 
 def format_prompt(tmpl: str, **kwargs) -> str:
@@ -132,6 +135,36 @@ def strip_think_block(text: str) -> str:
     if start != -1 and end != -1 and end > start:
         return text[end + len("</think>"):].strip()
     return text
+
+def build_misconception_section(
+    misconceptions: Optional[list[str]],
+) -> str:
+    clean_items = [
+        item.strip()
+        for item in (misconceptions or [])
+        if isinstance(item, str) and item.strip()
+    ]
+    
+    if not clean_items:
+        return ""
+
+    misconception_list = "\n".join(
+        f"{index + 1}. {item}"
+        for index, item in enumerate(clean_items)
+    )
+
+    return f"""
+        Candidate misconceptions associated with the learning module:
+        {misconception_list}
+        Misconception analysis instructions:
+        - These misconceptions belong to the module and may not all be relevant
+        to the current question.
+        - Determine which misconceptions are relevant to the question.
+        - For relevant misconceptions, determine whether the learner's answer
+        demonstrates them.
+        - Do not penalize the learner for unrelated misconceptions.
+        - Do not assume a misconception is present unless supported by the learner's answer.
+        """.strip()
 
 def ensure_think_then_answer(
     client: Client,
@@ -159,7 +192,7 @@ def ensure_think_then_answer(
         
         resp = _ollama_chat(client, model_tag, prompt, no_think_max_tokens)
         retries += 1
-    print(f"✅ ensure_think_then_answer: retries={retries} and final response={resp}")
+    logger.info(f"✅ ensure_think_then_answer: retries={retries} and final response={resp}")
     return resp
 
 def generate_response(
@@ -170,7 +203,7 @@ def generate_response(
     remove_think_block:bool = True
 ) -> Tuple[str, int]:
     """Generates a response from the model based on the given prompt."""
-    print(f"ℹ️ Generating response with Ollama model: {model_tag}")
+    logger.info(f"ℹ️ Generating response with Ollama model: {model_tag}")
     
     # Optionally ensure think block; set max_retries=0 if you don't care
     full_text = ensure_think_then_answer(client, model_tag, prompt, no_max_tokens, max_retries=1)
@@ -181,7 +214,7 @@ def generate_response(
     # Estimate tokens as number of words (approximation)
     generated_tokens_est = max(0, len(full_text.split()))
     
-    print(f"✅ generate_response: tokens≈{generated_tokens_est}")
+    logger.info(f"✅ generate_response: tokens≈{generated_tokens_est}")
     
     return full_text, generated_tokens_est
 
@@ -189,6 +222,7 @@ def evaluate_user_answer(
     question: str,
     user_answer: str,
     reference_answer: Optional[str],
+    misconceptions: Optional[list[str]],
     client: Client,
     model_tag: str,
     prompt_manager: PromptManager,
@@ -198,6 +232,8 @@ def evaluate_user_answer(
     """Evaluates a user's answer to a question using a language model."""
     # Load evaluation prompt template
     template = prompt_manager.load_prompt_template(GRADING_EVAL_PROMPT_NAME, lang=response_language)
+
+    misconception_section = build_misconception_section(misconceptions)
     
     # Format the prompt with the question, user answer, and reference answer
     eval_prompt = format_prompt(
@@ -205,22 +241,29 @@ def evaluate_user_answer(
         question=question, 
         user_answer=user_answer, 
         reference_answer=(reference_answer or ""),
+        misconception_section=misconception_section,
         language=lang_display(response_language)
     )
 
-    print(f"ℹ️ eval_prompt:\n{eval_prompt} and loaded template: {template}")
+    logger.info(
+        "ℹ️ Evaluating answer: misconception_aware=%s count=%s",
+        bool(misconceptions),
+        len(misconceptions or []),
+    )
 
     # Generate the evaluation response
     feedback, _ = generate_response(eval_prompt, client, model_tag, no_max_tokens)
 
-    print(f"✅ evaluate_user_answer() — feedback:\n{feedback}")
+    logger.info("✅ evaluate_user_answer() completed.")
 
     return feedback
 
 def optimizer_refine_grading(
     question: str, 
     user_answer: str,
-    grading: str, 
+    reference_answer: Optional[str],
+    grading: str,
+    misconceptions: Optional[list[str]], 
     client: Client, 
     model_tag: str, 
     prompt_manager: PromptManager,
@@ -232,21 +275,28 @@ def optimizer_refine_grading(
     # Load optimization prompt template
     template = prompt_manager.load_prompt_template(GRADING_OPTIMIZE_EVAL_PROMPT_NAME, lang=response_language)
 
+    misconception_section = build_misconception_section(misconceptions)
+    
     # Format the prompt with the question, user answer, and current grading
     opt_prompt = format_prompt(
         template, 
         question=question, 
-        user_answer=user_answer, 
+        user_answer=user_answer,
+        reference_answer=reference_answer or "",
         grading=grading,
+        misconception_section=misconception_section,
         language=lang_display(response_language)
     )
 
-    print(f"ℹ️ opt_prompt:\n{opt_prompt} and loaded template: {template}")
-    
+    logger.info(
+        "ℹ️ Optimizing grading with misconception_count=%s",
+        len(misconceptions or []),
+    )
+
     # Generate the improved grading response
     improved_response, _ = generate_response(opt_prompt, client, model_tag, no_max_tokens)
 
-    print(f"✅ optimizer_refine_grading() — improved:\n{improved_response}")
+    logger.info("✅ optimizer_refine_grading() completed.")
 
     return improved_response
 
@@ -254,7 +304,8 @@ def optimizer_refine_grading(
 def evaluator_optimizer_grading_loop(
     question: str, 
     user_answer: str, 
-    reference_answer: Optional[str], 
+    reference_answer: Optional[str],
+    misconceptions: Optional[list[str]], 
     client: Client, 
     model_tag: str,
     prompt_manager: PromptManager,
@@ -263,12 +314,13 @@ def evaluator_optimizer_grading_loop(
     max_iters: int = 1    
 ):
     """Grades a user's answer using an evaluator-optimizer loop."""
-    print(f"ℹ️ Starting evaluator_optimizer_grading_loop with max_iters={max_iters}")
+    logger.info(f"ℹ️ Starting evaluator_optimizer_grading_loop with max_iters={max_iters}")
 
     grading = evaluate_user_answer(
         question=question,
         user_answer=user_answer,
         reference_answer=reference_answer,
+        misconceptions=misconceptions,
         client=client,
         model_tag=model_tag,
         prompt_manager=prompt_manager,
@@ -276,16 +328,19 @@ def evaluator_optimizer_grading_loop(
         response_language=response_language
     )
 
-    print(f"ℹ️ Initial grading:\n{grading}")
+    logger.info(f"ℹ️ Initial grading:\n{grading}")
 
     grading_summary = grading
+
     for i in range(max_iters):
-        print(f"ℹ️ Optimization iteration: {i+1}/{max_iters}")
+        logger.info(f"ℹ️ Optimization iteration: {i+1}/{max_iters}")
         
         grading_summary = optimizer_refine_grading(
             question=question,
             user_answer=user_answer,
+            reference_answer=reference_answer,
             grading=grading_summary,
+            misconceptions=misconceptions,
             client=client,
             model_tag=model_tag,
             prompt_manager=prompt_manager,
@@ -294,50 +349,83 @@ def evaluator_optimizer_grading_loop(
         )
     
     grade_class_info, grade_summary = normalize_grade_items(grading_summary)
-    print(f"✅ Final grading summary: {grading_summary}\nParsed grade: {grade_class_info}")
+
+    logger.info(f"✅ Final grading summary: {grading_summary}\nParsed grade: {grade_class_info}")
+
     return grade_class_info, grade_summary
 
 async def grade_user_answer(
+    *,
     question: str,
     user_answer: str,
-    inference_model_name:str,
-    reference_answer: str,
+    inference_model_name: str,
+    reference_answer: Optional[str],
     no_max_tokens: int,
-    response_language: str
+    response_language: str,
+    misconceptions: Optional[list[str]] = None,
 ) -> Dict[str, Any]:
-    """Grades a user's answer to a question using a reasoning-optimized language model."""
-    # Heavy reasoning, good for evaluation tasks.
-    # DeepSeek-R1-Distill-Qwen-32B is reasoning-optimized
-    quant_config = None
-    
-    # Load model and tokenizer
+    """
+    Grade a user's answer.
+
+    `misconceptions` is optional:
+
+    - None / []:
+        Standard answer grading.
+        Used by Knowledge Assessment.
+
+    - Non-empty list:
+        Misconception-aware grading.
+        Used by course practice and instructor Q&A review.
+    """
+
     model_loading_start_time = time.time()
-    
-    client, model_tag = get_ollama_client_and_model(inference_model_name)
-    
-    model_loading_time = time.time() - model_loading_start_time
-    
-    print(f"ℹ️ Model loaded for grade_user_answer: {model_tag}, loading time: {model_loading_time} and Max Tokens: {no_max_tokens}")
+
+    client, model_tag = get_ollama_client_and_model(
+        inference_model_name,
+    )
+
+    model_loading_time = (
+        time.time() - model_loading_start_time
+    )
+
+    clean_misconceptions = [
+        item.strip()
+        for item in (misconceptions or [])
+        if isinstance(item, str) and item.strip()
+    ]
+
+    logger.info(
+        (
+            "Model loaded for grade_user_answer: "
+            "model=%s loading_time=%s max_tokens=%s "
+            "misconception_aware=%s misconception_count=%s"
+        ),
+        model_tag,
+        model_loading_time,
+        no_max_tokens,
+        bool(clean_misconceptions),
+        len(clean_misconceptions),
+    )
 
     configs = await get_app_config_and_libary_available()
-    
+
     prompt_mgr = PromptManager(configs)
-    
-    grade_class, grade_summary = evaluator_optimizer_grading_loop(
-        question=question, 
-        user_answer=user_answer,
-        reference_answer=reference_answer,
-        client=client,
-        model_tag=model_tag,
-        prompt_manager=prompt_mgr,
-        no_max_tokens=no_max_tokens,
-        response_language=response_language
+
+    grade_class, grade_summary = (
+        evaluator_optimizer_grading_loop(
+            question=question,
+            user_answer=user_answer,
+            reference_answer=reference_answer,
+            misconceptions=clean_misconceptions,
+            client=client,
+            model_tag=model_tag,
+            prompt_manager=prompt_mgr,
+            no_max_tokens=no_max_tokens,
+            response_language=response_language,
+        )
     )
-    
-    response: Dict[str, Any] = {
+
+    return {
         "grade": grade_class,
-        "summary": grade_summary
+        "summary": grade_summary,
     }
-    
-    print(f"✅ Final grade_user_answer grading generated: {response}")
-    return response

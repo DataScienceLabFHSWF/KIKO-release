@@ -1,0 +1,84 @@
+/* frontend/src/components/molecules/FormField/FormField.css */
+
+.ui-form-field {
+  min-width: 0;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.ui-form-field--row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  column-gap: 18px;
+  row-gap: 6px;
+  align-items: center;
+}
+
+.ui-form-field--stack {
+  display: grid;
+  gap: 8px;
+}
+
+.ui-form-field__label {
+  white-space: nowrap;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.ui-form-field__control {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.ui-form-field__icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  color: var(--color-primary-dark);
+  pointer-events: none;
+}
+
+.ui-form-field input,
+.ui-form-field select {
+  width: 100%;
+  min-width: 0;
+  height: 30px;
+  border: 1px solid rgba(16, 35, 71, 0.65);
+  background: #eef5ff;
+  color: var(--color-text);
+  padding: 0 8px;
+  outline: none;
+}
+
+.ui-form-field__input--with-icon {
+  padding-left: 34px !important;
+}
+
+.ui-form-field select {
+  background: #ffffff;
+}
+
+.ui-form-field input:focus,
+.ui-form-field select:focus {
+  border-color: var(--color-primary-dark);
+  box-shadow: 0 0 0 2px rgba(109, 207, 246, 0.25);
+}
+
+.ui-form-field__error {
+  grid-column: 2;
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .ui-form-field--row {
+    grid-template-columns: 1fr;
+  }
+
+  .ui-form-field__error {
+    grid-column: 1;
+  }
+}

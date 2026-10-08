@@ -1,0 +1,31 @@
+/* frontend/src/components/atoms/ReadOnlyField/ReadOnlyField.css */
+
+.read-only-field {
+  display: grid;
+  gap: 6px;
+}
+
+.read-only-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-primary-dark);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.read-only-field__value {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  background: #f1f7fb;
+  border: 1px solid rgba(16, 35, 71, 0.18);
+  color: var(--color-text);
+}
+
+.read-only-field__helper {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}

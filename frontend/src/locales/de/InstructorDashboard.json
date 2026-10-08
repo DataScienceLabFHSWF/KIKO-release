@@ -1,0 +1,50 @@
+{
+  "metaTitle": "Dashboard",
+  "title": "Dashboard",
+  "subtitle": "Eine einfache Übersicht über deine Kurse, Lernenden, Fragen und hochgeladenen Materialien.",
+  "sections": {
+    "overview": "Lehrübersicht",
+    "overviewDescription": "Diese Zahlen helfen dir, deine aktuelle Lehraktivität schnell zu verstehen.",
+    "nextActions": "Schnellaktionen",
+    "nextActionsDescription": "Springe direkt zu den Bereichen, die du wahrscheinlich als Nächstes brauchst."
+  },
+  "metrics": {
+    "coursesCreated": "Erstellte Kurse",
+    "students": "Eingeschriebene Lernende",
+    "questionsAsked": "Von dir erstellte Fragen",
+    "learnerQuestions": "Fragen von Lernenden",
+    "documentsUploaded": "Hochgeladene Dokumente",
+    "lastActivity": "Letzte Aktivität"
+  },
+  "actionsGrid": {
+    "courseSetup": {
+      "title": "Kurs erstellen",
+      "description": "Material hochladen und einen neuen Kurs vorbereiten."
+    },
+    "myCourses": {
+      "title": "Kurse verwalten",
+      "description": "Kurse prüfen, bearbeiten und organisieren."
+    },
+    "documents": {
+      "title": "Dokumente verwalten",
+      "description": "Dateien ansehen, herunterladen oder entfernen."
+    },
+    "chat": {
+      "title": "Chat-Assistent öffnen",
+      "description": "Fragen zu Dokumenten oder Kursinhalten stellen."
+    },
+    "evaluation": {
+      "title": "Evaluationsergebnisse ansehen",
+      "description": "Modellgeschwindigkeit, Qualität und Bewertung vergleichen."
+    }
+  },
+  "messages": {
+    "loading": "Dashboard wird geladen...",
+    "loadFailed": "Das Dashboard konnte nicht geladen werden.",
+    "unavailableTitle": "Dashboard nicht verfügbar",
+    "unavailableDescription": "Das Dashboard konnte gerade nicht geladen werden."
+  },
+  "actions": {
+    "retry": "Erneut versuchen"
+  }
+}

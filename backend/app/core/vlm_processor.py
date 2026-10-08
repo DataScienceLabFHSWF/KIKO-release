@@ -1,3 +1,5 @@
+# backend/app/core/vlm_processor.py
+
 import os, logging, json, fitz, base64
 from typing import Dict, List, Any
 from PIL import Image
@@ -43,7 +45,7 @@ class VLMProcessor:
         - Model tag from app.preferred_vlm_model or VLM_MODEL env, default 'qwen2.5vl:7b'
           (your Docker entrypoint already pulls the model)
         """
-        print("ℹ️ Getting Ollama client and model tag.")        
+        logger.info("ℹ️ Getting Ollama client and model tag.")        
         
         model_tag = (
             self.app.get("preferred_vlm_model")
@@ -51,28 +53,28 @@ class VLMProcessor:
         )
 
         client = Client(host=DOCKER_OLLAMA_URL)
-        print(f"✅ Initialized Ollama client for model: {client} FOR {model_tag}")
+        logger.info(f"✅ Initialized Ollama client for model: {client} FOR {model_tag}")
         return client, model_tag
 
     @staticmethod
     def _pil_to_base64(image: Image.Image) -> str:
-        print("ℹ️ Converting PIL image to base64 string.")
+        logger.info("ℹ️ Converting PIL image to base64 string.")
         if image.mode != "RGB":
             image = image.convert("RGB")
         buf = BytesIO()
         image.save(buf, format="PNG")
         response = base64.b64encode(buf.getvalue()).decode("utf-8")
-        print(f"✅ Successfully converted PIL image to base64 string.")
+        logger.info(f"✅ Successfully converted PIL image to base64 string.")
         return response
     
     def _pdf_to_images_fitz(self, file_path: str, dpi: int) -> List[Image.Image]:
         """Render PDF pages to PIL images using PyMuPDF (no Poppler needed)."""
-        print(f"ℹ️ Converting PDF to images using fitz: {file_path} at {dpi} dpi")
+        logger.info(f"ℹ️ Converting PDF to images using fitz: {file_path} at {dpi} dpi")
         images: List[Image.Image] = []
         zoom = dpi / 72.0  # 72 dpi is the PDF default
         mat = fitz.Matrix(zoom, zoom)
         doc = fitz.open(file_path)
-        print(f"ℹ️ Docs open to convert: {doc}")
+        logger.info(f"ℹ️ Docs open to convert: {doc}")
         try:
             for page in doc:
                 pix = page.get_pixmap(matrix=mat, alpha=False)
@@ -81,7 +83,7 @@ class VLMProcessor:
                 images.append(img)
         finally:
             doc.close()
-        print(f"✅ Successfully converted pdf to image: {images}")
+        logger.info(f"✅ Successfully converted pdf to image: {images}")
         return images
 
     def _ollama_chat_image(self, client: Client, model_tag: str, image: Image.Image, prompt: str) -> str:
@@ -89,7 +91,7 @@ class VLMProcessor:
         Single entry-point to query the Ollama VLM with one image and a text prompt.
         """
         try:
-            print(f"ℹ️ Sending image and prompt to Ollama VLM model: {model_tag}")
+            logger.info(f"ℹ️ Sending image and prompt to Ollama VLM model: {model_tag}")
             
             # Convert image to base64
             img_b64 = self._pil_to_base64(image)
@@ -117,18 +119,18 @@ class VLMProcessor:
 
             # Extract text response
             text = resp.get("message", {}).get("content", "").strip()
-            print(f"✅ Ollama VLM output ({model_tag}): {text[:200]}...")
+            logger.info(f"✅ Ollama VLM output ({model_tag}): {text[:200]}...")
 
             return text
         except Exception as e:
-            print(f"❌ Ollama VLM processing error: {str(e)}")
+            logger.exception(f"❌ Ollama VLM processing error: {str(e)}")
             return f"Error in Ollama VLM processing: {str(e)}"
 
     async def _parse_form_output(self, output_text: str, page_idx: int) -> List[Dict[str, Any]]:
         """Parse VLM output to extract structured form field data."""
         
         fields: List[Dict[str, Any]] = []
-        print(f"ℹ️ Parsing form output from VLM for page {page_idx + 1}.")
+        logger.info(f"ℹ️ Parsing form output from VLM for page {page_idx + 1}.")
         
         try:
             # Try to parse as JSON first
@@ -179,14 +181,14 @@ class VLMProcessor:
         if current_field:
             fields.append(current_field)
         
-        print(f"✅ Parsed {len(fields)} form fields from VLM output for page {page_idx + 1}.")
+        logger.info(f"✅ Parsed {len(fields)} form fields from VLM output for page {page_idx + 1}.")
         return fields
 
     ###### High-level VLM processing methods ######
     async def analyze_document_with_advanced_vlm(self, image: Image.Image, page_idx: int) -> str:
         """Analyze document page with state-of-the-art VLM."""
         try:
-            print(f"ℹ️ Analyzing document page {page_idx + 1} with advanced VLM.")
+            logger.info(f"ℹ️ Analyzing document page {page_idx + 1} with advanced VLM.")
             # Get Ollama client and model
             client, model_tag = self._get_ollama_client_and_model()
             
@@ -202,16 +204,16 @@ class VLMProcessor:
             # Get VLM output
             output = self._ollama_chat_image(client, model_tag, image, analysis_prompt)
 
-            print(f"✅ Completed VLM analysis for page {page_idx + 1} and got output: {output[:200]}...")
+            logger.info(f"✅ Completed VLM analysis for page {page_idx + 1} and got output: {output[:200]}...")
             return output
         except Exception as e:
-            print(f"❌ VLM analysis failed for page {page_idx + 1}: {str(e)}")            
+            logger.exception(f"❌ VLM analysis failed for page {page_idx + 1}: {str(e)}")            
             return f"Error during VLM analysis: {str(e)}"
 
     async def extract_advanced_formulas(self, image, page_idx):
         """Extract mathematical formulas using advanced VLM understanding."""
         try:
-            print(f"ℹ️ Extracting formulas from page {page_idx + 1} with advanced VLM.")
+            logger.info(f"ℹ️ Extracting formulas from page {page_idx + 1} with advanced VLM.")
             # Get Ollama client and model
             client, model_tag = self._get_ollama_client_and_model()
             
@@ -227,16 +229,16 @@ class VLMProcessor:
             # Get VLM output
             output = self._ollama_chat_image(client, model_tag, image, formula_prompt)
 
-            print(f"✅ Completed formula extraction for page {page_idx + 1} and got output: {output[:200]}...")
+            logger.info(f"✅ Completed formula extraction for page {page_idx + 1} and got output: {output[:200]}...")
             return output
         except Exception as e:
-            print(f"❌ Formula extraction error for page {page_idx + 1}: {str(e)}")
+            logger.exception(f"❌ Formula extraction error for page {page_idx + 1}: {str(e)}")
             return f"Error during formula extraction: {str(e)}"
     
     async def extract_advanced_forms(self, image, page_idx):
         """Extract form fields using advanced VLM understanding."""
         try:
-            print(f"ℹ️ Extracting form fields from page {page_idx + 1} with advanced VLM.")
+            logger.info(f"ℹ️ Extracting form fields from page {page_idx + 1} with advanced VLM.")
             # Get Ollama client and model
             client, model_tag = self._get_ollama_client_and_model()
 
@@ -255,11 +257,11 @@ class VLMProcessor:
             # Parse the output to extract structured form data
             fields = await self._parse_form_output(raw, page_idx)
             
-            print(f"✅ Completed form extraction for page {page_idx + 1} and got fields: {fields}")
+            logger.info(f"✅ Completed form extraction for page {page_idx + 1} and got fields: {fields}")
 
             return {"fields": fields}
         except Exception as e:
-            print(f"❌ Form extraction error for page {page_idx + 1}: {str(e)}")            
+            logger.exception(f"❌ Form extraction error for page {page_idx + 1}: {str(e)}")            
             return {"fields": []}
         
     async def extract_vlm_from_pdf(self, file_path: str) -> List[str]:
@@ -271,7 +273,7 @@ class VLMProcessor:
             # Convert PDF pages to images
             dpi = self.app.get("pdf_dpi") 
             images = self._pdf_to_images_fitz(file_path, dpi=dpi)
-            print(f"ℹ️ Convert PDF pages to images: {len(images)}")
+            logger.info(f"ℹ️ Convert PDF pages to images: {len(images)}")
 
             vlm_texts = []
             
@@ -320,5 +322,5 @@ class VLMProcessor:
             
             return vlm_texts
         except Exception as e:
-            print(f"❌ State-of-the-art VLM analysis failed for {file_path}: {str(e)}")
+            logger.exception(f"❌ State-of-the-art VLM analysis failed for {file_path}: {str(e)}")
             return []

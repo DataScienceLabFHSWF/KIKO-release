@@ -1,0 +1,54 @@
+{
+  "metaTitle": "Chat-Assistent",
+  "heading": "Was möchtest du lernen?",
+  "defaultPlaceHolder": "Schreibe etwas...",
+  "history": {
+    "loading": "Chatverlauf wird geladen...",
+    "loadFailed": "Chatverlauf konnte nicht geladen werden."
+  },
+  "actions": {
+    "send": "Frage senden",
+    "close": "Schließen",
+    "download": "Herunterladen"
+  },
+  "upload": {
+    "title": "PDF-Dateien hochladen",
+    "hint": "Nutze + zum Hochladen von PDFs oder ziehe sie hier hinein. Maximal 20 MB pro PDF.",
+    "dropHint": "PDF-Dateien hier ablegen.",
+    "removeFile": "{{fileName}} entfernen",
+    "errors": {
+      "pdfOnly": "Nur PDF-Dateien werden unterstützt.",
+      "maxSize": "Maximale Dateigröße ist {{size}} MB."
+    }
+  },
+  "voice": {
+    "disabled": "Spracheingabe ist noch nicht verfügbar."
+  },
+  "footer": {
+    "llm": "LLM:",
+    "sysInformation": "Systeminformationen"
+  },
+  "status": {
+    "uploading": "PDF-Dateien werden verarbeitet...",
+    "thinking": "Antwort wird generiert...",
+    "filesReady": "{{count}} PDF-Datei(en) bereit.",
+    "failed": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    "systemMessage": "Systemnachricht"
+  },
+  "sources": {
+    "show": "{{count}} Quellen anzeigen",
+    "hide": "{{count}} Quellen ausblenden",
+    "unknown": "Unbekannte Quelle"
+  },
+  "system": {
+    "title": "Systeminformationen",
+    "aiModels": "Verfügbare KI-Modelle:",
+    "advancedVlm": "Erweiterte VLM-Modelle",
+    "trocr": "TrOCR verfügbar",
+    "opencv": "OpenCV Computer Vision",
+    "embeddingAndLlm": "Embedding- und LLM-Modell:",
+    "embeddingModel": "Embedding-Modell",
+    "largeLanguageModel": "Großes Sprachmodell",
+    "runtime": "System:"
+  }
+}

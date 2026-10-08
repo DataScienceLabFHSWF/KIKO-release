@@ -1,0 +1,124 @@
+{
+  "metaTitle": "Evaluationsergebnisse",
+  "title": "Evaluationsergebnisse — Warum unterscheiden sich Modelle in Geschwindigkeit und Qualität?",
+  "subtitle": "Vergleiche Modellresultate in einer einfachen und verständlichen Ansicht.",
+
+  "tabs": {
+    "dataset": "Datensatz",
+    "apertus": "Chat: Apertus-8B",
+    "llama": "Chat: Llama 3.3 70B",
+    "kimi": "Chat: Kimi K2",
+    "grading": "Bewertung: DeepSeek-R1"
+  },
+
+  "sections": {
+    "keyNumbers": "Kennzahlen",
+    "resultsTable": "Ergebnistabelle",
+    "quickAggregates": "Kurzüberblick",
+    "visualization": "Visualisierung"
+  },
+
+  "stats": {
+    "rows": "Zeilen",
+    "columns": "Spalten",
+    "missingValues": "Fehlende Werte",
+    "avgCharsPerRow": "Ø Zeichen pro Zeile",
+    "rouge": "ROUGE-L Durchschnitt",
+    "bleu": "BLEU Durchschnitt",
+    "bertScore": "BERTScore F1 Durchschnitt",
+    "citationRate": "Zitationsrate",
+    "items": "Bewertungsfälle",
+    "accuracy": "Exakte Genauigkeit",
+    "mae": "MAE",
+    "kappa": "Gewichtetes Kappa"
+  },
+
+  "dataset": {
+    "heading": "Evaluationsdatensatz",
+    "description": "Dieser Beispieldatensatz wurde verwendet, um Modellantworten und Bewertungsverhalten zu prüfen.",
+    "explanation": {
+      "title": "Was ist dieser Datensatz und wie wurde er genutzt?",
+      "bullets": [
+        "Jede Zeile entspricht einem Testfall.",
+        "Der Datensatz enthält reale Fragen, Referenzantworten und Nutzerantworten.",
+        "Bei Chat-Modellen werden Modellantworten mit Referenzantworten verglichen.",
+        "Bei Bewertungsmodellen werden vorhergesagte Noten mit menschlichen Noten verglichen.",
+        "Der Datensatz ist eine Stichprobe und deckt nicht alle möglichen Fälle ab."
+      ]
+    }
+  },
+
+  "apertus": {
+    "heading": "Chat-Qualität - Apertus-8B-Instruct",
+    "description": "Diese Ansicht zeigt, wie Apertus die Evaluationsfragen beantwortet hat.",
+    "chartAlt": "Verteilung des BERTScore F1 für Apertus-Chatantworten",
+    "explanation": {
+      "title": "Wie liest man diese Ergebnisse?",
+      "bullets": [
+        "Die Tabelle zeigt eine Zeile pro Testfrage.",
+        "Höhere Werte bei BERTScore, ROUGE und BLEU deuten meistens auf größere Ähnlichkeit zur Referenzantwort hin.",
+        "Die Zitationsrate zeigt, ob Antworten quellenbasiert sind.",
+        "Kleinere Modelle können schneller sein, haben aber bei komplexen oder langen Kontexten Grenzen."
+      ]
+    }
+  },
+
+  "llama": {
+    "heading": "Chat-Qualität - Llama 3.3 70B",
+    "description": "Diese Ansicht fasst Qualität und Verhalten des größeren Llama-Modells zusammen.",
+    "explanation": {
+      "title": "Wie liest man diese Ergebnisse?",
+      "bullets": [
+        "Größere Modelle können ausführlichere Antworten erzeugen.",
+        "Sie können je nach GPU-Auslastung und Kontextlänge langsamer sein.",
+        "Qualitätsmetriken sollten immer zusammen mit menschlicher Prüfung betrachtet werden."
+      ]
+    }
+  },
+
+  "kimi": {
+    "heading": "Chat-Qualität - Kimi K2",
+    "description": "Diese Ansicht zeigt Ergebnisse für das cloudgestützte Kimi-Modell.",
+    "explanation": {
+      "title": "Wie liest man diese Ergebnisse?",
+      "bullets": [
+        "Cloudgestützte Modelle können je nach Netzwerk und Anbieter unterschiedliche Latenzen haben.",
+        "Vergleiche Qualität und Geschwindigkeit, bevor du ein Modell für einen Workflow auswählst.",
+        "Nutze diese Ansicht, um Stärken und Schwächen von Kimi zu verstehen."
+      ]
+    }
+  },
+
+  "grading": {
+    "heading": "Bewertung - DeepSeek-R1",
+    "description": "Diese Ansicht zeigt, wie nah automatische Bewertungen an menschlichen Bewertungen liegen.",
+    "chartAlt": "Konfusionsmatrix zwischen menschlichen Noten und vorhergesagten Noten",
+    "explanation": {
+      "title": "Wie liest man die Bewertungsergebnisse?",
+      "bullets": [
+        "Exakte Genauigkeit zeigt, wie oft die vorhergesagte Note genau der menschlichen Note entspricht.",
+        "MAE zeigt den durchschnittlichen Bewertungsabstand; niedriger ist besser.",
+        "Gewichtetes Kappa misst die Übereinstimmung über Zufall hinaus; näher an 1 ist besser.",
+        "Die Modellbewertung sollte als Entscheidungshilfe verstanden werden, nicht als endgültige menschliche Note."
+      ]
+    }
+  },
+  "empty": {
+    "noRows": "Für diesen Bereich sind noch keine Zeilen verfügbar."
+  },
+  "table": {
+    "searchPlaceholder": "Tabelle durchsuchen...",
+    "downloadCsv": "CSV herunterladen",
+    "rowsPerPage": "Zeilen pro Seite",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "page": "Seite",
+    "of": "von",
+    "showing": "Angezeigt",
+    "rows": "Zeilen"
+  },
+  "states": {
+    "loading": "Evaluationsdaten werden geladen...",
+    "errorTitle": "Evaluationsdaten konnten nicht geladen werden"
+  }
+}

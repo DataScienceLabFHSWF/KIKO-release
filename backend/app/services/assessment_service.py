@@ -6,8 +6,10 @@ from fastapi import HTTPException, status
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timezone
-from app.schemas import (AssessmentQuestion, AssessmentPayload, AssessmentResult,
-                         GradedAnswer)
+from app.schemas import (
+    AssessmentQuestion, AssessmentPayload, AssessmentResult,
+    AssessmentGradedAnswerResponse
+)
 from app.models import (KnowledgeAssessmentModel, KnowledgeAssessmentConfigModel)
 from app.core import PromptManager
 from .answer_grading_service import (grade_user_answer, get_ollama_client_and_model, generate_response,
@@ -59,14 +61,14 @@ def _build_questions_json_from_graded(
                 "question": getattr(q_obj, "question", None),
                 "user_answer": by_qid_user_ans.get(qid, None),
                 "reference_answer": getattr(q_obj, "correct_answer", None),
-                "grade": _val(ga, "grade", 6),
+                "grade": _val(ga, "grade", 5),
                 "summary": _val(ga, "summary", None),
             }
         )
 
     response = {"questions": items}
 
-    print(f"✅ Built questions JSON for prompts: {response}")
+    logger.info(f"✅ Built questions JSON for prompts: {response}")
 
     return response
 
@@ -87,7 +89,7 @@ def _localize_graded_json_for_prompt(graded_json: Dict[str, Any]) -> Dict[str, A
         )
     
     response = {"fragen": items}
-    print(f"✅ Localized graded JSON for prompt: {response}")
+    logger.info(f"✅ Localized graded JSON for prompt: {response}")
     return response
 
 def generate_knowledge_assessment_from_graded(
@@ -118,11 +120,11 @@ def generate_knowledge_assessment_from_graded(
         language=lang_display(response_language)
     )
 
-    print(f"ℹ️ knowledge_assessment_prompt:\n {knowledge_assessment_prompt}")
+    logger.info(f"ℹ️ knowledge_assessment_prompt:\n {knowledge_assessment_prompt}")
     
     text, tokens = generate_response(knowledge_assessment_prompt, client, model_tag, no_max_tokens)
 
-    print(f"✅ Generated Knowledge Assessment:\n{text} and tokens used: {tokens}")
+    logger.info(f"✅ Generated Knowledge Assessment:\n{text} and tokens used: {tokens}")
 
     return text, tokens
 
@@ -156,11 +158,11 @@ def generate_learning_path_from_graded(
         language=lang_display(response_language)
     )
 
-    print(f"ℹ️ learning_path_prompt:\n {learning_path_prompt}")
+    logger.info(f"ℹ️ learning_path_prompt:\n {learning_path_prompt}")
     
     text, tokens = generate_response(learning_path_prompt, client, model_tag, no_max_tokens)
 
-    print(f"✅ Generated Learning Path:\n{text} and tokens used: {tokens}")
+    logger.info(f"✅ Generated Learning Path:\n{text} and tokens used: {tokens}")
 
     return text, tokens
 
@@ -185,11 +187,11 @@ def generate_learning_step_from_path(
         language=lang_display(response_language)
     )
     
-    print(f"ℹ️ learning_step_prompt:\n {learning_step_prompt}")
+    logger.info(f"ℹ️ learning_step_prompt:\n {learning_step_prompt}")
     
     text, tokens = generate_response(learning_step_prompt, client, model_tag, no_max_tokens)
 
-    print(f"✅ Generated Learning Step Explanation:\n{text}")
+    logger.info(f"✅ Generated Learning Step Explanation:\n{text}")
 
     return text, tokens
 
@@ -264,12 +266,12 @@ async def submit_assessment_quiz_for_user(
     """Submit user answers, grade them, generate knowledge assessment, learning path, learning step, and recommendations."""
 
     try:
-        print(f"ℹ️ Submitting the user answers: {payload}")
+        logger.info(f"ℹ️ Submitting the user answers: {payload}")
 
         if not payload.answers or len(payload.answers) == 0:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"❌ validation_error: {str(e)}")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No assessment answers were provided.",)
         
-        q_ids = [a['question_id'] for a in payload.answers]
+        q_ids = [a.question_id for a in payload.answers]
 
         # Fetch questions from DB
         result = await db.execute(
@@ -284,20 +286,32 @@ async def submit_assessment_quiz_for_user(
         
         q_map = {q.question_id: q for q in questions}
 
-        print(f"ℹ️ q_ids: {q_ids} and q_map: {q_map} and answers: {payload.answers}")
-        
+        logger.info(f"ℹ️ q_ids: {q_ids} and q_map: {q_map} and answers: {payload.answers}")
+
+        configs = await get_app_config_and_libary_available(db=db)
+
+        if not configs:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="❌ Application configurations not found",
+            )
+
+        reasoning_model_name = configs.get("app_config").default_reasoning_model
+
+        logger.info(f"ℹ️ Using reasoning model: {reasoning_model_name} for grading answers")
+
         # Build grading tasks (one per answer)
         tasks = []
         normalized_answers = []  # keep order aligned with tasks
         
         for a in payload.answers:
-            q = q_map.get(a["question_id"])
+            q = q_map.get(a.question_id)
             
             if not q:
                 # skip unknown question ids silently or raise
                 continue
             
-            ua = (a["user_answer"] or "").strip()
+            ua = (a.user_answer or "").strip()
 
             normalized_answers.append(
                 (
@@ -312,7 +326,7 @@ async def submit_assessment_quiz_for_user(
                 grade_user_answer(
                     question=q.question,
                     user_answer=ua,
-                    inference_model_name=None,
+                    inference_model_name=reasoning_model_name,
                     reference_answer=q.correct_answer,
                     no_max_tokens=1024,
                     response_language=response_language
@@ -326,23 +340,23 @@ async def submit_assessment_quiz_for_user(
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
         # Shape response
-        graded_answers : List[GradedAnswer] = []
+        graded_answers : List[AssessmentGradedAnswerResponse] = []
 
         for (qid, _qtext, _ua, _ref), ai in zip(normalized_answers, results):
             if isinstance(ai, Exception):
-                graded_answers.append(GradedAnswer(
+                graded_answers.append(AssessmentGradedAnswerResponse(
                     question_id=qid,
-                    grade=6,
-                    summary=None,
+                    grade=5,
+                    summary="",
                 ))
             else:
-                graded_answers.append(GradedAnswer(
+                graded_answers.append(AssessmentGradedAnswerResponse(
                     question_id=qid,
-                    grade=ai.get("grade", 6),
-                    summary=ai.get("summary", None),
+                    grade=ai.get("grade", 5),
+                    summary=ai.get("summary", ""),
                 ))
 
-        print(f"✅ Graded answers: {graded_answers} and q_map: {q_map}")
+        logger.info(f"✅ Graded answers: {graded_answers} and q_map: {q_map}")
 
         # Build graded JSON for prompts
         graded_json = _build_questions_json_from_graded(
@@ -350,9 +364,7 @@ async def submit_assessment_quiz_for_user(
             original_answers=payload.answers,
             q_map=q_map,
         )
-        
-        configs = await get_app_config_and_libary_available()
-        
+
         prompt_mgr = PromptManager(configs)
         
         knowledge_text, _ = generate_knowledge_assessment_from_graded(graded_json, prompt_mgr, 2048, response_language)
@@ -378,7 +390,7 @@ async def submit_assessment_quiz_for_user(
             recommended_courses=recommendations
         )
         
-        print(f"✅ Assessment and Recommendation pipeline done: {response}")
+        logger.info(f"✅ Assessment and Recommendation pipeline done: {response}")
         
         return response
     except SQLAlchemyError as e:

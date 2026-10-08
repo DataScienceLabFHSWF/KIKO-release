@@ -2,9 +2,20 @@
 
 Thank you for your interest in contributing to KIKO.
 
-KIKO is an AI-powered knowledge and learning platform for nuclear decommissioning. The project combines a Streamlit frontend, FastAPI backend, PostgreSQL/pgvector, Docker, Ollama, and optional Hugging Face model integrations.
+KIKO is an AI-powered knowledge and learning platform built with:
 
-The current stable frontend is Streamlit. A ReactJS migration is under active development and is not yet the default public frontend.
+- React + TypeScript for the frontend
+- FastAPI for the backend
+- PostgreSQL + pgvector for persistent and vector data
+- Ollama for local model inference
+- Hugging Face integrations for supported external models
+- Docker Compose for development and deployment
+
+The current frontend lives in [`frontend/`](frontend).
+
+The previous Streamlit application is retained in
+[`frontend-streamlit/`](frontend-streamlit) as legacy reference code and
+should not receive new functionality unless a maintainer explicitly requests it.
 
 ## 📑 Table of contents
 
@@ -14,7 +25,7 @@ The current stable frontend is Streamlit. A ReactJS migration is under active de
 - [Pull request checklist](#pull-request-checklist)
 - [Backend contribution guide](#backend-contribution-guide)
 - [Frontend contribution guide](#frontend-contribution-guide)
-- [ReactJS migration work](#reactjs-migration-work)
+- [React + TypeScript migration work](#reactjs-migration-work)
 - [Testing](#testing)
 - [Code style](#code-style)
 - [Documentation changes](#documentation-changes)
@@ -26,23 +37,23 @@ The current stable frontend is Streamlit. A ReactJS migration is under active de
 1. Fork or clone the repository.
 
    ```bash
-   git clone https://github.com/DataScienceLabFHSWF/KIKO-release.git
+   git clone https://github.com/DataScienceLabFHSWF/kiko-platform.git
    ```
 
    ```bash
-   cd KIKO-release
+   cd kiko-platform
    ```
 
 2. Create a local environment file.
 
    ```bash
-   cp .env.example .env
+   cat .env.dev
    ```
 
 3. Start the stack.
 
    ```bash
-   docker compose --project-name <YOUR_PROJECT_NAME> up --build
+   ENV_FILE=.env.dev docker compose --env-file .env.dev -p <YOUR_PROJECT_NAME> -f docker-compose.dev.yml up -d --build
    ```
 
 4. Create a feature branch.
@@ -114,7 +125,7 @@ Before opening a pull request, check:
 - [ ] The change is focused and easy to review.
 - [ ] The PR title clearly describes the change.
 - [ ] The PR description explains what changed and why.
-- [ ] No `.env` file or secrets are committed.
+- [ ] No `.env.dev` file or secrets are committed.
 - [ ] No private documents, uploaded files, logs, database dumps, or model caches are committed.
 - [ ] Documentation is updated if behavior changed.
 - [ ] Tests are added or updated where appropriate.
@@ -175,36 +186,26 @@ Backend principles:
 
 ## 🖥️ Frontend contribution guide
 
-The current stable frontend is Streamlit and lives in:
+The active frontend is the React + TypeScript application located in:
 
 ```text
 frontend/
 ```
 
-When adding Streamlit pages:
-
-1. Add pages under:
-
-   ```text
-   frontend/pages/
-   ```
-
-2. Reuse existing sidebar/session utilities.
-
-3. Respect role-based visibility.
-
-4. Keep UI text clear and concise.
-
 Frontend principles:
 
-- Keep pages readable and modular.
-- Avoid large files with mixed concerns.
-- Keep role-specific behavior explicit.
-- Prefer shared helper functions for repeated API calls.
-- Keep user-facing text consistent.
-- Do not show internal stack traces or raw backend errors to users.
-
-The ReactJS frontend migration is under active development and is not yet the default public frontend. React changes should stay focused, documented, and clearly marked as migration work.
+- Use TypeScript for new frontend code.
+- Keep components focused and reusable.
+- Keep API communication in the existing API/service layer.
+- Reuse shared components instead of duplicating UI patterns.
+- Keep role-based behavior explicit.
+- Keep user-facing strings in the internationalization system.
+- Avoid hardcoded backend URLs.
+- Handle loading, empty, success, and error states explicitly.
+- Do not expose raw backend errors or stack traces to users.
+- Keep accessibility in mind for interactive controls.
+- Add or update tests where appropriate.
+- Include screenshots in pull requests for visible UI changes.
 
 ## 🧪 Testing
 
@@ -259,8 +260,7 @@ Frontend:
 
 Docker/configuration:
 
-- Keep `.env` local.
-- Keep `.env.example` safe and complete.
+- Keep `.env.dev` safe and complete.
 - Do not hardcode machine-specific GPU UUIDs in public defaults.
 - Do not expose database or model runtime ports publicly unless explicitly needed for development.
 - Prefer documented override files for local or GPU-specific settings.
@@ -304,7 +304,7 @@ Avoid putting long operational guides directly in the README.
 
 Never commit:
 
-- `.env`
+- `.env.dev`
 - API tokens
 - Hugging Face tokens
 - ngrok tokens
@@ -317,7 +317,7 @@ Never commit:
 - local model caches
 - internal server IPs or credentials
 
-Use safe placeholders in `.env.example`.
+Use safe placeholders in `.env.dev`.
 
 Bad:
 

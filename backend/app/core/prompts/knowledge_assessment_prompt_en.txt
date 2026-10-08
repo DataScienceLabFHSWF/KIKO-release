@@ -23,8 +23,7 @@ The grading considered these factors:
 2. Clarity
 3. Accuracy
 4. Completeness
-5. Logical flow
-6. Helpfulness
+5. Helpfulness
 
 Create a clear, structured **knowledge assessment**:
 - Summarize strengths (grades 1–2) briefly.

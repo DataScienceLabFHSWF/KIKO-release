@@ -19,7 +19,7 @@ class DocumentProcessor:
     """State-of-the-art document processor with all advanced features."""
     
     def __init__(self, config, response_language: str):
-        print(f"ℹ️ DocumentProcessor core: Initializing DocumentProcessor with advanced features.")
+        logger.info(f"ℹ️ DocumentProcessor core: Initializing DocumentProcessor with advanced features.")
         self.config = config
         self.ocr_manager = OCRManager(config)
         self.vlm_processor = VLMProcessor(config, PromptManager(config), response_language)
@@ -41,7 +41,7 @@ class DocumentProcessor:
             # Extract metadata if enabled
             metadata = {}
             if self.config.get("app_config").extract_metadata:
-                print(f"ℹ️ Core: Extracting document metadata from file path: {file_path}")
+                logger.info(f"ℹ️ Core: Extracting document metadata from file path: {file_path}")
                 metadata = await self.metadata_extractor.extract_metadata(file_path)
             
             # Process with state-of-the-art models
@@ -49,7 +49,7 @@ class DocumentProcessor:
             metadatas = []
             all_tables = []
             
-            print(f"ℹ️ Processing {len(doc)} pages with state-of-the-art AI...")
+            logger.info(f"ℹ️ Processing {len(doc)} pages with state-of-the-art AI...")
 
             text_splitter = RecursiveCharacterTextSplitter(
                 chunk_size= self.config.get("app_config").chunk_size,
@@ -61,54 +61,54 @@ class DocumentProcessor:
             
             for page_idx, page in enumerate(doc):
                 
-                print(f"ℹ️ Processing page {page_idx + 1}/{len(doc)}.")
+                logger.info(f"ℹ️ Processing page {page_idx + 1}/{len(doc)}.")
 
                 # Extract text directly from PDF
-                print(f"ℹ️ Extracting text from page {page_idx + 1}.")
+                logger.info(f"ℹ️ Extracting text from page {page_idx + 1}.")
                 page_text = page.get_text()
-                print(f"✅ Extracted {len(page_text)} characters from page {page_idx + 1}")
+                logger.info(f"✅ Extracted {len(page_text)} characters from page {page_idx + 1}")
                 
                 # Language detection
                 page_language = "auto"
                 if self.config.get("app_config").language_detection and page_text.strip():
-                    print(f"ℹ️ Detecting page language for page {page_idx + 1}.")
+                    logger.info(f"ℹ️ Detecting page language for page {page_idx + 1}.")
                     page_language = await self.multilingual.detect_language(page_text)
-                    print(f"✅ Detected language: {page_language}")
+                    logger.info(f"✅ Detected language: {page_language}")
                 
                 # Render page as high-quality image
-                print(f"ℹ️ Rendering page {page_idx + 1} as high-quality image for OCR.")
+                logger.info(f"ℹ️ Rendering page {page_idx + 1} as high-quality image for OCR.")
                 pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))  # 2x resolution
                 img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-                print(f"✅ Rendered page {page_idx + 1} as image ({pix.width}x{pix.height})")
+                logger.info(f"✅ Rendered page {page_idx + 1} as image ({pix.width}x{pix.height})")
                 
                 # Advanced document type classification
                 doc_type = "general"
                 if self.config.get("app_config").enable_document_classification:
-                    print(f"ℹ️ Classifying document type for page {page_idx + 1}.")
+                    logger.info(f"ℹ️ Classifying document type for page {page_idx + 1}.")
                     doc_type = doc_classifier(img)
-                    print(f"✅ Classified document type: {doc_type}")
+                    logger.info(f"✅ Classified document type: {doc_type}")
                 
                 # Get best OCR engine for this document type
                 ocr_engine = await self.ocr_manager.get_best_ocr_engine(doc_type, page_language)
-                print(f"✅ Selected OCR engine: {ocr_engine}")
+                logger.info(f"✅ Selected OCR engine: {ocr_engine}")
                 
                 # Apply advanced OCR if needed                
                 enhanced_text = ""
                 if self.config.get("app_config").use_advanced_ocr and len(page_text.strip()) < 100:
-                    print(f"ℹ️ Applying advanced OCR for page {page_idx + 1}.")
+                    logger.info(f"ℹ️ Applying advanced OCR for page {page_idx + 1}.")
                     enhanced_text = ocr_engine(img)
-                    print(f"✅ Enhanced OCR extracted {len(enhanced_text)} characters")
+                    logger.info(f"✅ Enhanced OCR extracted {len(enhanced_text)} characters")
                 
                 # Enhanced table extraction
                 page_tables = []
                 if self.config.get("app_config").enhanced_table_extraction:
-                    print(f"ℹ️ Applying Enhanced table extraction for page {page_idx + 1}.")
+                    logger.info(f"ℹ️ Applying Enhanced table extraction for page {page_idx + 1}.")
 
-                    print(f"ℹ️ Detecting tables on the page {page_idx + 1}...")
+                    logger.info(f"ℹ️ Detecting tables on the page {page_idx + 1}...")
                     table_regions = await self.table_extractor.detect_tables(img)
                     
                     for i, table_bbox in enumerate(table_regions):
-                        print(f"ℹ️ Extracting table structure from bbox {table_bbox} on page {page_idx + 1}...")
+                        logger.info(f"ℹ️ Extracting table structure from bbox {table_bbox} on page {page_idx + 1}...")
                         table_data = await self.table_extractor.extract_table_structure(img, table_bbox)
                         if table_data and "error" not in table_data:
                             page_tables.append({
@@ -117,9 +117,9 @@ class DocumentProcessor:
                                 "bbox": table_bbox,
                                 "structure": table_data
                             })
-                            print(f"✅ Extracted table {i+1} structure from page {page_idx + 1}")
-                        print(f"ℹ️ Finished extracting tables from page {page_idx + 1}. Found {len(page_tables)} tables.")
-                    print(f"✅ Total tables extracted from page {page_idx + 1}: {len(page_tables)}")
+                            logger.info(f"✅ Extracted table {i+1} structure from page {page_idx + 1}")
+                        logger.info(f"ℹ️ Finished extracting tables from page {page_idx + 1}. Found {len(page_tables)} tables.")
+                    logger.info(f"✅ Total tables extracted from page {page_idx + 1}: {len(page_tables)}")
                 
                 all_tables.extend(page_tables)
 
@@ -128,15 +128,15 @@ class DocumentProcessor:
                 
                 # Use enhanced OCR if it provides better results
                 if enhanced_text and len(enhanced_text) > len(page_text) * 1.2:
-                    print(f"ℹ️ Using enhanced OCR text for page {page_idx + 1}.")
+                    logger.info(f"ℹ️ Using enhanced OCR text for page {page_idx + 1}.")
                     combined_text = enhanced_text
                 elif enhanced_text and len(page_text.strip()) < 50:
-                    print(f"ℹ️ Using enhanced OCR text for page {page_idx + 1} due to low original text length.")
+                    logger.info(f"ℹ️ Using enhanced OCR text for page {page_idx + 1} due to low original text length.")
                     combined_text = enhanced_text
                 
                 # Add structured table data
                 if page_tables:
-                    print(f"ℹ️ Add structured table data for page {page_idx + 1}.")
+                    logger.info(f"ℹ️ Add structured table data for page {page_idx + 1}.")
                     table_text = "\n\n[EXTRACTED TABLES]\n"
                     for table in page_tables:
                         table_text += f"\n=== Table {table['id']} ===\n"
@@ -151,7 +151,7 @@ class DocumentProcessor:
                     page_language != self.config.get("app_config").default_language and
                     page_language != "auto"):
 
-                    print(f"ℹ️ Translating text from {page_language} to English for page {page_idx + 1}.")
+                    logger.info(f"ℹ️ Translating text from {page_language} to English for page {page_idx + 1}.")
                     # Translate text to Target Language
                     target_lang = getattr(self.config.get("app_config"), "default_language", None) or "eng"
                     
@@ -161,13 +161,13 @@ class DocumentProcessor:
                         target_lang= target_lang
                     )                    
                     if translated_text and len(translated_text) > 0:
-                        print(f"✅ Translated text from {page_language} to English for page {page_idx + 1}.")
+                        logger.info(f"✅ Translated text from {page_language} to English for page {page_idx + 1}.")
                         combined_text = (f"[TRANSLATED FROM {page_language.upper()}]\n{translated_text}\n\n" +
                                         f"[ORIGINAL TEXT]\n{combined_text}")
-                        print(f"ℹ️ Combined text for page {page_idx + 1} after translation: {len(combined_text)} characters")
+                        logger.info(f"ℹ️ Combined text for page {page_idx + 1} after translation: {len(combined_text)} characters")
                 
                 # Text chunking
-                print(f"ℹ️ Splitting text into chunks for page {page_idx + 1}.")
+                logger.info(f"ℹ️ Splitting text into chunks for page {page_idx + 1}.")
                 if combined_text.strip():
                     page_chunks = text_splitter.split_text(combined_text)
                     chunks.extend(page_chunks)
@@ -194,14 +194,14 @@ class DocumentProcessor:
                             "ocr_engine": self.config.get("app_config").preferred_ocr_engine,
                             "vlm_model": self.config.get("app_config").preferred_vlm_model
                         })
-                    print(f"✅ Processed page {page_idx + 1} with {len(page_chunks)} chunks created.")
+                    logger.info(f"✅ Processed page {page_idx + 1} with {len(page_chunks)} chunks created.")
                 else:
-                    print(f"ℹ️ No text extracted from page {page_idx + 1}. Skipping Text chunking.")
+                    logger.info(f"ℹ️ No text extracted from page {page_idx + 1}. Skipping Text chunking.")
             
-            print(f"✅ Finished processing document {file_path}. Total pages: {len(doc)}, Total chunks: {len(chunks)}")
+            logger.info(f"✅ Finished processing document {file_path}. Total pages: {len(doc)}, Total chunks: {len(chunks)}")
 
             # Prepare result
-            print("ℹ️ Preparing final result with chunks, metadata, tables, and processing_stats.")
+            logger.info("ℹ️ Preparing final result with chunks, metadata, tables, and processing_stats.")
             result = {
                 "doc_metadata": metadata,
                 "chunks": chunks,
@@ -215,11 +215,11 @@ class DocumentProcessor:
                     "document_types": list(set([m.get("document_type", "general") for m in metadatas]))
                 }
             }
-            print(f"✅ Final result prepared before VLM enhancement.")
+            logger.info(f"✅ Final result prepared before VLM enhancement.")
             
             # Add VLM analysis if enabled
             if self.config.get("app_config").enable_vlm:
-                print("ℹ️ Extracting VLM insights from PDF...")
+                logger.info("ℹ️ Extracting VLM insights from PDF...")
                 vlm_texts = await self.vlm_processor.extract_vlm_from_pdf(file_path)
                 if vlm_texts:
                     result["vlm_texts"] = vlm_texts
@@ -228,13 +228,13 @@ class DocumentProcessor:
                     for i, vlm_text in enumerate(vlm_texts):
                         if i < len(chunks):
                             # Create VLM-enhanced chunk
-                            print(f"ℹ️ Enhancing chunk {i+1} with VLM insights.")
+                            logger.info(f"ℹ️ Enhancing chunk {i+1} with VLM insights.")
                             enhanced_chunk = f"[PAGE {i+1} - ENHANCED WITH VLM]\n{vlm_text}\n\n[ORIGINAL TEXT]\n{chunks[i]}"
                             chunks[i] = enhanced_chunk
-                            print(f"✅ Successfully enhanced chunk {i+1} with VLM insights.")
+                            logger.info(f"✅ Successfully enhanced chunk {i+1} with VLM insights.")
                         else:
                             # Add as new chunk
-                            print(f"ℹ️ Adding new VLM chunk for page {i+1}.")
+                            logger.info(f"ℹ️ Adding new VLM chunk for page {i+1}.")
                             chunks.append(f"[PAGE {i+1} - VLM ANALYSIS]\n{vlm_text}")
                             metadatas.append({
                                 "source": os.path.basename(file_path),
@@ -244,20 +244,19 @@ class DocumentProcessor:
                                 "processing_method": "vlm_only",
                                 "confidence_score": 0.9
                             })
-                            print(f"✅ Added new VLM chunk for page {i+1}.")
+                            logger.info(f"✅ Added new VLM chunk for page {i+1}.")
                 else:
-                    print("ℹ️ No VLM insights extracted from PDF.")
+                    logger.info("ℹ️ No VLM insights extracted from PDF.")
             
             # Cache results
-            print(f"ℹ️ Processed data result after VLM enhancement: {len(chunks)} chunks, {len(metadatas)} metadata entries.")
-            print(f"✅ Processed {os.path.basename(file_path)} with state-of-the-art AI: {len(chunks)} chunks created")
+            logger.info(f"ℹ️ Processed data result after VLM enhancement: {len(chunks)} chunks, {len(metadatas)} metadata entries.")
+            logger.info(f"✅ Processed {os.path.basename(file_path)} with state-of-the-art AI: {len(chunks)} chunks created")
             
             return result
         except Exception as e:
-            print(f"❌ Error processing document {file_path}: {str(e)}")
-            print("ℹ️ returning empty chunks and metadata due to error.")
+            logger.exception(f"❌ Error processing document {file_path}: {str(e)}")
             return {}        
         finally:
             if 'doc' in locals():
-                print(f"ℹ️ Closing document {file_path}.")
+                logger.info(f"ℹ️ Closing document {file_path}.")
                 doc.close()

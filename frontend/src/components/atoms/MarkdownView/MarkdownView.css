@@ -1,0 +1,63 @@
+/* frontend/src/components/atoms/MarkdownView/MarkdownView.css */
+
+.markdown-view {
+  max-width: 100%;
+  min-width: 0;
+  color: var(--color-text);
+  line-height: 1.75;
+  font-weight: 500;
+}
+
+.markdown-view h1,
+.markdown-view h2,
+.markdown-view h3,
+.markdown-view h4,
+.markdown-view h5 {
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.markdown-view p {
+  margin: 0 0 16px;
+}
+
+.markdown-view ul,
+.markdown-view ol {
+  padding-left: 22px;
+}
+
+.markdown-view li {
+  margin: 6px 0;
+}
+
+.markdown-view a {
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.markdown-view__image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 22px auto;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: 10px 10px 0 var(--color-surface-blue);
+}
+
+.markdown-view__image-loading,
+.markdown-view__image-error {
+  display: block;
+  width: 100%;
+  margin: 18px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-blue);
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.markdown-view__image-error {
+  background: #ffe7e7;
+  color: var(--color-danger);
+}

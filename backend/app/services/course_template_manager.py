@@ -2,7 +2,7 @@
 Service for managing template courses that are cloned for new instructors.
 """
 # backend/app/services/course_template_manager.py
-import json, uuid, shutil
+import json, uuid, shutil, logging
 from copy import deepcopy
 from pathlib import Path
 from sqlalchemy import select
@@ -13,6 +13,8 @@ from .course_markdown_parser_service import parse_course_markdown, CourseMarkdow
 from typing import Any, Dict
 from app.utils import rewrite_markdown_image_urls
 from .default_course_document_service import provision_markdown_document_for_course
+
+logger = logging.getLogger(__name__)
 
 # Path to template course markdown files
 TEMPLATE_COURSES_DIR = Path("/backend/data/default_courses")
@@ -42,13 +44,13 @@ def load_template_config() -> dict:
     config_path = TEMPLATE_COURSES_DIR / "template_config.json"
     
     if not config_path.exists():
-        print(f"❌ Template config not found: {config_path}")
+        logger.error(f"❌ Template config not found: {config_path}")
         raise FileNotFoundError(f"Template config not found: {config_path}")
     
     with open(config_path, "r", encoding="utf-8") as f:
         config = json.load(f)
     
-    print(f"✅ Loaded template configuration from {config_path}")
+    logger.info(f"✅ Loaded template configuration from {config_path}")
     return config
 
 def replace_course_id_placeholders(value: Any, course_id: int) -> Any:
@@ -115,7 +117,7 @@ def copy_default_images_for_course(course_id: int, template_images: list[dict], 
         try:
             src_file = TEMPLATE_IMAGES_DIR / img["filename"]
             if not src_file.exists():
-                print(f"⚠️ Template image not found: {src_file}")
+                logger.info(f"⚠️ Template image not found: {src_file}")
                 continue
             
             # Generate unique stored filename using UUID to avoid conflicts
@@ -152,10 +154,10 @@ def copy_default_images_for_course(course_id: int, template_images: list[dict], 
             )
             db.add(image_record)
             
-            print(f"✅ Copied template image: {img['filename']} -> {stored_filename} to course {course_id}")
+            logger.info(f"✅ Copied template image: {img['filename']} -> {stored_filename} to course {course_id}")
             
         except Exception as e:
-            print(f"❌ Error copying template image {img.get('filename', 'unknown')}: {e}")
+            logger.exception(f"❌ Error copying template image {img.get('filename', 'unknown')}: {e}")
             continue
 
 def load_template_courses(user_email: str = None):
@@ -199,7 +201,7 @@ def load_template_courses(user_email: str = None):
 
         md_file = TEMPLATE_COURSES_DIR / filename
         if not md_file.exists():
-            print(f"⚠️ Template file not found: {md_file}")
+            logger.warning(f"⚠️ Template file not found: {md_file}")
             continue
 
         try:
@@ -231,13 +233,13 @@ def load_template_courses(user_email: str = None):
                     "default_images": config.get("images", []),
                 }
             )
-            print(f"✅ Loaded template: {title}")
+            logger.info(f"✅ Loaded template: {title}")
 
         except CourseMarkdownStructureError as e:
-            print(f"❌ Invalid template markdown structure in {filename}: {e}")
+            logger.error(f"❌ Invalid template markdown structure in {filename}: {e}")
             continue
         except Exception as e:
-            print(f"❌ Error loading template {filename}: {e}")
+            logger.exception(f"❌ Error loading template {filename}: {e}")
             continue
 
     return templates
@@ -265,7 +267,7 @@ async def create_template_courses_for_instructor(
         user = user_result.scalar_one_or_none()
 
         if not user:
-            print(f"⚠️ User with ID {user_id} not found")
+            logger.warning(f"⚠️ User with ID {user_id} not found")
             return provision_report
 
         if getattr(user, "template_courses_initialized", False):
@@ -389,10 +391,10 @@ async def create_template_courses_for_instructor(
                     )
 
                     provision_report["courses_created"] += 1
-                    print(f"✅ Created template course: {course.title}")
+                    logger.info(f"✅ Created template course: {course.title}")
 
             except Exception as e:
-                print(
+                logger.exception(
                     f"❌ Error creating template course "
                     f"'{template.get('title', 'unknown')}': {e}"
                 )
@@ -425,15 +427,15 @@ async def create_template_courses_for_instructor(
                         "reason": str(e),
                     }
                 )
-                print(
+                logger.exception(
                     f"⚠️ Failed to provision default document "
                     f"for course {job['course_id']}: {e}"
                 )
 
-        print(f"✅ Template provisioning report: {provision_report}")
+        logger.info(f"✅ Template provisioning report: {provision_report}")
         return provision_report
 
     except Exception as e:
-        print(f"❌ Error in create_template_courses_for_instructor for user {user_id}: {e}")
+        logger.exception(f"❌ Error in create_template_courses_for_instructor for user {user_id}: {e}")
         await db.rollback()
         return provision_report

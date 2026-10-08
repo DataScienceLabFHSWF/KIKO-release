@@ -1,0 +1,79 @@
+/* frontend/src/components/atoms/IconButton/IconButton.css */
+
+.ui-icon-button {
+  border: 0;
+  display: inline-grid;
+  place-items: center;
+  color: var(--color-text);
+  cursor: pointer;
+  clip-path: polygon(10px 0, 100% 0, 100% 72%, 94% 100%, 0 100%, 0 10px);
+}
+
+.ui-icon-button--sm {
+  width: 30px;
+  height: 30px;
+}
+
+.ui-icon-button--md {
+  width: 34px;
+  height: 34px;
+}
+
+.ui-icon-button--lg {
+  width: 42px;
+  height: 42px;
+}
+
+.ui-icon-button--primary {
+  background: var(--color-primary);
+}
+
+.ui-icon-button--secondary {
+  background: var(--color-primary-soft);
+}
+
+.ui-icon-button--ghost {
+  background: var(--color-surface-blue);
+}
+
+.ui-icon-button--danger {
+  background: var(--color-danger);
+  color: #ffffff;
+}
+
+.ui-icon-button--success {
+  background: var(--color-success);
+  color: #ffffff;
+}
+
+.ui-icon-button--plain {
+  background: transparent;
+  color: inherit;
+  clip-path: none;
+}
+
+.ui-icon-button:hover {
+  background: var(--color-surface-blue-strong);
+}
+
+.ui-icon-button--danger:hover {
+  background: #b83333;
+}
+
+.ui-icon-button--success:hover {
+  background: #168158;
+}
+
+.ui-icon-button--plain:hover {
+  background: transparent;
+  color: var(--color-primary-dark);
+}
+
+.ui-icon-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ui-icon-button svg {
+  display: block;
+}

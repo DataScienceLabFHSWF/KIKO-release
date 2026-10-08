@@ -23,8 +23,7 @@ Bei der Bewertung wurden folgende Faktoren berücksichtigt:
 2. Klarheit
 3. Genauigkeit
 4. Vollständigkeit
-5. Logischer Ablauf
-6. Nützlichkeit
+5. Nützlichkeit
 
 Erstellen Sie eine klare, strukturierte **Wissensbewertung**:
 - Fassen Sie die Stärken (Noten 1–2) kurz zusammen.

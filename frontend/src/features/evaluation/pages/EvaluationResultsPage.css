@@ -1,0 +1,89 @@
+/* frontend/src/features/evaluation/pages/EvaluationResultsPage.css */
+
+.evaluation-page {
+  width: 100%;
+  max-width: none;
+  display: grid;
+  gap: 28px;
+}
+
+.evaluation-page__section {
+  display: grid;
+  gap: 18px;
+}
+
+.evaluation-page__section + .evaluation-page__section {
+  padding-top: 24px;
+  border-top: 1px solid rgba(16, 35, 71, 0.16);
+}
+
+.evaluation-page__section-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.evaluation-page__section-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  background: var(--color-surface-blue);
+  color: var(--color-primary-dark);
+  clip-path: polygon(0 0, 90% 0, 100% 22%, 100% 100%, 0 100%);
+}
+
+.evaluation-page h2,
+.evaluation-page h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-weight: 900;
+}
+
+.evaluation-page h2 {
+  font-size: 28px;
+}
+
+.evaluation-page h3 {
+  font-size: 18px;
+}
+
+.evaluation-page p {
+  margin: 6px 0 0;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.evaluation-page__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.evaluation-page__chart-card {
+  width: 100%;
+  overflow: auto;
+  padding: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 35, 71, 0.16);
+  box-shadow: 10px 10px 0 var(--color-surface-blue);
+}
+
+.evaluation-page__chart-card img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+}
+
+@media (max-width: 860px) {
+  .evaluation-page__stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .evaluation-page__stats {
+    grid-template-columns: 1fr;
+  }
+}

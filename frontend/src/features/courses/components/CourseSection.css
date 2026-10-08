@@ -1,0 +1,45 @@
+/* frontend/src/features/courses/components/CourseSection.css */
+
+.course-section {
+  display: grid;
+  gap: 20px;
+}
+
+.course-section + .course-section {
+  padding-top: 28px;
+  border-top: 1px solid rgba(16, 35, 71, 0.16);
+}
+
+.course-section__header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.course-section__icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: var(--color-surface-blue);
+  color: var(--color-primary-dark);
+  clip-path: polygon(0 0, 90% 0, 100% 22%, 100% 100%, 0 100%);
+}
+
+.course-section__header h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.course-section__header p {
+  margin: 6px 0 0;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.course-section__content {
+  display: grid;
+  gap: 18px;
+}

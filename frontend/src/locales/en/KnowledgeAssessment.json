@@ -1,0 +1,46 @@
+{
+  "title": "Knowledge Assessment",
+  "subtitle": "A quick optional check to tailor your course recommendations.",
+  "intro": "Answer the questions below. Your answers help KIKO suggest more relevant courses.",
+  "progress": "{{answered}} of {{total}} answered",
+  "question": {
+    "number": "Q{{number}}.",
+    "fallbackTopic": "Question",
+    "answerLabel": "Your answer",
+    "placeholder": "Write your answer here...",
+    "help": "Answer briefly. A few clear sentences are enough."
+  },
+  "actions": {
+    "submit": "Submit assessment",
+    "submitting": "Evaluating answers...",
+    "retry": "Retry"
+  },
+  "status": {
+    "loading": "Loading assessment questions..."
+  },
+  "validation": {
+    "allRequired": "Please answer all questions before submitting."
+  },
+  "empty": {
+    "title": "No assessment questions available",
+    "description": "The knowledge assessment is currently not configured. Please try again later."
+  },
+  "errors": {
+    "loadTitle": "Could not load assessment",
+    "loadDescription": "Something went wrong while loading the assessment questions.",
+    "submitDescription": "Something went wrong while submitting your answers."
+  },
+  "result": {
+    "title": "Assessment completed",
+    "subtitle": "Here is your learning profile and recommended next step.",
+    "knowledgeAssessment": "Knowledge assessment",
+    "learningPath": "Suggested learning path",
+    "nextStep": "Next learning step",
+    "recommendedCourses": "Recommended courses",
+    "noRecommendations": "No course recommendations were returned yet.",
+    "untitledCourse": "Untitled course",
+    "reason": "Why recommended: {{reason}}",
+    "goToCourses": "Go to My Courses",
+    "noGeneratedContent": "No generated content was returned."
+  }
+}

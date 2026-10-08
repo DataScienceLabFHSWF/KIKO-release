@@ -1,0 +1,64 @@
+/* frontend/src/components/molecules/PageHeader/PageHeader.css */
+
+.page-header {
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(16, 35, 71, 0.18);
+}
+
+.page-header__main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.page-header__title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.page-header__icon {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  display: grid;
+  place-items: center;
+  background: var(--color-surface-blue);
+  color: var(--color-text);
+  clip-path: polygon(0 0, 90% 0, 100% 20%, 100% 100%, 0 100%);
+}
+
+.page-header__text {
+  min-width: 0;
+}
+
+.page-header h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(32px, 3vw, 48px);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.page-header p {
+  margin: 8px 0 0;
+  color: var(--color-primary-dark);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.page-header__action {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 720px) {
+  .page-header__main {
+    display: grid;
+  }
+
+  .page-header__action {
+    justify-self: start;
+  }
+}
